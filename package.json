@@ -46,5 +46,20 @@
     ],
     "main": "./dist/lunchboxjs.js",
     "module": "./dist/lunchboxjs.module.js",
-    "types": "dist/lunchboxjs.es.d.ts"
+    "types": "dist/lunchboxjs.es.d.ts",
+    "directories": {
+        "doc": "docs"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/breakfast-studio/lunchboxjs.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/breakfast-studio/lunchboxjs/issues"
+    },
+    "homepage": "https://github.com/breakfast-studio/lunchboxjs#readme",
+    "description": ""
 }
