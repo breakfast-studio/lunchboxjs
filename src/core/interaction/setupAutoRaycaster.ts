@@ -1,8 +1,8 @@
 import { interactables } from '.'
 import {
-    createdCamera,
-    createdRaycaster,
-    createdRenderer,
+    ensuredCamera,
+    ensuredRaycaster,
+    ensureRenderer,
     onBeforeRender,
 } from '..'
 import { globals, Lunch } from '../../'
@@ -25,7 +25,7 @@ export const setupAutoRaycaster = (node: Lunch.Node<THREE.Raycaster>) => {
     // add mouse events once renderer is ready
     let stopWatcher: WatchStopHandle | null = null
     stopWatcher = watch(
-        () => createdRenderer.value,
+        () => ensureRenderer.value,
         (renderer) => {
             // make sure renderer exists
             if (!renderer?.instance) return
@@ -91,8 +91,8 @@ export let currentIntersections: Array<{
 
 const autoRaycasterBeforeRender = () => {
     // setup
-    const raycaster = createdRaycaster.value?.instance
-    const camera = createdCamera.value?.instance
+    const raycaster = ensuredRaycaster.value?.instance
+    const camera = ensuredCamera.value?.instance
     if (!raycaster || !camera) return
 
     raycaster.setFromCamera(globals.mousePos.value, camera)

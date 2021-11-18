@@ -3,7 +3,7 @@ import {
     isLunchboxRootNode,
     isLunchboxStandardNode,
 } from '../utils'
-import { ensureRootNode, ensureScene } from '../core'
+import { ensureRootNode, ensuredScene } from '../core'
 import { MiniDom } from '../core/minidom'
 import { Lunch } from '..'
 
@@ -54,11 +54,11 @@ export const insert = (
         // add to scene if parent is the wrapper node
         if (
             child.metaType === 'standardMeta' &&
-            child.type !== 'Scene' &&
+            child.type !== 'scene' &&
             isLunchboxRootNode(effectiveParent)
         ) {
             // ensure scene exists
-            const sceneNode = ensureScene()
+            const sceneNode = ensuredScene.value
 
             if (sceneNode.instance && child) {
                 sceneNode.addChild(child)
@@ -68,7 +68,9 @@ export const insert = (
                 child.instance.isObject3D &&
                 sceneNode.instance
             ) {
-                sceneNode.instance.add(child.instance)
+                if (sceneNode !== child) {
+                    sceneNode.instance.add(child.instance)
+                }
             }
         }
         // add to hierarchy otherwise

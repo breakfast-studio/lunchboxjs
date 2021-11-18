@@ -29,5 +29,7 @@ const demos = ref([
     { title: 'Basic' },
     { title: 'Shadows' },
     { title: 'Custom Shader', url: '/demo/custom-shader/' },
+    { title: 'Custom Scene', url: '/demo/custom-scene/' },
+    { title: 'Camera Switch', url: '/demo/camera-switch/' },
 ])
 </script>

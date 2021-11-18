@@ -9,7 +9,8 @@ export function instantiateThreeObject<T>(node: Lunch.StandardMeta<T>) {
     // what class will we be instantiating?
     const uppercaseType = node.type[0].toUpperCase() + node.type.slice(1)
     const targetClass = catalogue[node.type] || (THREE as any)[uppercaseType]
-    if (!targetClass) throw `${uppercaseType} is not part of the THREE namespace! Did you forget to extend? import {extend} from 'lunchbox'; extend({app, YourComponent, ...})`
+    if (!targetClass)
+        throw `${uppercaseType} is not part of the THREE namespace! Did you forget to extend? import {extend} from 'lunchbox'; extend({app, YourComponent, ...})`
 
     // what args have we been provided?
     const args: Array<any> = node.props.args ?? []
@@ -17,9 +18,11 @@ export function instantiateThreeObject<T>(node: Lunch.StandardMeta<T>) {
     // replace $attached values with their instances
     // we need to guarantee everything comes back as an array so we can spread $attachedArrays,
     // so we'll use processPropAsArray
-    const argsWrappedInArrays = args.map((arg: any) => { return processPropAsArray({ node, prop: arg }) })
+    const argsWrappedInArrays = args.map((arg: any) => {
+        return processPropAsArray({ node, prop: arg })
+    })
     let processedArgs = [] as Array<any>
-    argsWrappedInArrays.forEach(arr => {
+    argsWrappedInArrays.forEach((arr) => {
         processedArgs = processedArgs.concat(arr)
     })
 
@@ -27,4 +30,3 @@ export function instantiateThreeObject<T>(node: Lunch.StandardMeta<T>) {
 
     return instance as T
 }
-

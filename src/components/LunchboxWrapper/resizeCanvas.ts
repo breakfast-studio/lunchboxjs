@@ -1,8 +1,9 @@
-import { ensureCamera, ensureRenderer, ensureScene } from '../../core'
+import { ensuredCamera, ensureRenderer, ensuredScene } from '../../core'
+import { toRaw } from 'vue'
 
 export const resizeCanvas = (width?: number, height?: number) => {
-    const renderer = ensureRenderer().instance
-    const scene = ensureScene().instance
+    const renderer = ensureRenderer.value?.instance
+    const scene = ensuredScene.value.instance
 
     // ignore if no element
     if (!renderer?.domElement || !scene) return
@@ -12,7 +13,7 @@ export const resizeCanvas = (width?: number, height?: number) => {
 
     // update camera
     const aspect = width / height
-    const camera = ensureCamera()
+    const camera = ensuredCamera.value
     if (camera.type?.toLowerCase() === 'perspectivecamera') {
         const perspectiveCamera = camera.instance as THREE.PerspectiveCamera
         perspectiveCamera.aspect = aspect
@@ -25,6 +26,7 @@ export const resizeCanvas = (width?: number, height?: number) => {
     renderer.setSize(width, height)
     // render immediately so there's no flicker
     if (scene && camera.instance) {
-        renderer.render(scene, camera.instance)
+        // const cameraInstance = scene.traverse(v => )
+        renderer.render(toRaw(scene), toRaw(camera.instance))
     }
 }

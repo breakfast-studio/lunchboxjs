@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { onBeforeRender, globals, Lunchbox } from '../src'
+import { computed, ref, watch } from 'vue'
+import { onBeforeRender, globals, Lunch, camera, renderer } from '../src'
 
 // props
 const props = defineProps<{
@@ -20,18 +20,17 @@ const props = defineProps<{
 }>()
 
 // computed
-const camera = globals.camera
-const renderer = globals.renderer
+// const camera = globals.camera
+// const renderer = globals.renderer
 const ready = computed(() => {
-    return camera.value !== null && renderer.value?.instance?.domElement
+    return camera.value !== null && renderer.value?.domElement
 })
-const orbitArgs = computed(() => [
-    camera.value?.instance,
-    renderer.value?.instance?.domElement,
-])
+const orbitArgs = computed(() => [camera.value, renderer.value?.domElement])
+// watch(() => orbitArgs.value, console.log, { immediate: true })
+// console.log(renderer)
 
 // update
-const controls = ref<Lunchbox.LunchboxComponent>()
+const controls = ref<Lunch.LunchboxComponent>()
 const update = () => {
     const instance = controls.value?.$el.instance as any
     if (instance && ready.value) {

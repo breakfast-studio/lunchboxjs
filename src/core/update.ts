@@ -1,5 +1,6 @@
-import { ensureRenderer, ensureScene, ensureCamera } from '.'
+import { ensureRenderer, ensuredScene, ensuredCamera } from '.'
 import { Lunch } from '..'
+import { toRaw } from 'vue'
 
 let frameID: number
 
@@ -12,7 +13,14 @@ export const update: Lunch.UpdateCallback = (opts: {
     scene?: THREE.Scene | null
     camera?: THREE.Camera | null
 }) => {
-    frameID = requestAnimationFrame(() => update(opts))
+    frameID = requestAnimationFrame(() =>
+        update({
+            app: opts.app,
+            renderer: ensureRenderer.value?.instance,
+            scene: ensuredScene.value.instance,
+            camera: ensuredCamera.value.instance,
+        })
+    )
 
     const { app, renderer, scene, camera } = opts
 
@@ -24,8 +32,9 @@ export const update: Lunch.UpdateCallback = (opts: {
     })
 
     // RENDER
+    // console.log(camera?.position.z)
     if (renderer && scene && camera) {
-        renderer.render(scene, camera)
+        renderer.render(toRaw(scene), toRaw(camera))
     }
 
     // AFTER RENDER
@@ -34,23 +43,6 @@ export const update: Lunch.UpdateCallback = (opts: {
             cb(opts)
         }
     })
-
-    /*
-    frameID = requestAnimationFrame(() => update(renderer, scene, camera))
-
-    // Make sure we have all necessary components
-    if (!renderer) {
-        renderer = ensureRenderer().instance
-    }
-    if (!scene) {
-        scene = ensureScene().instance
-    }
-    if (!camera) {
-        camera = ensureCamera().instance
-    }
-
-
-    */
 }
 
 export const onBeforeRender = (cb: Lunch.UpdateCallback, index = Infinity) => {

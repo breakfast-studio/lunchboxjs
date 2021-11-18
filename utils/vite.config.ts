@@ -10,6 +10,7 @@ export default defineConfig({
             input: {
                 main: 'index.html',
 
+                customScene: 'demo/custom-scene/index.html',
                 customShader: 'demo/custom-shader/index.html',
                 events: 'demo/events/index.html',
                 hierarchy: 'demo/hierarchy/index.html',

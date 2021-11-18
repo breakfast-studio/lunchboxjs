@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader'
-import { Lunchbox } from '../src'
+import { Lunch } from '../src'
 
 const props = defineProps<{
     preventAdd?: boolean
@@ -20,7 +20,7 @@ const emit = defineEmits<{
     (e: 'error', evt: ErrorEvent): void
 }>()
 
-const container = ref<Lunchbox.LunchboxComponent<THREE.Group>>()
+const container = ref<Lunch.LunchboxComponent<THREE.Group>>()
 const onLoad = (gltf: GLTF) => {
     if (!props.preventAdd) {
         container.value?.$el?.instance?.add(gltf.scene)

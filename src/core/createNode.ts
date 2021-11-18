@@ -1,11 +1,11 @@
 import { isLunchboxRootNode } from '../utils'
-import { instantiateThreeObject, MiniDom } from '.'
+import { instantiateThreeObject, MiniDom, ensuredScene } from '.'
 import { Lunch } from '..'
 
 /** Create a new Lunchbox comment node. */
 export function createCommentNode(options: Partial<Lunch.CommentMeta> = {}) {
     const defaults: Omit<Lunch.CommentMeta, keyof Lunch.MetaBase> = {
-        text: options.text ?? ''
+        text: options.text ?? '',
     }
     return new MiniDom.RendererCommentNode({
         ...defaults,
@@ -29,11 +29,10 @@ export function createDomNode(options: Partial<Lunch.DomMeta> = {}) {
     return node
 }
 
-
 /** Create a new Lunchbox text node. */
 export function createTextNode(options: Partial<Lunch.TextMeta> = {}) {
     const defaults: Omit<Lunch.CommentMeta, keyof Lunch.MetaBase> = {
-        text: options.text ?? ''
+        text: options.text ?? '',
     }
     return new MiniDom.RendererTextNode({
         ...options,
@@ -45,13 +44,12 @@ export function createTextNode(options: Partial<Lunch.TextMeta> = {}) {
 /** Create a new Lunchbox standard node. */
 export function createNode<T extends object = THREE.Object3D>(
     options: Partial<Lunch.StandardMeta<T>> = {},
-    props: Lunch.LunchboxMetaProps = {},
+    props: Lunch.LunchboxMetaProps = {}
 ) {
-
     const defaults: Omit<Lunch.StandardMeta<T>, keyof Lunch.MetaBase> = {
         attached: options.attached ?? [],
         attachedArray: options.attachedArray ?? {},
-        instance: options.instance ?? null
+        instance: options.instance ?? null,
     }
     const node = new MiniDom.RendererStandardNode<T>({
         ...options,
@@ -60,13 +58,25 @@ export function createNode<T extends object = THREE.Object3D>(
     })
 
     if (node.type && !isLunchboxRootNode(node) && !node.instance) {
+        // if (node.type.includes('Camera')) {
+        //     console.log(node.type, {
+        //         ...node.props,
+        //         ...props,
+        //     })
+        //     console.trace()
+        // }
         node.instance = instantiateThreeObject({
             ...node,
             props: {
                 ...node.props,
                 ...props,
-            }
+            },
         })
+    }
+
+    if (node.type === 'scene') {
+        // manually set scene override
+        ensuredScene.value = node as Lunch.Node<THREE.Scene>
     }
 
     return node

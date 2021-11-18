@@ -2,10 +2,7 @@ import { createDomNode, createNode } from '../core'
 import { isLunchboxDomComponent } from '../utils'
 import { Lunch } from '..'
 
-const autoAttach = [
-    'geometry',
-    'material',
-]
+const autoAttach = ['geometry', 'material']
 
 export const createElement = (
     type: string,
@@ -29,7 +26,7 @@ export const createElement = (
     const node = createNode(options)
 
     // autoattach
-    autoAttach.forEach(key => {
+    autoAttach.forEach((key) => {
         if (type.toLowerCase().endsWith(key)) {
             node.props.attach = key
         }

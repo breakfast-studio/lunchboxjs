@@ -1,9 +1,12 @@
-import { computed, createRenderer, Component, ref } from 'vue'
+import { computed, createRenderer, Component, ref, watch } from 'vue'
 import { nodeOps } from './nodeOps'
 import {
-    createdCamera,
-    createdRenderer,
-    createdScene,
+    // createdCamera,
+    // createdRenderer,
+    // autoScene,
+    ensuredCamera,
+    ensureRenderer,
+    ensuredScene,
     ensureRootNode,
     extend,
     inputActive,
@@ -26,15 +29,11 @@ export const globals = {
     dpr: ref(1),
     inputActive,
     mousePos,
-
-    camera: createdCamera,
-    renderer: createdRenderer,
-    scene: createdScene,
 }
 
-export const camera = computed(() => globals.camera.value?.instance)
-export const renderer = computed(() => globals.renderer.value?.instance)
-export const scene = computed(() => globals.scene.value?.instance)
+export const camera = computed(() => ensuredCamera.value.instance)
+export const renderer = computed(() => ensureRenderer.value?.instance ?? null)
+export const scene = computed(() => ensuredScene.value.instance)
 
 export const createApp = (root: Component) => {
     const app = createRenderer(nodeOps).createApp(root) as Lunch.App
@@ -68,12 +67,6 @@ export const createApp = (root: Component) => {
         extend({ app, ...targets })
         return app
     }
-
-    // kick update loop
-    // app.update = update
-    // app.update({
-    //     app,
-    // })
 
     // done
     return app

@@ -5,14 +5,18 @@ import {
     onBeforeUnmount,
     onMounted,
     ref,
+    WritableComputedRef,
 } from 'vue'
 import {
     cancelUpdate,
-    ensureCamera,
+    createNode,
+    ensuredCamera,
     ensureRenderer,
-    ensureScene,
+    ensuredScene,
     fallbackRendererUuid,
     MiniDom,
+    rendererReady,
+    tryGetNodeWithInstanceType,
     update,
 } from '../../core'
 import { set } from 'lodash'
@@ -49,7 +53,7 @@ export const LunchboxWrapper: ComponentOptions = {
         const useFallbackRenderer = ref(true)
         const dpr = ref(props.dpr ?? -1)
         const container = ref<MiniDom.RendererDomNode>()
-        let renderer: MiniDom.RendererStandardNode<THREE.WebGLRenderer>
+        let renderer: Lunch.Node<THREE.WebGLRenderer> | null
         let scene: MiniDom.RendererStandardNode<THREE.Scene>
 
         // MOUNT
@@ -59,7 +63,7 @@ export const LunchboxWrapper: ComponentOptions = {
             if (!canvas.value) throw new Error('missing canvas')
 
             // ensure camera
-            const camera = ensureCamera().instance
+            const camera = ensuredCamera.value.instance
             // move camera if needed
             if (camera && props.cameraPosition) {
                 camera.position.set(...props.cameraPosition)
@@ -67,33 +71,77 @@ export const LunchboxWrapper: ComponentOptions = {
 
             // RENDERER
             // ====================
-            // build renderer args
-            const rendererArgs: THREE.WebGLRendererParameters = {
-                antialias: true,
-                canvas: canvas.value.domElement,
-            }
-            if (props.transparent) {
-                rendererArgs.alpha = true
-            }
-            const sugar = {
-                shadow: props.shadow,
-            }
-            // ensure renderer
-            renderer = ensureRenderer([rendererArgs], sugar)
-            // set renderer props if needed
-            if (props.rendererProperties) {
-                Object.keys(props.rendererProperties).forEach((key) => {
-                    set(renderer, key, (props.rendererProperties as any)[key])
+            // is there already a renderer?
+            // TODO: allow other renderer types
+            renderer = tryGetNodeWithInstanceType([
+                'WebGLRenderer',
+            ]) as unknown as Lunch.Node<THREE.WebGLRenderer> | null
+
+            // if renderer is missing, initialize with options
+            if (!renderer) {
+                // build renderer args
+                const rendererArgs: THREE.WebGLRendererParameters = {
+                    antialias: true,
+                    canvas: canvas.value.domElement,
+                }
+                if (props.transparent) {
+                    rendererArgs.alpha = true
+                }
+
+                // create new renderer
+                ensureRenderer.value = createNode<THREE.WebGLRenderer>({
+                    type: 'WebGLRenderer',
+                    uuid: fallbackRendererUuid,
+                    props: {
+                        args: [rendererArgs],
+                    },
                 })
-            }
-            if (renderer.uuid !== fallbackRendererUuid) {
+
+                // we've initialized the renderer, so anything depending on it can execute now
+                rendererReady.value = true
+
+                const rendererAsWebGlRenderer =
+                    ensureRenderer as WritableComputedRef<
+                        Lunch.Node<THREE.WebGLRenderer>
+                    >
+
+                // update render sugar
+                const sugar = {
+                    shadow: props.shadow,
+                }
+                if (rendererAsWebGlRenderer.value.instance && sugar?.shadow) {
+                    rendererAsWebGlRenderer.value.instance.shadowMap.enabled =
+                        true
+                    if (typeof sugar.shadow === 'object') {
+                        rendererAsWebGlRenderer.value.instance.shadowMap.type =
+                            sugar.shadow.type
+                    }
+                }
+
+                // set renderer props if needed
+                if (props.rendererProperties) {
+                    Object.keys(props.rendererProperties).forEach((key) => {
+                        set(
+                            rendererAsWebGlRenderer.value,
+                            key,
+                            (props.rendererProperties as any)[key]
+                        )
+                    })
+                }
+
+                // update using created renderer
+                renderer = rendererAsWebGlRenderer.value
+            } else {
                 useFallbackRenderer.value = false
+                // the user has initialized the renderer, so anything depending
+                // on the renderer can execute
+                rendererReady.value = true
                 return
             }
 
             // SCENE
             // ====================
-            scene = ensureScene()
+            scene = ensuredScene.value
             // set background color
             if (scene && scene.instance && props.background) {
                 scene.instance.background = new Color(props.background)
@@ -105,7 +153,7 @@ export const LunchboxWrapper: ComponentOptions = {
                 dpr.value = window.devicePixelRatio
             }
 
-            if (renderer.instance) {
+            if (renderer?.instance) {
                 renderer.instance.setPixelRatio(dpr.value)
                 globals.dpr.value = dpr.value
                 // prep canvas (sizing, observe, unmount, etc)
@@ -120,6 +168,7 @@ export const LunchboxWrapper: ComponentOptions = {
 
             // KICK UPDATE
             // ====================
+            // console.log(scene)
             update({
                 app: getCurrentInstance()!.appContext.app as Lunch.App,
                 camera,

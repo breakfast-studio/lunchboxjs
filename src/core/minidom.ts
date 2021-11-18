@@ -9,7 +9,10 @@ import { Lunch } from '..'
 // to make a DOM-like but otherwise agnostic hierarchy structure.
 export namespace MiniDom {
     export class BaseNode {
-        constructor(options: Partial<BaseNode> = {}, parent?: MiniDom.BaseNode) {
+        constructor(
+            options: Partial<BaseNode> = {},
+            parent?: MiniDom.BaseNode
+        ) {
             this.parentNode = options?.parentNode ?? parent ?? null
             this.minidomType = 'MinidomBaseNode'
             this.uuid = options?.uuid ?? createUuid()
@@ -25,7 +28,9 @@ export namespace MiniDom {
         get nextSibling(): MiniDom.BaseNode | null {
             if (!this.parentNode) return null
 
-            const idx = this.parentNode.children.findIndex(n => n.uuid === this.uuid)
+            const idx = this.parentNode.children.findIndex(
+                (n) => n.uuid === this.uuid
+            )
             // return next sibling if we're present and not the last child of the parent
             if (idx !== -1 && idx < this.parentNode.children.length - 1) {
                 return this.parentNode.children[idx + 1]
@@ -34,10 +39,15 @@ export namespace MiniDom {
             return null
         }
 
-        insertBefore(child: MiniDom.BaseNode, anchor?: MiniDom.BaseNode | null) {
+        insertBefore(
+            child: MiniDom.BaseNode,
+            anchor?: MiniDom.BaseNode | null
+        ) {
             child.removeAsChildFromAnyParents()
             child.parentNode = this
-            const anchorIdx = this.children.findIndex(n => n.uuid === anchor?.uuid)
+            const anchorIdx = this.children.findIndex(
+                (n) => n.uuid === anchor?.uuid
+            )
             if (anchorIdx !== -1) {
                 this.children.splice(anchorIdx, 0, child)
             } else {
@@ -45,7 +55,7 @@ export namespace MiniDom {
             }
         }
         removeChild(child: MiniDom.BaseNode) {
-            const idx = this.children.findIndex(n => n?.uuid === child?.uuid)
+            const idx = this.children.findIndex((n) => n?.uuid === child?.uuid)
             if (idx !== -1) {
                 this.children.splice(idx, 1)
             }
@@ -59,7 +69,7 @@ export namespace MiniDom {
                 // remove child from any other parents
                 child.removeAsChildFromAnyParents()
 
-                // add to this node 
+                // add to this node
                 child.parentNode = this
                 this.insertBefore(child, null)
             }
@@ -76,7 +86,7 @@ export namespace MiniDom {
             return output
         }
 
-        /** Drop this node. Removes parent's knowledge of this node 
+        /** Drop this node. Removes parent's knowledge of this node
          * and resets this node's internal parent. */
         drop() {
             // remove parent
@@ -89,13 +99,23 @@ export namespace MiniDom {
         // TODO: depth-first vs breadth-first
         walk(callback: (item: MiniDom.BaseNode) => boolean) {
             const queue = [this, ...this.children] as MiniDom.BaseNode[]
+            const traversed: MiniDom.BaseNode[] = []
             let canContinue = true
             while (queue.length && canContinue) {
                 const current = queue.shift()
                 if (current) {
-                    queue.push(...current.children)
+                    if (traversed.includes(current)) continue
+
+                    traversed.push(current)
+                    queue.push(
+                        ...current.children.filter(
+                            (child) => !traversed.includes(child)
+                        )
+                    )
                     canContinue = callback(current)
-                } else { canContinue = false }
+                } else {
+                    canContinue = false
+                }
             }
         }
 
@@ -104,12 +124,18 @@ export namespace MiniDom {
         minidomType: MiniDom.NodeType
 
         removeAsChildFromAnyParents() {
-            allNodes.forEach(node => node.removeChild(this))
+            allNodes.forEach((node) => node.removeChild(this))
         }
     }
 
-    export class RendererBaseNode extends MiniDom.BaseNode implements Lunch.MetaBase {
-        constructor(options: Partial<Lunch.MetaBase> = {}, parent?: MiniDom.BaseNode) {
+    export class RendererBaseNode
+        extends MiniDom.BaseNode
+        implements Lunch.MetaBase
+    {
+        constructor(
+            options: Partial<Lunch.MetaBase> = {},
+            parent?: MiniDom.BaseNode
+        ) {
             super(options, parent)
             this.minidomType = 'RendererNode'
 
@@ -131,8 +157,8 @@ export namespace MiniDom {
         drop() {
             super.drop()
             // handle remove functions
-            Object.keys(this.eventListenerRemoveFunctions).forEach(key => {
-                this.eventListenerRemoveFunctions[key].forEach(func => func())
+            Object.keys(this.eventListenerRemoveFunctions).forEach((key) => {
+                this.eventListenerRemoveFunctions[key].forEach((func) => func())
             })
         }
     }
@@ -141,18 +167,31 @@ export namespace MiniDom {
     // SPECIFIC RENDERER NODES BELOW
     // ====================
 
-    export class RendererRootNode extends MiniDom.RendererBaseNode implements Lunch.RootMeta {
-        constructor(options: Partial<Lunch.RootMeta> = {}, parent?: MiniDom.BaseNode) {
+    export class RendererRootNode
+        extends MiniDom.RendererBaseNode
+        implements Lunch.RootMeta
+    {
+        constructor(
+            options: Partial<Lunch.RootMeta> = {},
+            parent?: MiniDom.BaseNode
+        ) {
             super(options, parent)
-            this.domElement = options.domElement ?? document.createElement('div')
+            this.domElement =
+                options.domElement ?? document.createElement('div')
         }
 
         domElement: HTMLElement
         isLunchboxRootNode = true
     }
 
-    export class RendererCommentNode extends MiniDom.RendererBaseNode implements Lunch.CommentMeta {
-        constructor(options: Partial<Lunch.CommentMeta> = {}, parent?: MiniDom.BaseNode) {
+    export class RendererCommentNode
+        extends MiniDom.RendererBaseNode
+        implements Lunch.CommentMeta
+    {
+        constructor(
+            options: Partial<Lunch.CommentMeta> = {},
+            parent?: MiniDom.BaseNode
+        ) {
             super(options, parent)
             this.text = options.text ?? ''
         }
@@ -160,17 +199,30 @@ export namespace MiniDom {
         text: string
     }
 
-    export class RendererDomNode extends MiniDom.RendererBaseNode implements Lunch.DomMeta {
-        constructor(options: Partial<Lunch.DomMeta> = {}, parent?: MiniDom.BaseNode) {
+    export class RendererDomNode
+        extends MiniDom.RendererBaseNode
+        implements Lunch.DomMeta
+    {
+        constructor(
+            options: Partial<Lunch.DomMeta> = {},
+            parent?: MiniDom.BaseNode
+        ) {
             super(options, parent)
-            this.domElement = options.domElement ?? document.createElement('div')
+            this.domElement =
+                options.domElement ?? document.createElement('div')
         }
 
         domElement: HTMLElement
     }
 
-    export class RendererTextNode extends MiniDom.RendererBaseNode implements Lunch.TextMeta {
-        constructor(options: Partial<Lunch.TextMeta> = {}, parent?: MiniDom.BaseNode) {
+    export class RendererTextNode
+        extends MiniDom.RendererBaseNode
+        implements Lunch.TextMeta
+    {
+        constructor(
+            options: Partial<Lunch.TextMeta> = {},
+            parent?: MiniDom.BaseNode
+        ) {
             super(options, parent)
             this.text = options.text ?? ''
         }
@@ -178,8 +230,14 @@ export namespace MiniDom {
         text: string
     }
 
-    export class RendererStandardNode<T = THREE.Object3D> extends MiniDom.RendererBaseNode implements Lunch.StandardMeta<T> {
-        constructor(options: Partial<Lunch.StandardMeta<T>> = {}, parent?: MiniDom.BaseNode) {
+    export class RendererStandardNode<T = THREE.Object3D>
+        extends MiniDom.RendererBaseNode
+        implements Lunch.StandardMeta<T>
+    {
+        constructor(
+            options: Partial<Lunch.StandardMeta<T>> = {},
+            parent?: MiniDom.BaseNode
+        ) {
             super(options, parent)
             this.attached = options.attached ?? []
             this.attachedArray = options.attachedArray ?? {}

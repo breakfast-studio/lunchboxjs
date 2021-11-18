@@ -1,6 +1,6 @@
 import { allNodes, createNode, MiniDom } from '.'
 import { setupAutoRaycaster } from './interaction/setupAutoRaycaster'
-import { ref } from 'vue'
+import { computed, reactive, ref, WritableComputedRef } from 'vue'
 import { Lunch } from '..'
 
 // ENSURE ROOT
@@ -14,151 +14,165 @@ export function ensureRootNode(options: Partial<Lunch.RootMeta> = {}) {
     return lunchboxRootNode
 }
 
+// This is used in `buildEnsured` below and `LunchboxWrapper`
+/** Search the overrides record and the node tree for a node in the given types */
+export function tryGetNodeWithInstanceType<T extends THREE.Object3D>(
+    pascalCaseTypes: string | string[]
+) {
+    if (!Array.isArray(pascalCaseTypes)) {
+        pascalCaseTypes = [pascalCaseTypes]
+    }
+
+    // default to override if we have one
+    for (let singleType of pascalCaseTypes) {
+        if (overrides[singleType]) return overrides[singleType] as Lunch.Node<T>
+    }
+
+    // look for auto-created node
+    for (let singleType of pascalCaseTypes) {
+        const found =
+            autoCreated[singleType] ||
+            allNodes.find(
+                (node) =>
+                    (node as MiniDom.RendererBaseNode).type?.toLowerCase() ===
+                    singleType.toLowerCase()
+            )
+
+        // if we have one, save and return
+        if (found) {
+            const createdAsNode = found as MiniDom.RendererStandardNode<T>
+            autoCreated[singleType] = createdAsNode
+            return createdAsNode
+        }
+    }
+
+    return null
+}
+
+// GENERIC ENSURE FUNCTION
+// ====================
+// Problem:
+// I want to make sure an object of type Xyz exists in my Lunchbox app.
+// If it doesn't exist, I want to create it and add it to the root node.
+//
+// Solution:
+// export const ensuredXyz = buildEnsured<Xyz>('Xyz', 'FALLBACK_XYZ')
+//
+// Now in other components, you can do both:
+// import { ensuredXyz }
+// ensuredXyz.value (...)
+// and:
+// ensuredXyz.value = ...
+export const autoCreated: Record<string, Lunch.Node | null> = reactive({})
+export const overrides: Record<string, Lunch.Node | null> = reactive({})
+
+/**
+ * Build a computed ensured value with a getter and setter.
+ * @param pascalCaseTypes List of types this can be. Will autocreate first type if array provided.
+ * @param fallbackUuid Fallback UUID to use.
+ * @param props Props to pass to autocreated element
+ * @returns Computed getter/setter for ensured object.
+ */
+function buildEnsured<T extends THREE.Object3D>(
+    pascalCaseTypes: string | string[],
+    fallbackUuid: string,
+    props: Record<string, any> = {},
+    callback: ((node: MiniDom.RendererStandardNode<T>) => void) | null = null
+) {
+    // make sure we've got an array
+    if (!Array.isArray(pascalCaseTypes)) {
+        pascalCaseTypes = [pascalCaseTypes]
+    }
+
+    // add type for autoCreated and overrides
+    for (let singleType of pascalCaseTypes) {
+        if (!autoCreated[singleType]) {
+            autoCreated[singleType] = null
+        }
+        if (!overrides[singleType]) {
+            overrides[singleType] = null
+        }
+    }
+
+    return computed({
+        get(): MiniDom.RendererStandardNode<T> {
+            // try to get existing type
+            const existing = tryGetNodeWithInstanceType<T>(
+                pascalCaseTypes as string[]
+            )
+            if (existing) return existing
+
+            // otherwise, create a new node
+            const root = ensureRootNode()
+            const node = createNode<T>({
+                type: pascalCaseTypes[0],
+                uuid: fallbackUuid,
+                props,
+            })
+            root.addChild(node)
+            autoCreated[pascalCaseTypes[0]] = node
+            if (callback) {
+                callback(node)
+            }
+            return node
+        },
+        set(val: MiniDom.RendererStandardNode<T>) {
+            const t = val.type ?? ''
+            const pascalType = t[0].toUpperCase() + t.slice(1)
+            overrides[pascalType] = val
+        },
+    })
+}
+
 // ENSURE CAMERA
 // ====================
 export const fallbackCameraUuid = 'FALLBACK_CAMERA'
-export const createdCamera = ref<Lunch.Node<THREE.Camera> | null>(null)
-export const ensureCamera = () => {
-    // look for cameras
-    // TODO: does this need to be more robust?
-    const foundCamera = allNodes.find((node) =>
-        (node as MiniDom.RendererBaseNode).type
-            ?.toLowerCase()
-            .includes('camera')
-    )
-
-    // if we have one, return
-    if (foundCamera) {
-        const cameraAsStandardNode =
-            foundCamera as MiniDom.RendererStandardNode<THREE.Camera>
-        createdCamera.value = cameraAsStandardNode
-        return cameraAsStandardNode
+export const ensuredCamera = buildEnsured<THREE.Camera>(
+    ['PerspectiveCamera', 'OrthographicCamera'],
+    fallbackCameraUuid,
+    {
+        args: [45, 0.5625, 1, 1000],
     }
-
-    // otherwise, create a new camera
-    const root = ensureRootNode()
-    const cameraNode = createNode<THREE.Camera>({
-        type: 'PerspectiveCamera',
-        uuid: fallbackCameraUuid,
-        props: {
-            args: [45, 0.5625, 1, 1000],
-        },
-    })
-    root.addChild(cameraNode)
-    createdCamera.value = cameraNode
-
-    // add camera to scene
-    ensureScene().instance?.add(cameraNode.instance!)
-    return cameraNode
-}
+)
 
 // ENSURE RENDERER
 // ====================
 export const fallbackRendererUuid = 'FALLBACK_RENDERER'
-export const createdRenderer = ref<Lunch.Node<THREE.Renderer> | null>(null)
-export const ensureRenderer = (
-    fallbackArgs: Array<THREE.WebGLRendererParameters> = [],
-    sugar: {
-        shadow?: Lunch.ShadowSugar
-    } = {}
-) => {
-    // look for renderers
-    // TODO: does this need to be more robust?
-    const foundRenderer = allNodes.find((node) =>
-        (node as MiniDom.RendererBaseNode).type
-            ?.toLowerCase()
-            .includes('renderer')
-    )
+export const v = buildEnsured(
+    // TODO: ensure support for css/svg renderers
+    ['WebGLRenderer'], //, 'CSS2DRenderer', 'CSS3DRenderer', 'SVGRenderer'],
+    fallbackRendererUuid,
+    {}
+) as unknown as WritableComputedRef<Lunch.Node<THREE.WebGLRenderer>>
+/** Special value to be changed ONLY in `LunchboxWrapper`.
+ * Functions waiting for a Renderer need to wait for this to be true.  */
+export const rendererReady = ref(false)
 
-    // if we have one, return
-    if (foundRenderer) {
-        const rendererAsStandardNode =
-            foundRenderer as MiniDom.RendererStandardNode<THREE.WebGLRenderer>
-        createdRenderer.value = rendererAsStandardNode
-        return rendererAsStandardNode
-    }
-
-    // otherwise, create a new renderer
-    const root = ensureRootNode()
-    const rendererNode = createNode<THREE.WebGLRenderer>(
-        {
-            type: 'WebGLRenderer',
-            uuid: fallbackRendererUuid,
-        },
-        { args: fallbackArgs }
-    )
-
-    // shadow sugar
-    if (sugar?.shadow) {
-        rendererNode.instance!.shadowMap.enabled = true
-        if (typeof sugar.shadow === 'object') {
-            rendererNode.instance!.shadowMap.type = sugar.shadow.type
-        }
-    }
-
-    root.addChild(rendererNode)
-    createdRenderer.value = rendererNode
-
-    // return created node
-    return rendererNode
-}
+export const ensureRenderer = computed<Lunch.Node<THREE.WebGLRenderer> | null>({
+    get() {
+        return (rendererReady.value ? (v.value as any) : (null as any)) as any
+    },
+    set(val: any) {
+        const t = val.type ?? ''
+        const pascalType = t[0].toUpperCase() + t.slice(1)
+        overrides[pascalType] = val as any
+    },
+})
 
 // ENSURE SCENE
 // ====================
 export const fallbackSceneUuid = 'FALLBACK_SCENE'
-export const createdScene = ref<Lunch.Node<THREE.Scene>>()
-export const ensureScene = () => {
-    // look for scenes
-    const foundScene = allNodes.find(
-        (node) =>
-            (node as MiniDom.RendererBaseNode).type?.toLowerCase() === 'scene'
-    )
-    // if we have one, return
-    if (foundScene) {
-        const sceneAsLunchboxNode =
-            foundScene as MiniDom.RendererStandardNode<THREE.Scene>
-        createdScene.value = sceneAsLunchboxNode
-        return sceneAsLunchboxNode
-    }
-
-    // otherwise, create a new scene
-    const root = ensureRootNode()
-    const sceneNode = createNode<THREE.Scene>({
-        type: 'Scene',
-        uuid: fallbackSceneUuid,
-    })
-    root.addChild(sceneNode)
-    createdScene.value = sceneNode
-    return sceneNode
-}
+export const ensuredScene = buildEnsured<THREE.Scene>(
+    'Scene',
+    fallbackSceneUuid
+)
 
 // ENSURE AUTO-RAYCASTER
 export const autoRaycasterUuid = 'AUTO_RAYCASTER'
-export const createdRaycaster = ref<Lunch.Node<THREE.Raycaster> | null>(null)
-export const ensureRaycaster = () => {
-    // look for autoraycaster
-    const found = allNodes.find(
-        (node) => (node as Lunch.Node).uuid === autoRaycasterUuid
-    )
-    // if we have one, return
-    if (found) {
-        const foundAsNode = found as Lunch.Node<THREE.Raycaster>
-        createdRaycaster.value = foundAsNode
-        return foundAsNode
-    }
-
-    // otherwise, create raycaster
-    const root = ensureRootNode()
-    const raycasterNode = createNode<THREE.Raycaster>({
-        type: 'Raycaster',
-        uuid: autoRaycasterUuid,
-    })
-    root.addChild(raycasterNode)
-    createdRaycaster.value = raycasterNode
-
-    // finish auto-raycaster setup
-    setupAutoRaycaster(raycasterNode)
-
-    // done with raycaster
-    return raycasterNode
-}
+// `unknown` is intentional here - we need to typecast the node since Raycaster isn't an Object3D
+export const ensuredRaycaster = buildEnsured(
+    'Raycaster',
+    autoRaycasterUuid,
+    {},
+    (node) => setupAutoRaycaster(node as unknown as Lunch.Node<THREE.Raycaster>)
+) as unknown as WritableComputedRef<Lunch.Node<THREE.Raycaster>>

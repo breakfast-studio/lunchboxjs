@@ -4,7 +4,7 @@ import {
     interactables,
     removeInteractable,
 } from './interactables'
-import { ensureRaycaster } from '..'
+import { ensuredRaycaster } from '..'
 import { inputActive } from './input'
 import { currentIntersections } from '.'
 import { Lunch } from '../..'
@@ -36,7 +36,9 @@ export function addEventListener({
 
     // if we need it, let's get/create the main raycaster
     if (interactionsRequiringRaycaster.includes(key)) {
-        ensureRaycaster()
+        // we're not using `v` here, we're just making sure the raycaster has been created
+        // TODO: is this necessary?
+        const v = ensuredRaycaster.value
 
         if (node.instance && !interactables.includes(node)) {
             addInteractable(node)
