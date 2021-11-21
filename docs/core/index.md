@@ -108,4 +108,4 @@ You can use most Three.js classes in Lunchbox, such as:
 
 For more information, see [Components](/components/).
 
-To add any features not in that list, see the instructions under [Extend](/renderer/components/extend).
+To add any features not in that list, see the instructions under [Extend](/components/extend/).
