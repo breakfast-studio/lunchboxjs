@@ -7,12 +7,8 @@ let frameID: number
 export const beforeRender = [] as Lunch.UpdateCallback[]
 export const afterRender = [] as Lunch.UpdateCallback[]
 
-export const update: Lunch.UpdateCallback = (opts: {
-    app: Lunch.App
-    renderer?: THREE.Renderer | null
-    scene?: THREE.Scene | null
-    camera?: THREE.Camera | null
-}) => {
+export const update: Lunch.UpdateCallback = (opts) => {
+    // request next frame
     frameID = requestAnimationFrame(() =>
         update({
             app: opts.app,
@@ -22,6 +18,7 @@ export const update: Lunch.UpdateCallback = (opts: {
         })
     )
 
+    // prep options
     const { app, renderer, scene, camera } = opts
 
     // BEFORE RENDER
@@ -32,9 +29,12 @@ export const update: Lunch.UpdateCallback = (opts: {
     })
 
     // RENDER
-    // console.log(camera?.position.z)
     if (renderer && scene && camera) {
-        renderer.render(toRaw(scene), toRaw(camera))
+        if (app.customRender) {
+            app.customRender(opts)
+        } else {
+            renderer.render(toRaw(scene), toRaw(camera))
+        }
     }
 
     // AFTER RENDER

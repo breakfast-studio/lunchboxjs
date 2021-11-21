@@ -7,8 +7,13 @@ type RendererStandardNode<T = THREE.Object3D> =
 export declare namespace Lunch {
     /** Lunchbox app. */
     type App = VueApp<any> & {
+        clearCustomRender: () => void
+        customRender: ((opts: UpdateCallbackProperties) => void) | null
         extend: (v: Record<string, any>) => App
         rootNode: RootNode
+        setCustomRender: (
+            update: (opts: UpdateCallbackProperties) => void
+        ) => void
         update: UpdateCallback
     }
 
