@@ -15,10 +15,19 @@ export default defineConfig({
                 ],
             },
             {
-                text: 'Renderer',
+                text: 'Plugin',
                 children: [
                     { text: 'Components', link: '/components/' },
                     { text: 'Extend', link: '/components/extend/' },
+                ],
+            },
+            {
+                text: 'Advanced',
+                children: [
+                    {
+                        text: 'Custom Render Function',
+                        link: '/advanced/custom-render/',
+                    },
                 ],
             },
         ],
