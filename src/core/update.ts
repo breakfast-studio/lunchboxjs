@@ -14,7 +14,7 @@ export const update: Lunch.UpdateCallback = (opts) => {
             app: opts.app,
             renderer: ensureRenderer.value?.instance,
             scene: ensuredScene.value.instance,
-            camera: ensuredCamera.value.instance,
+            camera: ensuredCamera.value?.instance,
         })
     )
 
