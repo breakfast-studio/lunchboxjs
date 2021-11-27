@@ -54,6 +54,7 @@ export const LunchboxWrapper: ComponentOptions = {
         const dpr = ref(props.dpr ?? -1)
         const container = ref<MiniDom.RendererDomNode>()
         let renderer: Lunch.Node<THREE.WebGLRenderer> | null
+        let camera: Lunch.Node<THREE.Camera> | null
         let scene: MiniDom.RendererStandardNode<THREE.Scene>
 
         // MOUNT
@@ -62,11 +63,20 @@ export const LunchboxWrapper: ComponentOptions = {
             // canvas needs to exist
             if (!canvas.value) throw new Error('missing canvas')
 
-            // ensure camera
-            const camera = ensuredCamera.value.instance
+            // CAMERA
+            // ====================
+            // is there already a camera?
+            camera = tryGetNodeWithInstanceType([
+                'PerspectiveCamera',
+                'OrthographicCamera',
+            ])
+            if (!camera) {
+                camera = ensuredCamera.value
+            }
+            // const camera = ensuredCamera.value.instance
             // move camera if needed
             if (camera && props.cameraPosition) {
-                camera.position.set(...props.cameraPosition)
+                camera.instance?.position.set(...props.cameraPosition)
             }
 
             // RENDERER
@@ -171,7 +181,7 @@ export const LunchboxWrapper: ComponentOptions = {
             // console.log(scene)
             update({
                 app: getCurrentInstance()!.appContext.app as Lunch.App,
-                camera,
+                camera: camera.instance,
                 renderer: renderer.instance,
                 scene: scene.instance,
             })

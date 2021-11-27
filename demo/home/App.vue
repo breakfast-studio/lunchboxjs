@@ -32,5 +32,6 @@ const demos = ref([
     { title: 'Custom Scene', url: '/demo/custom-scene/' },
     { title: 'Camera Switch', url: '/demo/camera-switch/' },
     { title: 'Custom Render', url: '/demo/custom-render/' },
+    { title: 'Orthographic Camera', url: '/demo/ortho-camera/' },
 ])
 </script>
