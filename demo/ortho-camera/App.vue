@@ -1,10 +1,5 @@
 <template>
-    <Lunchbox
-        :cameraPosition="[10, 10, 10]"
-        transparent
-        ortho
-        :cameraArgs="[-20, 20, 20, -20]"
-    >
+    <Lunchbox :cameraPosition="[5, 5, 5]" transparent ortho>
         <mesh @click="sceneIndex = 1">
             <boxGeometry />
             <meshBasicMaterial color="blue" />

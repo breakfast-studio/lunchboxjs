@@ -19,7 +19,14 @@ export const resizeCanvas = (width?: number, height?: number) => {
         perspectiveCamera.aspect = aspect
         perspectiveCamera.updateProjectionMatrix()
     } else if (camera.type?.toLowerCase() === 'orthographiccamera') {
-        console.log('TODO: ortho camera update')
+        // console.log('TODO: ortho camera update')
+        const orthoCamera = camera.instance as THREE.OrthographicCamera
+        const heightInTermsOfWidth = height / width
+        orthoCamera.top = heightInTermsOfWidth * 10
+        orthoCamera.bottom = -heightInTermsOfWidth * 10
+        orthoCamera.right = 10
+        orthoCamera.left = -10
+        orthoCamera.updateProjectionMatrix()
     } else {
         console.log('TODO: non-ortho or perspective camera')
     }

@@ -23,7 +23,7 @@ import {
 } from '../../core'
 import { set } from 'lodash'
 import { globals, Lunch } from '../..'
-import { Color } from 'three'
+import { Color, Vector2 } from 'three'
 import { prepCanvas } from './prepCanvas'
 
 /** fixed & fill styling for container */
@@ -67,43 +67,6 @@ export const LunchboxWrapper: ComponentOptions = {
         onMounted(() => {
             // canvas needs to exist
             if (!canvas.value) throw new Error('missing canvas')
-
-            // CAMERA
-            // ====================
-            // is there already a camera?
-            camera = tryGetNodeWithInstanceType([
-                'PerspectiveCamera',
-                'OrthographicCamera',
-            ])
-            // if not, let's create one
-            if (!camera) {
-                // create ortho camera
-                if (props.ortho || props.orthographic) {
-                    ensuredCamera.value = createNode<THREE.OrthographicCamera>({
-                        props: { args: props.cameraArgs ?? [] },
-                        type: 'OrthographicCamera',
-                        uuid: fallbackCameraUuid,
-                    })
-                } else {
-                    ensuredCamera.value = createNode<THREE.PerspectiveCamera>({
-                        props: {
-                            args: props.cameraArgs ?? [45, 0.5625, 1, 1000],
-                        },
-                        type: 'PerspectiveCamera',
-                        uuid: fallbackCameraUuid,
-                    })
-                }
-
-                cameraReady.value = true
-
-                camera = ensuredCamera.value
-            } else {
-                cameraReady.value = true
-            }
-            // move camera if needed
-            if (camera && props.cameraPosition) {
-                camera.instance?.position.set(...props.cameraPosition)
-            }
 
             // RENDERER
             // ====================
@@ -173,6 +136,45 @@ export const LunchboxWrapper: ComponentOptions = {
                 // on the renderer can execute
                 rendererReady.value = true
                 return
+            }
+
+            // CAMERA
+            // ====================
+            // is there already a camera?
+            camera = tryGetNodeWithInstanceType([
+                'PerspectiveCamera',
+                'OrthographicCamera',
+            ])
+            // if not, let's create one
+            if (!camera) {
+                // create ortho camera
+                if (props.ortho || props.orthographic) {
+                    // const size: Vector2 = new Vector2()
+
+                    ensuredCamera.value = createNode<THREE.OrthographicCamera>({
+                        props: { args: props.cameraArgs ?? [] },
+                        type: 'OrthographicCamera',
+                        uuid: fallbackCameraUuid,
+                    })
+                } else {
+                    ensuredCamera.value = createNode<THREE.PerspectiveCamera>({
+                        props: {
+                            args: props.cameraArgs ?? [45, 0.5625, 1, 1000],
+                        },
+                        type: 'PerspectiveCamera',
+                        uuid: fallbackCameraUuid,
+                    })
+                }
+
+                cameraReady.value = true
+
+                camera = ensuredCamera.value
+            } else {
+                cameraReady.value = true
+            }
+            // move camera if needed
+            if (camera && props.cameraPosition) {
+                camera.instance?.position.set(...props.cameraPosition)
             }
 
             // SCENE
