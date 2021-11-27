@@ -127,13 +127,35 @@ function buildEnsured<T extends THREE.Object3D>(
 // ENSURE CAMERA
 // ====================
 export const fallbackCameraUuid = 'FALLBACK_CAMERA'
-export const ensuredCamera = buildEnsured<THREE.Camera>(
+export const defaultCamera = buildEnsured(
     ['PerspectiveCamera', 'OrthographicCamera'],
     fallbackCameraUuid,
-    {
-        args: [45, 0.5625, 1, 1000],
-    }
-)
+    { args: [45, 0.5625, 1, 1000] }
+) as unknown as WritableComputedRef<Lunch.Node<THREE.Camera>>
+/** Special value to be changed ONLY in `LunchboxWrapper`.
+ * Functions waiting for a Camera need to wait for this to be true.  */
+export const cameraReady = ref(false)
+
+export const ensuredCamera = computed<Lunch.Node<THREE.Camera> | null>({
+    get() {
+        return (
+            cameraReady.value ? (defaultCamera.value as any) : (null as any)
+        ) as any
+    },
+    set(val: any) {
+        const t = val.type ?? ''
+        const pascalType = t[0].toUpperCase() + t.slice(1)
+        overrides[pascalType] = val as any
+    },
+})
+
+// export const ensuredCamera = buildEnsured<THREE.Camera>(
+//     ['PerspectiveCamera', 'OrthographicCamera'],
+//     fallbackCameraUuid,
+//     {
+//         args: [45, 0.5625, 1, 1000],
+//     }
+// )
 
 // ENSURE RENDERER
 // ====================

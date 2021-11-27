@@ -138,8 +138,11 @@ export declare namespace Lunch {
 
     interface WrapperProps {
         background?: string
+        cameraArgs?: any[]
         cameraPosition?: [number, number, number]
         dpr?: number
+        ortho?: boolean
+        orthographic?: boolean
         rendererProperties?: Partial<THREE.WebGLRenderer>
         shadow?: ShadowSugar
         transparent?: boolean

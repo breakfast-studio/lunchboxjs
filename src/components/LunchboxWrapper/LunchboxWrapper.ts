@@ -8,11 +8,13 @@ import {
     WritableComputedRef,
 } from 'vue'
 import {
+    cameraReady,
     cancelUpdate,
     createNode,
     ensuredCamera,
     ensureRenderer,
     ensuredScene,
+    fallbackCameraUuid,
     fallbackRendererUuid,
     MiniDom,
     rendererReady,
@@ -42,8 +44,11 @@ export const LunchboxWrapper: ComponentOptions = {
     props: {
         // These should match the Lunchbox.WrapperProps interface
         background: String,
+        cameraArgs: Array,
         cameraPosition: Array,
         dpr: Number,
+        ortho: Boolean,
+        orthographic: Boolean,
         rendererProperties: Object,
         shadow: [Boolean, Object],
         transparent: Boolean,
@@ -70,10 +75,31 @@ export const LunchboxWrapper: ComponentOptions = {
                 'PerspectiveCamera',
                 'OrthographicCamera',
             ])
+            // if not, let's create one
             if (!camera) {
+                // create ortho camera
+                if (props.ortho || props.orthographic) {
+                    ensuredCamera.value = createNode<THREE.OrthographicCamera>({
+                        props: { args: props.cameraArgs ?? [] },
+                        type: 'OrthographicCamera',
+                        uuid: fallbackCameraUuid,
+                    })
+                } else {
+                    ensuredCamera.value = createNode<THREE.PerspectiveCamera>({
+                        props: {
+                            args: props.cameraArgs ?? [45, 0.5625, 1, 1000],
+                        },
+                        type: 'PerspectiveCamera',
+                        uuid: fallbackCameraUuid,
+                    })
+                }
+
+                cameraReady.value = true
+
                 camera = ensuredCamera.value
+            } else {
+                cameraReady.value = true
             }
-            // const camera = ensuredCamera.value.instance
             // move camera if needed
             if (camera && props.cameraPosition) {
                 camera.instance?.position.set(...props.cameraPosition)

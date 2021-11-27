@@ -30,7 +30,7 @@ export const globals = {
     mousePos,
 }
 
-export const camera = computed(() => ensuredCamera.value.instance)
+export const camera = computed(() => ensuredCamera.value?.instance ?? null)
 export const renderer = computed(() => ensureRenderer.value?.instance ?? null)
 export const scene = computed(() => ensuredScene.value.instance)
 

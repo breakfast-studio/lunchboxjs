@@ -4,16 +4,16 @@ import { toRaw } from 'vue'
 export const resizeCanvas = (width?: number, height?: number) => {
     const renderer = ensureRenderer.value?.instance
     const scene = ensuredScene.value.instance
+    const camera = ensuredCamera.value
 
     // ignore if no element
-    if (!renderer?.domElement || !scene) return
+    if (!renderer?.domElement || !scene || !camera) return
 
     width = width ?? window.innerWidth
     height = height ?? window.innerHeight
 
     // update camera
     const aspect = width / height
-    const camera = ensuredCamera.value
     if (camera.type?.toLowerCase() === 'perspectivecamera') {
         const perspectiveCamera = camera.instance as THREE.PerspectiveCamera
         perspectiveCamera.aspect = aspect
