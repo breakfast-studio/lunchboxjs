@@ -17,7 +17,12 @@ import { components } from './components'
 import { Lunch } from './types'
 
 export { lunchboxRootNode as lunchboxTree } from './core'
-export { onBeforeRender, onAfterRender } from './core'
+export {
+    offAfterRender,
+    offBeforeRender,
+    onBeforeRender,
+    onAfterRender,
+} from './core'
 export * from './types'
 
 // Utilities

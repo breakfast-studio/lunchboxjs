@@ -53,11 +53,29 @@ export const onBeforeRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
     }
 }
 
+export const offBeforeRender = (cb: Lunch.UpdateCallback | number) => {
+    if (isFinite(cb as number)) {
+        beforeRender.splice(cb as number, 1)
+    } else {
+        const idx = beforeRender.findIndex((v) => v == cb)
+        beforeRender.splice(idx, 1)
+    }
+}
+
 export const onAfterRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
     if (index === Infinity) {
         afterRender.push(cb)
     } else {
         afterRender.splice(index, 0, cb)
+    }
+}
+
+export const offAfterRender = (cb: Lunch.UpdateCallback | number) => {
+    if (isFinite(cb as number)) {
+        afterRender.splice(cb as number, 1)
+    } else {
+        const idx = afterRender.findIndex((v) => v == cb)
+        afterRender.splice(idx, 1)
     }
 }
 
