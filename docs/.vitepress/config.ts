@@ -15,7 +15,7 @@ export default defineConfig({
                 ],
             },
             {
-                text: 'Plugin',
+                text: 'Basic',
                 children: [
                     { text: 'Components', link: '/components/' },
                     { text: 'Extend', link: '/components/extend/' },

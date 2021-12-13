@@ -14,18 +14,18 @@ In a .vue [single file component](https://v3.vuejs.org/guide/single-file-compone
 
 ## Three.js and Lunchbox
 
-Almost all Lunchbox concepts are direct translations of Three.js concepts - let's look at [meshes](https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh) as an example.
+Almost all Lunchbox components are direct translations of Three.js concepts. Let's look at [meshes](https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh) as an example.
 
 A standard Three.js mesh requires a geometry and a material. Three.js code to create and add a yellow cube to the scene might look like [this](https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh):
 
 ```js
 // create geometry with sides of length 1
 const geometry = new THREE.BoxGeometry(1, 1, 1)
-// create yellow basic material (unaffected by lighting)
+// create yellow basic material
 const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
 // combine geometry + material in mesh
 const mesh = new THREE.Mesh(geometry, material)
-// add that mesh to the scene
+// add that mesh to the scene (assuming you've created a scene)
 scene.add(mesh)
 ```
 
@@ -42,7 +42,7 @@ In Lunchbox, this produces the same result:
 
 A few points to note:
 
--   Lunchbox component names match class names in Three.js.
+-   Lunchbox component names match camelCased Three.js class names.
 
 ```
 // three.js
@@ -70,7 +70,7 @@ would map to this in Lunchbox:
 <boxGeometry :args="[1, 2, 3]" />
 ```
 
--   Any property you can add to a Three.js object (for example, the `color` property of a `MeshBasicMaterial`) can be added as a reactive prop on a Lunchbox component:
+-   Any property you can add to a Three.js object (for example, the `color` property of a `MeshBasicMaterial`) can be added as a reactive prop on a Lunchbox component. For example, this yellow material:
 
 ```js
 const material = new THREE.MeshBasicMaterial()
