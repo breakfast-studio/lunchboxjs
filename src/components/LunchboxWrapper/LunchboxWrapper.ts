@@ -45,6 +45,8 @@ export const LunchboxWrapper: ComponentOptions = {
         // These should match the Lunchbox.WrapperProps interface
         background: String,
         cameraArgs: Array,
+        cameraLook: Array,
+        cameraLookAt: Array,
         cameraPosition: Array,
         dpr: Number,
         ortho: Boolean,
@@ -149,8 +151,6 @@ export const LunchboxWrapper: ComponentOptions = {
             if (!camera) {
                 // create ortho camera
                 if (props.ortho || props.orthographic) {
-                    // const size: Vector2 = new Vector2()
-
                     ensuredCamera.value = createNode<THREE.OrthographicCamera>({
                         props: { args: props.cameraArgs ?? [] },
                         type: 'OrthographicCamera',
@@ -175,6 +175,11 @@ export const LunchboxWrapper: ComponentOptions = {
             // move camera if needed
             if (camera && props.cameraPosition) {
                 camera.instance?.position.set(...props.cameraPosition)
+            }
+            // angle camera if needed
+            if (camera && (props.cameraLookAt || props.cameraLook)) {
+                const source = (props.cameraLookAt || props.cameraLook)!
+                camera.instance?.lookAt(...source)
             }
 
             // SCENE

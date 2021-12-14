@@ -139,6 +139,8 @@ export declare namespace Lunch {
     interface WrapperProps {
         background?: string
         cameraArgs?: any[]
+        cameraLook?: [number, number, number]
+        cameraLookAt?: [number, number, number]
         cameraPosition?: [number, number, number]
         dpr?: number
         ortho?: boolean
