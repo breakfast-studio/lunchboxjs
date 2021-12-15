@@ -3,7 +3,7 @@
 Sometimes you'll need to replace the default Lunchbox render function with your own. To do that, import and call `setCustomRender`, passing your new render function:
 
 ```js
-import { setCustomRender } from '../../src'
+import { setCustomRender } from 'lunchboxjs'
 
 setCustomRender((options) => {
     /*
@@ -23,7 +23,7 @@ setCustomRender((options) => {
 To remove your custom render function and fall back to Lunchbox's default, call `clearCustomRender`:
 
 ```js
-import { clearCustomRender } from '../../src'
+import { clearCustomRender } from 'lunchboxjs'
 
 clearCustomRender()
 ```
