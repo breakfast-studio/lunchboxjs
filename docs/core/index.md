@@ -2,7 +2,7 @@
 
 ## `Lunchbox`
 
-A Lunchbox app needs to be wrapped in a `Lunchbox` component:
+A Lunchbox app needs to be wrapped in a `Lunchbox` wrapper:
 
 ```html
 <Lunchbox>
@@ -11,6 +11,8 @@ A Lunchbox app needs to be wrapped in a `Lunchbox` component:
 ```
 
 In a .vue [single file component](https://v3.vuejs.org/guide/single-file-component.html#single-file-components), this will be inside the `<template>` tag.
+
+See the [Wrapper](/components/wrapper/) page for more information and available props.
 
 ## Three.js and Lunchbox
 
