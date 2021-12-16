@@ -18,9 +18,14 @@
 import * as CANNON from 'cannon-es'
 import { onBeforeRender } from '../../../src'
 import { inject, ref } from 'vue'
+import { addBounds } from './addBounds'
 
+// Meta
+// ====================
 const scale = inject<number>('scale')!
 
+// Types
+// ====================
 type ShapeGeometry = 'sphere'
 interface ShapeMeta {
     body: CANNON.Body
@@ -51,14 +56,7 @@ const shapes = ref([] as ShapeMeta[])
 
 // add bounds
 // ====================
-const ground = new CANNON.Body({
-    type: CANNON.Body.STATIC,
-    shape: new CANNON.Plane(),
-})
-ground.position.y = -scale * 0.5
-// face up
-ground.quaternion.setFromEuler(-Math.PI * 0.5, 0, 0)
-world.addBody(ground)
+addBounds(scale, world)
 
 // add shapes
 // ====================
@@ -90,12 +88,12 @@ const addShape = (
     // nudge
     sphereBody.applyForce(
         new CANNON.Vec3(
-            Math.random() * 100 - 50,
-            Math.random() * 100 - 50,
-            Math.random() * 100 - 50
+            (Math.random() * 100 - 50) * 100,
+            (Math.random() * 100 - 50) * 100,
+            (Math.random() * 100 - 50) * 100
         )
     )
 }
-addShape()
-addShape([0, 3, -0.1])
+// addShape()
+addShape([1, 2, -0.1])
 </script>
