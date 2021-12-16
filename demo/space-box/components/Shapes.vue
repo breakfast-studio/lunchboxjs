@@ -21,16 +21,17 @@ import { inject, ref } from 'vue'
 
 const scale = inject<number>('scale')!
 
+type ShapeGeometry = 'sphere'
 interface ShapeMeta {
     body: CANNON.Body
-    geometry: 'sphere'
+    geometry: ShapeGeometry
     position: [number, number, number]
     scale: number
 }
 
 // create world
 // ====================
-const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -9, 0) })
+const world = new CANNON.World()
 // world update
 let lastTime = new Date().getTime() * 0.001
 const update = () => {
@@ -38,6 +39,7 @@ const update = () => {
     world.step(1 / 60, t - lastTime)
     lastTime = t
 
+    // copy shape data to make reactive
     shapes.value.forEach((v) => {
         v.position = [v.body.position.x, v.body.position.y, v.body.position.z]
     })
@@ -60,17 +62,40 @@ world.addBody(ground)
 
 // add shapes
 // ====================
-const radius = 0.2 // m
-const sphereBody = new CANNON.Body({
-    mass: 5, // kg
-    shape: new CANNON.Sphere(radius),
-})
-sphereBody.position.set(0, 2, 0) // m
-shapes.value.push({
-    body: sphereBody,
-    geometry: 'sphere',
-    position: [0, 2, 0],
-    scale: radius,
-})
-world.addBody(sphereBody)
+const addShape = (
+    position: [number, number, number] = [0, 2, 0],
+    geometry: ShapeGeometry = 'sphere',
+    radius: number = 0.2
+) => {
+    let shape: CANNON.Shape
+    switch (geometry) {
+        case 'sphere':
+            shape = new CANNON.Sphere(radius)
+            break
+    }
+
+    const sphereBody = new CANNON.Body({
+        mass: 5, // kg
+        shape,
+    })
+    sphereBody.position.set(...position) // m
+
+    shapes.value.push({
+        body: sphereBody,
+        geometry,
+        position,
+        scale: radius,
+    })
+    world.addBody(sphereBody)
+    // nudge
+    sphereBody.applyForce(
+        new CANNON.Vec3(
+            Math.random() * 100 - 50,
+            Math.random() * 100 - 50,
+            Math.random() * 100 - 50
+        )
+    )
+}
+addShape()
+addShape([0, 3, -0.1])
 </script>
