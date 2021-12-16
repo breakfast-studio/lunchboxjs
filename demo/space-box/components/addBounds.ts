@@ -1,10 +1,13 @@
 import * as CANNON from 'cannon-es'
 
 export const addBounds = (scale: number, world: CANNON.World) => {
+    const material = new CANNON.Material({ restitution: 1, friction: 0 })
+
     // floor
     const ground = new CANNON.Body({
         type: CANNON.Body.STATIC,
         shape: new CANNON.Plane(),
+        material,
     })
     ground.position.y = -scale * 0.5
     // face up
@@ -15,6 +18,7 @@ export const addBounds = (scale: number, world: CANNON.World) => {
     const ceiling = new CANNON.Body({
         type: CANNON.Body.STATIC,
         shape: new CANNON.Plane(),
+        material,
     })
     ceiling.position.y = scale * 0.5
     // face up
@@ -25,6 +29,7 @@ export const addBounds = (scale: number, world: CANNON.World) => {
     const north = new CANNON.Body({
         type: CANNON.Body.STATIC,
         shape: new CANNON.Plane(),
+        material,
     })
     north.position.z = -scale * 0.5
     world.addBody(north)
@@ -33,6 +38,7 @@ export const addBounds = (scale: number, world: CANNON.World) => {
     const south = new CANNON.Body({
         type: CANNON.Body.STATIC,
         shape: new CANNON.Plane(),
+        material,
     })
     south.quaternion.setFromEuler(0, Math.PI, 0)
     south.position.z = scale * 0.5
@@ -42,6 +48,7 @@ export const addBounds = (scale: number, world: CANNON.World) => {
     const west = new CANNON.Body({
         type: CANNON.Body.STATIC,
         shape: new CANNON.Plane(),
+        material,
     })
     west.quaternion.setFromEuler(0, Math.PI * 0.5, 0)
     west.position.x = scale * -0.5
@@ -51,21 +58,11 @@ export const addBounds = (scale: number, world: CANNON.World) => {
     const east = new CANNON.Body({
         type: CANNON.Body.STATIC,
         shape: new CANNON.Plane(),
+        material,
     })
     east.quaternion.setFromEuler(0, Math.PI * -0.5, 0)
     east.position.x = scale * 0.5
     world.addBody(east)
 
-    // walls
-    // const positions
-    // for (let i = 0; i < 4; i++){
-    //     const wall = new CANNON.Body({
-    //         type: CANNON.Body.STATIC,
-    //         shape: new CANNON.Plane(),
-    //     })
-    //     ceiling.position.y = scale * 0.5
-    //     // face up
-    //     ceiling.quaternion.setFromEuler(Math.PI * 0.5, 0, 0)
-    //     world.addBody(ceiling)
-    // }
+    return [ground, ceiling, north, south, east, west]
 }

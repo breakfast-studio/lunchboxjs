@@ -7,6 +7,9 @@
     >
         <Container />
         <Shapes />
+
+        <pointLight castShadow :position="[0, -scale * 0.25, 0]" />
+        <ambientLight color="aliceblue" intensity="0.3" />
     </Lunchbox>
 </template>
 
@@ -15,5 +18,6 @@ import Container from './components/Container.vue'
 import Shapes from './components/Shapes.vue'
 import { provide } from 'vue'
 
-provide('scale', 5)
+const scale = 4
+provide('scale', scale)
 </script>

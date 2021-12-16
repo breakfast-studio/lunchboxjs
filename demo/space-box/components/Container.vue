@@ -2,9 +2,12 @@
     <mesh :scale="scale" receiveShadow>
         <boxGeometry />
         <!-- TODO: parallaxed uv, space material -->
-        <meshStandardMaterial color="blue" :side="BackSide" />
-
-        <pointLight castShadow :position="[0.5, 0.5, 0]" />
+        <meshStandardMaterial
+            color="blue"
+            :side="BackSide"
+            :transmission="0.8"
+            transparent
+        />
     </mesh>
 </template>
 
