@@ -20,8 +20,9 @@ export { lunchboxRootNode as lunchboxTree } from './core'
 export {
     offAfterRender,
     offBeforeRender,
-    onBeforeRender,
     onAfterRender,
+    onBeforeRender,
+    onStart,
 } from './core'
 export * from './types'
 

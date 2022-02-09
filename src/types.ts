@@ -145,6 +145,8 @@ export declare namespace Lunch {
         dpr?: number
         ortho?: boolean
         orthographic?: boolean
+        // TODO: Why doesn't ConstructorParameters<THREE.WebGLRenderer> work here?
+        rendererArguments?: object
         rendererProperties?: Partial<THREE.WebGLRenderer>
         shadow?: ShadowSugar
         transparent?: boolean

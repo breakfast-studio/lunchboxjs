@@ -18,6 +18,7 @@ import {
     fallbackRendererUuid,
     MiniDom,
     rendererReady,
+    startCallbacks,
     tryGetNodeWithInstanceType,
     update,
 } from '../../core'
@@ -51,6 +52,7 @@ export const LunchboxWrapper: ComponentOptions = {
         dpr: Number,
         ortho: Boolean,
         orthographic: Boolean,
+        rendererArguments: Object,
         rendererProperties: Object,
         shadow: [Boolean, Object],
         transparent: Boolean,
@@ -82,11 +84,10 @@ export const LunchboxWrapper: ComponentOptions = {
             if (!renderer) {
                 // build renderer args
                 const rendererArgs: THREE.WebGLRendererParameters = {
+                    alpha: props.transparent,
                     antialias: true,
                     canvas: canvas.value.domElement,
-                }
-                if (props.transparent) {
-                    rendererArgs.alpha = true
+                    ...(props.rendererArguments ?? {}),
                 }
 
                 // create new renderer
@@ -137,7 +138,6 @@ export const LunchboxWrapper: ComponentOptions = {
                 // the user has initialized the renderer, so anything depending
                 // on the renderer can execute
                 rendererReady.value = true
-                return
             }
 
             // CAMERA
@@ -172,14 +172,17 @@ export const LunchboxWrapper: ComponentOptions = {
             } else {
                 cameraReady.value = true
             }
+            if (!camera.instance) {
+                throw new Error('Error creating camera.')
+            }
             // move camera if needed
             if (camera && props.cameraPosition) {
-                camera.instance?.position.set(...props.cameraPosition)
+                camera.instance.position.set(...props.cameraPosition)
             }
             // angle camera if needed
             if (camera && (props.cameraLookAt || props.cameraLook)) {
                 const source = (props.cameraLookAt || props.cameraLook)!
-                camera.instance?.lookAt(...source)
+                camera.instance.lookAt(...source)
             }
 
             // SCENE
@@ -209,11 +212,25 @@ export const LunchboxWrapper: ComponentOptions = {
                 throw new Error('missing renderer')
             }
 
+            // CALLBACK PREP
+            // ====================
+            const app = getCurrentInstance()!.appContext.app as Lunch.App
+
+            // START
+            // ====================
+            for (let startCallback of startCallbacks) {
+                startCallback({
+                    app,
+                    camera: camera.instance,
+                    renderer: renderer.instance,
+                    scene: scene.instance,
+                })
+            }
+
             // KICK UPDATE
             // ====================
-            // console.log(scene)
             update({
-                app: getCurrentInstance()!.appContext.app as Lunch.App,
+                app,
                 camera: camera.instance,
                 renderer: renderer.instance,
                 scene: scene.instance,

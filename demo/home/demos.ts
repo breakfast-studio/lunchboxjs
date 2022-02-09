@@ -13,4 +13,5 @@ export const demos = [
     { title: 'Orthographic Camera', url: '/demo/ortho-camera/' },
     { title: 'Before/After Render', url: '/demo/before-after-render/' },
     { title: 'Suspended Shapes', url: '/demo/suspended-shapes/' },
+    { title: 'onStart' },
 ]
