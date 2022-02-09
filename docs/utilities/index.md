@@ -54,3 +54,39 @@ onStart(({ scene }) => {
     console.log(scene?.children)
 })
 ```
+
+## `camera`, `renderer`, and `scene`
+
+The current camera, renderer, and scene are all available as exports. Note that when your code runs, these may be null or undefined, so the [`useX`](#usecamera-userenderer-and-usescene)version of these might be easier to use.
+
+## `useCamera`, `useRenderer`, and `useScene`
+
+Provide a function to be called when the camera, renderer, or scene is available. Accepts the camera, renderer, or scene, and an additional boolean indicating whether or not to destroy the callback immediately after use.
+
+```js
+import { useCamera, useRenderer, useScene } from '../../src'
+
+// run once (default)
+useCamera((cam) => console.log(cam))
+useRenderer((renderer) => console.log(renderer))
+useScene((scene) => console.log(scene))
+
+// run on any camera change
+useCamera((cam) => {
+    /* ... */
+}, false)
+```
+
+Note that in TypeScript, `useCamera` and `useRenderer` can support generic types:
+
+```ts
+import { useCamera, useRenderer } from '../../src'
+
+useCamera<THREE.OrthographicCamera>((cam) => {
+    // `cam` is an instance of OrthographicCamera
+    console.log(cam)
+})
+useRenderer</* any type inheriting from THREE.Renderer */>((renderer) =>
+    console.log(renderer)
+)
+```
