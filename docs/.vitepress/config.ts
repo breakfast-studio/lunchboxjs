@@ -19,6 +19,7 @@ export default defineConfig({
                 children: [
                     { text: 'Wrapper', link: '/components/wrapper/' },
                     { text: 'Components', link: '/components/' },
+                    { text: 'Utilities', link: '/utilities/' },
                     { text: 'Extend', link: '/components/extend/' },
                 ],
             },

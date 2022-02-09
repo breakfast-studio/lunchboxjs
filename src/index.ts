@@ -1,4 +1,11 @@
-import { computed, createRenderer, Component, ref, watch } from 'vue'
+import {
+    computed,
+    createRenderer,
+    Component,
+    ref,
+    watch,
+    WatchStopHandle,
+} from 'vue'
 import { nodeOps } from './nodeOps'
 import {
     // createdCamera,
@@ -36,9 +43,74 @@ export const globals = {
     mousePos,
 }
 
+/** The current camera. Often easier to use `useCamera` instead of this. */
 export const camera = computed(() => ensuredCamera.value?.instance ?? null)
+/** Run a function using the current camera when it's present. */
+export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
+    callback: (cam: T) => void,
+    once = true
+) {
+    let destroy: WatchStopHandle
+    destroy = watch(
+        camera,
+        (newVal) => {
+            if (!newVal) return
+
+            // TODO: better fix than `any`?
+            callback(newVal as any)
+            if (once) {
+                destroy?.()
+            }
+        },
+        { immediate: true }
+    )
+}
+
+/** The current renderer. Often easier to use `useRenderer` instead of this. */
 export const renderer = computed(() => ensureRenderer.value?.instance ?? null)
+/** Run a function using the current renderer when it's present. */
+export function useRenderer<T extends THREE.Renderer = THREE.WebGLRenderer>(
+    callback: (rend: T) => void,
+    once = true
+) {
+    let destroy: WatchStopHandle
+    destroy = watch(
+        renderer,
+        (newVal) => {
+            if (!newVal) return
+
+            // TODO: better fix than `any`?
+            callback(newVal as any)
+            if (once) {
+                destroy?.()
+            }
+        },
+        { immediate: true }
+    )
+}
+
+/** The current scene. Often easier to use `useScene` instead of this. */
 export const scene = computed(() => ensuredScene.value.instance)
+/** Run a function using the current scene when it's present. */
+export function useScene(
+    callback: (newScene: THREE.Scene) => void,
+    once = true
+) {
+    let destroy: WatchStopHandle
+    destroy = watch(
+        scene,
+        (newVal) => {
+            if (!newVal) return
+
+            // TODO: better fix than `any`?
+            callback(newVal as any)
+            if (once) {
+                destroy?.()
+            }
+        },
+        { immediate: true }
+    )
+}
 
 // CUSTOM RENDER SUPPORT
 // ====================
