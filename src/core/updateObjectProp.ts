@@ -31,8 +31,17 @@ export function updateObjectProp({
         return addEventListener({ node, key, value })
     }
 
+    // update THREE property
+    // get final key
+    const camelKey = key.replace(/-/g, '.')
+    const finalKey = propertyShortcuts[camelKey] || camelKey
+
     // handle and return early if prop is specific to Vue/Lunchbox
-    if (internalLunchboxVueKeys.includes(key)) return node
+    if (
+        internalLunchboxVueKeys.includes(key) ||
+        internalLunchboxVueKeys.includes(finalKey)
+    )
+        return node
 
     // everything else should be Three-specific, so let's cancel if this isn't a standard node
     if (!isLunchboxStandardNode(node)) return node
@@ -49,12 +58,8 @@ export function updateObjectProp({
     // cancel if no target
     if (!target) return node
 
-    // update THREE property
-    // get final key
-    const camelKey = key.replace(/-/g, '.')
-    let finalKey = propertyShortcuts[camelKey] || camelKey
-    let liveProperty
     // burrow down until we get property to change
+    let liveProperty
     for (let i = 0; i < nestedPropertiesToCheck.length && !liveProperty; i++) {
         const nestedProperty = nestedPropertiesToCheck[i]
         const fullPath = [nestedProperty, finalKey].filter(Boolean).join('.')
@@ -128,6 +133,8 @@ const internalLunchboxVueKeys = [
     'args',
     'attach',
     'attachArray',
+    'is.default',
+    'isDefault',
     'key',
     'onAdded',
     // 'onReady',

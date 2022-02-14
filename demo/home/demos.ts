@@ -15,4 +15,6 @@ export const demos = [
     { title: 'Suspended Shapes', url: '/demo/suspended-shapes/' },
     { title: 'onStart' },
     { title: 'Utility Functions', url: '/demo/utility-functions/' },
+    { title: 'Controls' },
+    { title: 'Multiple Cameras', url: '/demo/cameras-and-renderers/' },
 ]

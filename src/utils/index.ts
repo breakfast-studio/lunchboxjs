@@ -23,7 +23,9 @@ export const isEventKey = (target: any): target is Lunch.EventKey => {
     ].includes(target)
 }
 
-export const isLunchboxComponent = (node: any): node is Lunch.LunchboxComponent => {
+export const isLunchboxComponent = (
+    node: any
+): node is Lunch.LunchboxComponent => {
     return node?.$el && node?.$el?.hasOwnProperty?.('instance')
 }
 
@@ -35,7 +37,9 @@ export const isLunchboxDomComponent = (node: any): node is Lunch.DomMeta => {
     return lunchboxDomComponentNames.includes(typeToCheck ?? '')
 }
 
-export const isLunchboxStandardNode = (node: any): node is Lunch.StandardMeta => {
+export const isLunchboxStandardNode = (
+    node: any
+): node is Lunch.StandardMeta => {
     return node?.metaType === 'standardMeta'
 }
 

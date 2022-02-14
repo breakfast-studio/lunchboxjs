@@ -1,4 +1,4 @@
-import { allNodes, createNode, MiniDom } from '.'
+import { allNodes, createNode, isMinidomNode, MiniDom } from '.'
 import { setupAutoRaycaster } from './interaction/setupAutoRaycaster'
 import { computed, reactive, ref, WritableComputedRef } from 'vue'
 import { Lunch } from '..'
@@ -37,6 +37,14 @@ export function tryGetNodeWithInstanceType<T extends THREE.Object3D>(
                     (node as MiniDom.RendererBaseNode).type?.toLowerCase() ===
                     singleType.toLowerCase()
             )
+
+        // cancel if found example is marked !isDefault
+        if (
+            isMinidomNode(found) &&
+            (!found.props['is-default'] || !found.props['isDefault'])
+        ) {
+            return null
+        }
 
         // if we have one, save and return
         if (found) {
