@@ -1,4 +1,22 @@
-# Extra Cameras, Renderers and Scenes
+# Custom Cameras, Renderers, and Scenes
+
+Lunchbox creates its own default camera, renderer, and scene on creation, but you can also provide your own:
+
+```html
+<Lunchbox>
+    <!-- this becomes the default camera -->
+    <perspectiveCamera />
+
+    <!-- this becomes the default scene -->
+    <scene>
+        <mesh>...</mesh>
+    </scene>
+</Lunchbox>
+```
+
+Any component ending in `camera`, `renderer`, or `scene` overrides its respective default.
+
+## Extra Cameras, Renderers and Scenes
 
 :::tip TL;DR
 Use the `is-default` prop to specify secondary cameras, renderers, or scenes:

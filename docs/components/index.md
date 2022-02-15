@@ -80,7 +80,7 @@ You can also call methods declaratively in components:
 <webGLRenderer :setSize="[256, 256]" />
 ```
 
-(See [here](https://threejs.org/docs/index.html?q=webglren#api/en/renderers/WebGLRenderer.setSize) for the setSize method and [here](/advanced/extra-cameras-renderers-and-scenes/) for more information on extra renderers.)
+(See [here](https://threejs.org/docs/index.html?q=webglren#api/en/renderers/WebGLRenderer.setSize) for the setSize method and [here](/advanced/custom-cameras-renderers-and-scenes/) for more information on extra renderers.)
 
 The main caveat is that you need to wrap all arguments in an array, just like with the `args` prop:
 

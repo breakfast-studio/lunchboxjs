@@ -31,8 +31,8 @@ export default defineConfig({
                         link: '/advanced/custom-render/',
                     },
                     {
-                        text: 'Extra Cameras, Renderers, and Scenes',
-                        link: '/advanced/extra-cameras-renderers-and-scenes/',
+                        text: 'Custom Cameras, Renderers, and Scenes',
+                        link: '/advanced/custom-cameras-renderers-and-scenes/',
                     },
                 ],
             },
