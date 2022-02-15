@@ -36,7 +36,7 @@
         "vue-tsc": "^0.3.0"
     },
     "peerDependencies": {
-        "three": "^0.133.1"
+        "three": "0.137.5"
     },
     "files": [
         "dist",
