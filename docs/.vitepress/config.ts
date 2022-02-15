@@ -30,6 +30,10 @@ export default defineConfig({
                         text: 'Custom Render Function',
                         link: '/advanced/custom-render/',
                     },
+                    {
+                        text: 'Extra Cameras, Renderers, and Scenes',
+                        link: '/advanced/extra-cameras-renderers-and-scenes/',
+                    },
                 ],
             },
         ],
