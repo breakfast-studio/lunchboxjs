@@ -56,6 +56,7 @@ export const LunchboxWrapper: ComponentOptions = {
         rendererProperties: Object,
         shadow: [Boolean, Object],
         transparent: Boolean,
+        zoom: Number,
     },
     setup(props: Lunch.WrapperProps, context) {
         const canvas = ref<MiniDom.RendererDomNode>()
@@ -183,6 +184,10 @@ export const LunchboxWrapper: ComponentOptions = {
             if (camera && (props.cameraLookAt || props.cameraLook)) {
                 const source = (props.cameraLookAt || props.cameraLook)!
                 camera.instance.lookAt(...source)
+            }
+            // zoom camera if needed
+            if (camera && props.zoom !== undefined) {
+                ;(camera.instance as THREE.OrthographicCamera).zoom = props.zoom
             }
 
             // SCENE

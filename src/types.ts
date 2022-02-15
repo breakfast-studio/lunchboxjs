@@ -150,5 +150,6 @@ export declare namespace Lunch {
         rendererProperties?: Partial<THREE.WebGLRenderer>
         shadow?: ShadowSugar
         transparent?: boolean
+        zoom?: number
     }
 }
