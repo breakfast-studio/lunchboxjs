@@ -41,7 +41,8 @@ export function tryGetNodeWithInstanceType<T extends THREE.Object3D>(
         // cancel if found example is marked !isDefault
         if (
             isMinidomNode(found) &&
-            (!found.props['is-default'] || !found.props['isDefault'])
+            (found.props['is-default'] === false ||
+                !found.props['isDefault'] === false)
         ) {
             return null
         }

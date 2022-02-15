@@ -1,7 +1,11 @@
 <template>
     <Lunchbox background="white" :shadow="{ type: PCFSoftShadowMap }">
         <!-- Cameras -->
-        <perspectiveCamera :position="[2, 2, 5]" v-if="cameraIndex === 0" />
+        <perspectiveCamera
+            ref="cam1"
+            :position="[2, 2, 5]"
+            v-if="cameraIndex === 0"
+        />
         <perspectiveCamera
             :rotation-x="cameraRotation"
             :position="[-2, 1, 10]"
@@ -39,9 +43,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { PCFSoftShadowMap } from 'three'
-import { onBeforeRender } from '../../src'
+import { Lunch, onBeforeRender } from '../../src'
+
+const cam1 = ref<Lunch.LunchboxComponent<THREE.PerspectiveCamera>>()
+onMounted(() => {
+    console.log(cam1.value?.$el?.instance)
+})
 
 const cameraCount = 3
 const cameraIndex = ref(0)
