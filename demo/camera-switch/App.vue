@@ -47,15 +47,11 @@ import { onMounted, ref } from 'vue'
 import { PCFSoftShadowMap } from 'three'
 import { Lunch, onBeforeRender } from '../../src'
 
-const cam1 = ref<Lunch.LunchboxComponent<THREE.PerspectiveCamera>>()
-onMounted(() => {
-    console.log(cam1.value?.$el?.instance)
-})
-
 const cameraCount = 3
 const cameraIndex = ref(0)
 const cameraRotation = ref(0)
 onBeforeRender(() => {
     cameraRotation.value = Math.sin(Date.now() * 0.0001) * 0.1
+    console.log(cameraIndex.value)
 })
 </script>
