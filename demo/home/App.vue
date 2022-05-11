@@ -18,5 +18,5 @@
 </template>
 
 <script lang="ts" setup>
-import { demos } from './demos'
+import demos from './demos.json'
 </script>

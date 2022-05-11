@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import glsl from 'vite-plugin-glsl'
-import { demos } from '../demo/home/demos'
+import demos from '../demo/home/demos.json'
 import camelCase from 'lodash/camelCase'
 
 // dynamically add demo urls to build
