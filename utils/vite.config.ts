@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, UserConfigExport } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import glsl from 'vite-plugin-glsl'
 import demos from '../demo/home/demos.json'
@@ -12,7 +12,7 @@ const demoPages = demos.reduce((acc, curr) => {
 }, {} as Record<string, string>)
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export const config: UserConfigExport = {
     plugins: [vue(), glsl()],
     build: {
         rollupOptions: {
@@ -25,4 +25,5 @@ export default defineConfig({
         outDir: 'dist',
         emptyOutDir: true,
     },
-})
+}
+export default defineConfig(config)
