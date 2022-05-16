@@ -4,3 +4,4 @@ dist
 dist-ssr
 *.local
 js
+__diff_output__

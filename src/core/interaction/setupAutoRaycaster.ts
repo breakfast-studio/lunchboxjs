@@ -45,8 +45,8 @@ export const setupAutoRaycaster = (node: Lunch.Node<THREE.Raycaster>) => {
                     (renderer.instance!.domElement.height ?? 1) /
                     globals.dpr.value
 
-                mousePos.value.x = (evt.offsetX / screenWidth) * 2 - 1
-                mousePos.value.y = -(evt.offsetY / screenHeight) * 2 + 1
+                mousePos.value.x = (evt.clientX / screenWidth) * 2 - 1
+                mousePos.value.y = -(evt.clientY / screenHeight) * 2 + 1
             }
             mouseDownListener = () => (inputActive.value = true)
             mouseUpListener = () => (inputActive.value = false)
