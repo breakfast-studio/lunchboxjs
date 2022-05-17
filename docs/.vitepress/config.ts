@@ -10,6 +10,10 @@ export default defineConfig({
                 text: 'GitHub',
                 link: 'https://github.com/breakfast-studio/lunchboxjs',
             },
+            {
+                text: 'Examples',
+                link: 'https://twitter.com/lunchboxjs',
+            },
         ],
         sidebar: [
             {
