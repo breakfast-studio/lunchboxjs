@@ -4,7 +4,13 @@ export default defineConfig({
     title: 'LunchboxJS',
     description: 'Custom Vue 3 renderer for ThreeJS.',
     themeConfig: {
-        nav: [{ text: 'Home', link: '/' }],
+        nav: [
+            { text: 'Home', link: '/' },
+            {
+                text: 'GitHub',
+                link: 'https://github.com/breakfast-studio/lunchboxjs',
+            },
+        ],
         sidebar: [
             {
                 text: 'Getting Started',
