@@ -142,15 +142,17 @@ export const createApp = (root: Component) => {
 
     // register all components
     Object.keys(components).forEach((key) => {
-        app!.component(key, (components as any)[key])
+        app?.component(key, (components as any)[key])
     })
 
     // update mount function to match Lunchbox.Node
     const { mount } = app
     app.mount = (root, ...args) => {
+        // find DOM element to use as app root
         const domElement = (
             typeof root === 'string' ? document.querySelector(root) : root
         ) as HTMLElement
+        // create or find root node
         const rootNode = ensureRootNode({
             domElement,
             isLunchboxRootNode: true,

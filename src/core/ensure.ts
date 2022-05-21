@@ -158,18 +158,10 @@ export const ensuredCamera = computed<Lunch.Node<THREE.Camera> | null>({
     },
 })
 
-// export const ensuredCamera = buildEnsured<THREE.Camera>(
-//     ['PerspectiveCamera', 'OrthographicCamera'],
-//     fallbackCameraUuid,
-//     {
-//         args: [45, 0.5625, 1, 1000],
-//     }
-// )
-
 // ENSURE RENDERER
 // ====================
 export const fallbackRendererUuid = 'FALLBACK_RENDERER'
-export const v = buildEnsured(
+export const ensuredRenderer = buildEnsured(
     // TODO: ensure support for css/svg renderers
     ['WebGLRenderer'], //, 'CSS2DRenderer', 'CSS3DRenderer', 'SVGRenderer'],
     fallbackRendererUuid,
@@ -181,7 +173,9 @@ export const rendererReady = ref(false)
 
 export const ensureRenderer = computed<Lunch.Node<THREE.WebGLRenderer> | null>({
     get() {
-        return (rendererReady.value ? (v.value as any) : (null as any)) as any
+        return (
+            rendererReady.value ? (ensuredRenderer.value as any) : (null as any)
+        ) as any
     },
     set(val: any) {
         const t = val.type ?? ''
