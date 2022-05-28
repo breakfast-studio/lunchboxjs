@@ -52,6 +52,7 @@ export default defineConfig({
                     { text: 'Internal Development', link: '/dev/' },
                     { text: 'Lunchbox Overview', link: '/dev/overview/' },
                     { text: 'Overrides', link: '/dev/overrides/' },
+                    { text: 'Contributing', link: '/dev/contributing/' },
                 ],
             },
         ],

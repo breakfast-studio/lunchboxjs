@@ -1,11 +1,4 @@
-import {
-    computed,
-    createRenderer,
-    Component,
-    ref,
-    watch,
-    WatchStopHandle,
-} from 'vue'
+import { computed, createRenderer, Component, ref, watch } from 'vue'
 import { nodeOps } from './nodeOps'
 import {
     // createdCamera,
@@ -47,20 +40,13 @@ export const globals = {
 export const camera = computed(() => ensuredCamera.value?.instance ?? null)
 /** Run a function using the current camera when it's present. */
 export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
-    callback: (cam: T) => void,
-    once = true
+    callback: (cam: T) => void
 ) {
-    let destroy: WatchStopHandle
-    destroy = watch(
+    return watch(
         camera,
         (newVal) => {
             if (!newVal) return
-
-            // TODO: better fix than `any`?
-            callback(newVal as any)
-            if (once) {
-                destroy?.()
-            }
+            callback(newVal as unknown as T)
         },
         { immediate: true }
     )
@@ -70,20 +56,13 @@ export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
 export const renderer = computed(() => ensureRenderer.value?.instance ?? null)
 /** Run a function using the current renderer when it's present. */
 export function useRenderer<T extends THREE.Renderer = THREE.WebGLRenderer>(
-    callback: (rend: T) => void,
-    once = true
+    callback: (rend: T) => void
 ) {
-    let destroy: WatchStopHandle
-    destroy = watch(
+    return watch(
         renderer,
         (newVal) => {
             if (!newVal) return
-
-            // TODO: better fix than `any`?
-            callback(newVal as any)
-            if (once) {
-                destroy?.()
-            }
+            callback(newVal as unknown as T)
         },
         { immediate: true }
     )
@@ -92,21 +71,12 @@ export function useRenderer<T extends THREE.Renderer = THREE.WebGLRenderer>(
 /** The current scene. Often easier to use `useScene` instead of this. */
 export const scene = computed(() => ensuredScene.value.instance)
 /** Run a function using the current scene when it's present. */
-export function useScene(
-    callback: (newScene: THREE.Scene) => void,
-    once = true
-) {
-    let destroy: WatchStopHandle
-    destroy = watch(
+export function useScene(callback: (newScene: THREE.Scene) => void) {
+    return watch(
         scene,
         (newVal) => {
             if (!newVal) return
-
-            // TODO: better fix than `any`?
             callback(newVal as any)
-            if (once) {
-                destroy?.()
-            }
         },
         { immediate: true }
     )

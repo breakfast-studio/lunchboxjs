@@ -1,6 +1,6 @@
 # Overrides
 
-Lunchbox [guidelines](/dev/#guidelines) mention providing clear overrides whenever assumptions are made. The `<Lunchbox>` wrapper makes several assumptions, which leaves us with this MiniDom hierarchy once it has mounted:
+Lunchbox [guidelines](/dev/#guidelines) mention providing clear overrides whenever assumptions are made. The assumptions that the `<Lunchbox>` wrapper makes leave us with this MiniDom hierarchy once it has mounted:
 
 ```
 | Root
@@ -24,9 +24,24 @@ From here, most apps will implicitly add objects (meshes, models, lights, etc) t
 </Lunchbox>
 ```
 
+results in:
+
+```
+| Root
+| -- Renderer
+| -- Camera
+| -- Scene
+| ----- Mesh
+| ------- BoxGeometry
+| ------- MeshBasicMaterial
+| ----- PointLight
+```
+
 This is enough for many Three.js apps, but in order to support more complex setups and be as futureproof as possible, Lunchbox makes it possible to override these default assumptions.
 
-## Custom Scene
+## Custom Scene, Camera, and Renderer
+
+(The rules for these three object types are the same, so we'll be using a Scene as an example.)
 
 A Scene can be added directly to the wrapper:
 
@@ -38,13 +53,39 @@ A Scene can be added directly to the wrapper:
 </Lunchbox>
 ```
 
-By default, the first Scene in the user's markup is the default Scene, which is provided to `onStart`, `onBeforeRender`, and several other places.
+By default, the first Scene in the user's markup is saved as the default Scene, which is provided to `onStart`, `onBeforeRender`, and several other places.
 
-This happens thanks to the setup in `ensure.ts` - let's take a deeper dive into that workflow.
+This means you can alternate between different Scenes. Changing Scenes will trigger a `useScene` callback, if you import and use that function:
 
-### `ensure.ts`
+```html
+<template>
+    <Lunchbox>
+        <scene v-if="showSceneOne">
+            <mesh> <!-- ... --> </mesh>
+        </scene>
+        <scene v-else>
+            <!-- ... -->
+        </scene>
+    </Lunchbox>
+</template>
 
-Let's make a few assumptions about Three.js apps:
+<script setup>
+    import { useScene } from 'lunchboxjs'
+    import { ref } from 'vue'
 
--   There are entities we can assume will be used in most, if not all, Three.js apps.
--   We can usually
+    // alternate scene every 1000ms
+    const showSceneOne = ref(true)
+    setInterval(() => (showSceneOne.value = !showSceneOne.value), 1000)
+
+    useScene((scene) => {
+        // fires each scene change
+        console.log(scene)
+    })
+</script>
+```
+
+Note that you'll need to write your own code to handle multiple scenes - Lunchbox only handles one scene, camera, and renderer automatically.
+
+## Next Steps
+
+Now that you know the main ideas Lunchbox's internals, take a look at [next steps](/dev/contributing/) for reporting bugs and suggesting/contributing features!

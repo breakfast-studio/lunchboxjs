@@ -12,7 +12,7 @@ You shouldn't need to worry about this most of the time, but it's important to n
 
 :::
 
-Since Vue 3 is a DOM-first framework, many of its operations are geared toward properties and methods the DOM naturally contains (see MDN for [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) and its ancestor interfaces, [Node](https://developer.mozilla.org/en-US/docs/Web/API/Node) and [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget), for a more complete list).
+Since Vue 3 is a DOM-first framework, many of its operations are geared toward properties and methods the DOM naturally contains (see MDN for [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element), its parent interface [Node](https://developer.mozilla.org/en-US/docs/Web/API/Node), and Node's parent interface [EventTarget](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget), for a more complete list).
 
 ```js
 const standardDomElement = document.querySelector('div')

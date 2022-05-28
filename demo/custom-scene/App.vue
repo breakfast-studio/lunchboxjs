@@ -1,12 +1,14 @@
 <template>
     <Lunchbox :cameraPosition="[0, 0, 5]">
-        <mesh @click="sceneIndex = 1">
-            <boxGeometry />
-            <meshBasicMaterial color="blue" />
-        </mesh>
+        <scene v-if="sceneIndex === 0">
+            <mesh :position-x="1" @click="sceneIndex = 1">
+                <boxGeometry />
+                <meshBasicMaterial color="blue" />
+            </mesh>
+        </scene>
 
-        <scene v-if="sceneIndex === 1">
-            <mesh @click="sceneIndex = 0">
+        <scene v-else>
+            <mesh :position-x="-1" @click="sceneIndex = 0">
                 <sphereGeometry />
                 <meshBasicMaterial color="green" />
             </mesh>
@@ -15,7 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
+import { useScene } from '../../src'
 
 const sceneIndex = ref(0)
+useScene(console.log)
 </script>

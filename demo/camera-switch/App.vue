@@ -51,13 +51,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { PCFSoftShadowMap } from 'three'
-import { Lunch, onBeforeRender } from '../../src'
+import type { PerspectiveCamera } from 'three'
+import { Lunch, onBeforeRender, useCamera } from '../../src'
 
 const cameraCount = 3
 const cameraIndex = ref(0)
 const cameraRotation = ref(0)
+let cam: PerspectiveCamera
+
 onBeforeRender(() => {
     cameraRotation.value = Math.sin(Date.now() * 0.0001) * 0.1
-    console.log(cameraIndex.value)
 })
+
+useCamera(console.log, false)
 </script>
