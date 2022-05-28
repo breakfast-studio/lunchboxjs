@@ -61,20 +61,15 @@ The current camera, renderer, and scene are all available as exports. Note that 
 
 ## `useCamera`, `useRenderer`, and `useScene`
 
-Provide a function to be called when the camera, renderer, or scene is available. Accepts the camera, renderer, or scene, and an additional boolean indicating whether or not to destroy the callback immediately after use.
+Provide a function to be called when the camera, renderer, or scene is available. Accepts the primary camera, renderer, or scene as an argument.
 
 ```js
 import { useCamera, useRenderer, useScene } from '../../src'
 
-// run once (default)
+// run every camera/renderer/scene change
 useCamera((cam) => console.log(cam))
 useRenderer((renderer) => console.log(renderer))
 useScene((scene) => console.log(scene))
-
-// run on any camera change
-useCamera((cam) => {
-    /* ... */
-}, false)
 ```
 
 Note that in TypeScript, `useCamera` and `useRenderer` can support generic types:

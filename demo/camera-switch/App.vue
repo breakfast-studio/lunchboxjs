@@ -3,15 +3,21 @@
         <!-- Cameras -->
         <perspectiveCamera
             ref="cam1"
-            :position="[2, 2, 5]"
+            :position="[2, 1, 5]"
             v-if="cameraIndex === 0"
+            key="cam1"
         />
         <perspectiveCamera
             :rotation-x="cameraRotation"
             :position="[-2, 1, 10]"
-            v-if="cameraIndex === 1"
+            v-else-if="cameraIndex === 1"
+            key="cam2"
         />
-        <perspectiveCamera :position="[2, 4, 5]" v-if="cameraIndex === 2" />
+        <perspectiveCamera
+            :position="[2, 4, 5]"
+            v-else-if="cameraIndex === 2"
+            key="cam3"
+        />
 
         <!-- Light -->
         <pointLight
@@ -45,13 +51,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { PCFSoftShadowMap } from 'three'
-import { Lunch, onBeforeRender } from '../../src'
+import type { PerspectiveCamera } from 'three'
+import { Lunch, onBeforeRender, useCamera } from '../../src'
 
 const cameraCount = 3
 const cameraIndex = ref(0)
 const cameraRotation = ref(0)
+let cam: PerspectiveCamera
+
 onBeforeRender(() => {
     cameraRotation.value = Math.sin(Date.now() * 0.0001) * 0.1
-    console.log(cameraIndex.value)
 })
+
+useCamera(console.log, false)
 </script>

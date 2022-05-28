@@ -5,7 +5,6 @@ import { overrides } from '../core'
 export const remove = (node: MiniDom.RendererBaseNode) => {
     if (!node) return
     const overrideKeys = Object.keys(overrides)
-
     // prep subtree
     const subtree: MiniDom.BaseNode[] = []
     node.walk((descendant) => {
