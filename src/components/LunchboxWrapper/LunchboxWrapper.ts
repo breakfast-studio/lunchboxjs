@@ -24,8 +24,12 @@ import {
 } from '../../core'
 import { set } from 'lodash'
 import { globals, Lunch } from '../..'
-import { Color, Vector2 } from 'three'
+// import { Color, Vector2, sRGBEncoding, ACESFilmicToneMapping } from 'three'
+import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
+
+// TODO:
+// Continue r3f prop - what else (besides camera fov) makes r3f look good?
 
 /** fixed & fill styling for container */
 const fillStyle = (position: string) => {
@@ -52,6 +56,7 @@ export const LunchboxWrapper: ComponentOptions = {
         dpr: Number,
         ortho: Boolean,
         orthographic: Boolean,
+        r3f: Boolean,
         rendererArguments: Object,
         rendererProperties: Object,
         shadow: [Boolean, Object],
@@ -66,6 +71,11 @@ export const LunchboxWrapper: ComponentOptions = {
         let renderer: Lunch.Node<THREE.WebGLRenderer> | null
         let camera: Lunch.Node<THREE.Camera> | null
         let scene: MiniDom.RendererStandardNode<THREE.Scene>
+
+        // https://threejs.org/docs/index.html#manual/en/introduction/Color-management
+        if (props.r3f && (THREE as any)?.ColorManagement) {
+            ;(THREE as any).ColorManagement.legacyMode = false
+        }
 
         // MOUNT
         // ====================
@@ -88,6 +98,9 @@ export const LunchboxWrapper: ComponentOptions = {
                     alpha: props.transparent,
                     antialias: true,
                     canvas: canvas.value.domElement,
+                    powerPreference: !!props.r3f
+                        ? 'high-performance'
+                        : 'default',
                     ...(props.rendererArguments ?? {}),
                 }
 
@@ -107,6 +120,16 @@ export const LunchboxWrapper: ComponentOptions = {
                     ensureRenderer as WritableComputedRef<
                         Lunch.Node<THREE.WebGLRenderer>
                     >
+
+                // apply r3f settings if desired
+                if (props.r3f) {
+                    if (rendererAsWebGlRenderer.value.instance) {
+                        rendererAsWebGlRenderer.value.instance.outputEncoding =
+                            THREE.sRGBEncoding
+                        rendererAsWebGlRenderer.value.instance.toneMapping =
+                            THREE.ACESFilmicToneMapping
+                    }
+                }
 
                 // update render sugar
                 const sugar = {
@@ -160,7 +183,12 @@ export const LunchboxWrapper: ComponentOptions = {
                 } else {
                     ensuredCamera.value = createNode<THREE.PerspectiveCamera>({
                         props: {
-                            args: props.cameraArgs ?? [45, 0.5625, 1, 1000],
+                            args: props.cameraArgs ?? [
+                                props.r3f ? 75 : 45,
+                                0.5625,
+                                1,
+                                1000,
+                            ],
                         },
                         type: 'PerspectiveCamera',
                         uuid: fallbackCameraUuid,
@@ -195,7 +223,7 @@ export const LunchboxWrapper: ComponentOptions = {
             scene = ensuredScene.value
             // set background color
             if (scene && scene.instance && props.background) {
-                scene.instance.background = new Color(props.background)
+                scene.instance.background = new THREE.Color(props.background)
             }
 
             // MISC PROPERTIES
