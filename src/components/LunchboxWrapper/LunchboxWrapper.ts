@@ -64,7 +64,6 @@ export const LunchboxWrapper: ComponentOptions = {
         shadow: [Boolean, Object],
         transparent: Boolean,
         zoom: Number,
-        manualUpdate: Boolean,
         updateSource: Object,
     },
     setup(props: Lunch.WrapperProps, context) {
