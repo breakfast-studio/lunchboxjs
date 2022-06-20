@@ -149,6 +149,7 @@ export declare namespace Lunch {
         // TODO: Why doesn't ConstructorParameters<THREE.WebGLRenderer> work here?
         rendererArguments?: object
         rendererProperties?: Partial<THREE.WebGLRenderer>
+        sizePolicy?: string
         shadow?: ShadowSugar
         transparent?: boolean
         zoom?: number
