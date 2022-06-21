@@ -5,11 +5,13 @@ import {
     onBeforeUnmount,
     onMounted,
     ref,
+    WatchSource,
     WritableComputedRef,
 } from 'vue'
 import {
     cameraReady,
     cancelUpdate,
+    cancelUpdateSource,
     createNode,
     ensuredCamera,
     ensureRenderer,
@@ -62,6 +64,7 @@ export const LunchboxWrapper: ComponentOptions = {
         shadow: [Boolean, Object],
         transparent: Boolean,
         zoom: Number,
+        updateSource: Object,
     },
     setup(props: Lunch.WrapperProps, context) {
         const canvas = ref<MiniDom.RendererDomNode>()
@@ -267,6 +270,7 @@ export const LunchboxWrapper: ComponentOptions = {
                 camera: camera.instance,
                 renderer: renderer.instance,
                 scene: scene.instance,
+                updateSource: props.updateSource,
             })
         })
 
@@ -274,6 +278,7 @@ export const LunchboxWrapper: ComponentOptions = {
         // ====================
         onBeforeUnmount(() => {
             cancelUpdate()
+            cancelUpdateSource()
         })
 
         // RENDER FUNCTION
