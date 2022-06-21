@@ -5,7 +5,7 @@ import { resizeCanvas } from './resizeCanvas'
 export const prepCanvas = (
     container: Ref<MiniDom.RendererDomNode | undefined>,
     canvasElement: HTMLCanvasElement,
-    onBeforeUnmount: Function,
+    onBeforeUnmount: Function
 ) => {
     const containerElement = container.value?.domElement
     if (!containerElement) throw new Error('missing container')

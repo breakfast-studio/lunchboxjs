@@ -9,7 +9,7 @@ export const beforeRender = [] as Lunch.UpdateCallback[]
 export const afterRender = [] as Lunch.UpdateCallback[]
 
 const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {
-    cancelUpdate();
+    cancelUpdate()
     frameID = requestAnimationFrame(() =>
         update({
             app: opts.app,
@@ -19,21 +19,25 @@ const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {
             updateSource: opts.updateSource,
         })
     )
-};
+}
 
 export const update: Lunch.UpdateCallback = (opts) => {
     if (opts.updateSource) {
         if (!watchStopHandle) {
             // request next frame only when state changes
-            watchStopHandle = watch(opts.updateSource, () => {
-                requestUpdate(opts);
-            }, {
-                deep: true
-            })
+            watchStopHandle = watch(
+                opts.updateSource,
+                () => {
+                    requestUpdate(opts)
+                },
+                {
+                    deep: true,
+                }
+            )
         }
     } else {
         // request next frame on a continuous loop
-        requestUpdate(opts);
+        requestUpdate(opts)
     }
 
     // prep options

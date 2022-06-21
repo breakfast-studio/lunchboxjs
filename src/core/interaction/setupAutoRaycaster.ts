@@ -75,10 +75,10 @@ export const setupAutoRaycaster = (node: Lunch.Node<THREE.Raycaster>) => {
                 () => {
                     if (frameID) cancelAnimationFrame(frameID)
                     frameID = requestAnimationFrame(() => {
-                        autoRaycasterBeforeRender();
-                    });
-                },
-            );
+                        autoRaycasterBeforeRender()
+                    })
+                }
+            )
 
             // mark complete
             autoRaycasterEventsInitialized = true
