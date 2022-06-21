@@ -2,6 +2,13 @@ import { MiniDom } from '../../core'
 import { Ref } from 'vue'
 import { resizeCanvas } from './resizeCanvas'
 
+const getInnerDimensions = (node: Element) => {
+    const computedStyle = getComputedStyle(node)
+    const width = node.clientWidth - parseFloat(computedStyle.paddingLeft) - parseFloat(computedStyle.paddingRight)
+    const height = node.clientHeight - parseFloat(computedStyle.paddingTop) - parseFloat(computedStyle.paddingBottom)
+    return { width, height }
+}
+
 export const prepCanvas = (
     container: Ref<MiniDom.RendererDomNode | undefined>,
     canvasElement: HTMLCanvasElement,
@@ -14,8 +21,10 @@ export const prepCanvas = (
     // save...
     // ...and size element
     const resizeCanvasByPolicy = () => {
-        if (sizePolicy === "container")
-            resizeCanvas(containerElement.clientWidth, containerElement.clientHeight);
+        if (sizePolicy === "container") {
+            const dims = getInnerDimensions(containerElement);
+            resizeCanvas(dims.width, dims.height);
+        }
         else
             resizeCanvas()
     };
