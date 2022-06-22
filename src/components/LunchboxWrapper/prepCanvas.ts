@@ -14,7 +14,7 @@ export const prepCanvas = (
     container: Ref<MiniDom.RendererDomNode | undefined>,
     canvasElement: HTMLCanvasElement,
     onBeforeUnmount: Function,
-    sizePolicy?: Lunch.SizePolicy,
+    sizePolicy?: Lunch.SizePolicy
 ) => {
     const containerElement = container.value?.domElement
     if (!containerElement) throw new Error('missing container')
