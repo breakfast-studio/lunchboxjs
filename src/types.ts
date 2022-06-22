@@ -138,6 +138,8 @@ export declare namespace Lunch {
     /** Universally unique identifier. */
     type Uuid = string
 
+    type SizePolicy = 'full' | 'container'
+
     interface WrapperProps {
         background?: string
         cameraArgs?: any[]
@@ -151,6 +153,7 @@ export declare namespace Lunch {
         // TODO: Why doesn't ConstructorParameters<THREE.WebGLRenderer> work here?
         rendererArguments?: object
         rendererProperties?: Partial<THREE.WebGLRenderer>
+        sizePolicy?: SizePolicy
         shadow?: ShadowSugar
         transparent?: boolean
         zoom?: number

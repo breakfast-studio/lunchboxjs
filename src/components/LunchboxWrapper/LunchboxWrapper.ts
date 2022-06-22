@@ -43,6 +43,7 @@ const fillStyle = (position: string) => {
         left: 0,
         width: '100%',
         height: '100%',
+        display: 'block',
     }
 }
 
@@ -61,6 +62,7 @@ export const LunchboxWrapper: ComponentOptions = {
         r3f: Boolean,
         rendererArguments: Object,
         rendererProperties: Object,
+        sizePolicy: String,
         shadow: [Boolean, Object],
         transparent: Boolean,
         zoom: Number,
@@ -242,7 +244,8 @@ export const LunchboxWrapper: ComponentOptions = {
                 prepCanvas(
                     container,
                     renderer.instance.domElement,
-                    onBeforeUnmount
+                    onBeforeUnmount,
+                    props.sizePolicy,
                 )
             } else {
                 throw new Error('missing renderer')
@@ -283,18 +286,21 @@ export const LunchboxWrapper: ComponentOptions = {
 
         // RENDER FUNCTION
         // ====================
+        const containerFillStyle = props.sizePolicy === 'container' ? 'static' : 'absolute'
+        const canvasFillStyle = props.sizePolicy === 'container' ? 'static' : 'fixed'
+
         return () => [
             context.slots.default?.() ?? null,
             h(
                 'div',
                 {
-                    style: fillStyle('absolute'),
+                    style: fillStyle(containerFillStyle),
                     ref: container,
                 },
                 [
                     useFallbackRenderer.value
                         ? h('canvas', {
-                              style: fillStyle('fixed'),
+                              style: fillStyle(canvasFillStyle),
                               class: 'lunchbox-canvas',
                               ref: canvas,
                           })
