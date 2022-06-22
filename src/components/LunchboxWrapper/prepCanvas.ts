@@ -1,4 +1,5 @@
 import { MiniDom } from '../../core'
+import { Lunch } from '../../types'
 import { Ref } from 'vue'
 import { resizeCanvas } from './resizeCanvas'
 
@@ -13,7 +14,7 @@ export const prepCanvas = (
     container: Ref<MiniDom.RendererDomNode | undefined>,
     canvasElement: HTMLCanvasElement,
     onBeforeUnmount: Function,
-    sizePolicy?: String,
+    sizePolicy?: Lunch.SizePolicy,
 ) => {
     const containerElement = container.value?.domElement
     if (!containerElement) throw new Error('missing container')
