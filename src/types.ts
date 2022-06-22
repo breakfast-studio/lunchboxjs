@@ -1,6 +1,7 @@
 type RootNode = import('./core/minidom').MiniDom.RendererRootNode
 type VNodeProps = import('vue').VNodeProps
 type VueApp<T> = import('vue').App<T>
+type WatchSource = import('vue').WatchSource
 type RendererStandardNode<T = THREE.Object3D> =
     import('./core').MiniDom.RendererStandardNode<T>
 
@@ -127,6 +128,7 @@ export declare namespace Lunch {
         scene?: THREE.Scene | null
         renderer?: THREE.Renderer | null
         camera?: THREE.Camera | null
+        updateSource?: WatchSource | null
 
         // sceneNode: Node<THREE.Scene> | null
         // rendererNode: Node<THREE.Renderer> | null
@@ -153,5 +155,6 @@ export declare namespace Lunch {
         shadow?: ShadowSugar
         transparent?: boolean
         zoom?: number
+        updateSource?: WatchSource | null
     }
 }

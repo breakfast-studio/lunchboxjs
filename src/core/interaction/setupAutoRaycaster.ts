@@ -17,6 +17,8 @@ let mouseUpListener: (event: MouseEvent) => void
 export const mousePos = ref({ x: Infinity, y: Infinity })
 let autoRaycasterEventsInitialized = false
 
+let frameID: number
+
 export const setupAutoRaycaster = (node: Lunch.Node<THREE.Raycaster>) => {
     const instance = node.instance
 
@@ -67,8 +69,16 @@ export const setupAutoRaycaster = (node: Lunch.Node<THREE.Raycaster>) => {
 
             // TODO: add touch events
 
-            // add to update loop
-            onBeforeRender(autoRaycasterBeforeRender)
+            // process mouse events asynchronously, whenever the mouse state changes
+            watch(
+                () => [inputActive.value, mousePos.value.x, mousePos.value.y],
+                () => {
+                    if (frameID) cancelAnimationFrame(frameID)
+                    frameID = requestAnimationFrame(() => {
+                        autoRaycasterBeforeRender()
+                    })
+                }
+            )
 
             // mark complete
             autoRaycasterEventsInitialized = true

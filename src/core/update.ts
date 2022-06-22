@@ -1,22 +1,44 @@
 import { ensureRenderer, ensuredScene, ensuredCamera } from '.'
 import { Lunch } from '..'
-import { toRaw } from 'vue'
+import { toRaw, watch, WatchStopHandle } from 'vue'
 
 let frameID: number
+let watchStopHandle: WatchStopHandle
 
 export const beforeRender = [] as Lunch.UpdateCallback[]
 export const afterRender = [] as Lunch.UpdateCallback[]
 
-export const update: Lunch.UpdateCallback = (opts) => {
-    // request next frame
+const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {
+    cancelUpdate()
     frameID = requestAnimationFrame(() =>
         update({
             app: opts.app,
             renderer: ensureRenderer.value?.instance,
             scene: ensuredScene.value.instance,
             camera: ensuredCamera.value?.instance,
+            updateSource: opts.updateSource,
         })
     )
+}
+
+export const update: Lunch.UpdateCallback = (opts) => {
+    if (opts.updateSource) {
+        if (!watchStopHandle) {
+            // request next frame only when state changes
+            watchStopHandle = watch(
+                opts.updateSource,
+                () => {
+                    requestUpdate(opts)
+                },
+                {
+                    deep: true,
+                }
+            )
+        }
+    } else {
+        // request next frame on a continuous loop
+        requestUpdate(opts)
+    }
 
     // prep options
     const { app, renderer, scene, camera } = opts
@@ -81,4 +103,8 @@ export const offAfterRender = (cb: Lunch.UpdateCallback | number) => {
 
 export const cancelUpdate = () => {
     if (frameID) cancelAnimationFrame(frameID)
+}
+
+export const cancelUpdateSource = () => {
+    if (watchStopHandle) watchStopHandle()
 }
