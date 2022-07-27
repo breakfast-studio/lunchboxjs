@@ -7,6 +7,7 @@ import {
     ref,
     WatchSource,
     WritableComputedRef,
+    inject,
 } from 'vue'
 import {
     cameraReady,
@@ -25,10 +26,11 @@ import {
     update,
 } from '../../core'
 import { set } from 'lodash'
-import { globals, Lunch } from '../..'
+import { Lunch, useGlobals } from '../..'
 // import { Color, Vector2, sRGBEncoding, ACESFilmicToneMapping } from 'three'
 import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
+import { useUpdateGlobals } from '../..'
 
 // TODO:
 // Continue r3f prop - what else (besides camera fov) makes r3f look good?
@@ -71,11 +73,14 @@ export const LunchboxWrapper: ComponentOptions = {
     setup(props: Lunch.WrapperProps, context) {
         const canvas = ref<MiniDom.RendererDomNode>()
         const useFallbackRenderer = ref(true)
-        const dpr = ref(props.dpr ?? -1)
+        let dpr = props.dpr ?? -1
         const container = ref<MiniDom.RendererDomNode>()
         let renderer: Lunch.Node<THREE.WebGLRenderer> | null
         let camera: Lunch.Node<THREE.Camera> | null
         let scene: MiniDom.RendererStandardNode<THREE.Scene>
+
+        const globals = useGlobals()
+        const updateGlobals = useUpdateGlobals()
 
         // https://threejs.org/docs/index.html#manual/en/introduction/Color-management
         if (props.r3f && (THREE as any)?.ColorManagement) {
@@ -233,19 +238,20 @@ export const LunchboxWrapper: ComponentOptions = {
 
             // MISC PROPERTIES
             // ====================
-            if (dpr.value === -1) {
-                dpr.value = window.devicePixelRatio
+            if (dpr === -1) {
+                dpr = window.devicePixelRatio
             }
+            updateGlobals?.({ dpr })
 
             if (renderer?.instance) {
-                renderer.instance.setPixelRatio(dpr.value)
-                globals.dpr.value = dpr.value
+                renderer.instance.setPixelRatio(globals.dpr)
+                // TODO: update DPR on monitor switch
                 // prep canvas (sizing, observe, unmount, etc)
                 prepCanvas(
                     container,
                     renderer.instance.domElement,
                     onBeforeUnmount,
-                    props.sizePolicy,
+                    props.sizePolicy
                 )
             } else {
                 throw new Error('missing renderer')
@@ -286,8 +292,10 @@ export const LunchboxWrapper: ComponentOptions = {
 
         // RENDER FUNCTION
         // ====================
-        const containerFillStyle = props.sizePolicy === 'container' ? 'static' : 'absolute'
-        const canvasFillStyle = props.sizePolicy === 'container' ? 'static' : 'fixed'
+        const containerFillStyle =
+            props.sizePolicy === 'container' ? 'static' : 'absolute'
+        const canvasFillStyle =
+            props.sizePolicy === 'container' ? 'static' : 'fixed'
 
         return () => [
             context.slots.default?.() ?? null,

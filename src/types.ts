@@ -18,6 +18,13 @@ export declare namespace Lunch {
         update: UpdateCallback
     }
 
+    type AppGlobals = {
+        /** Device pixel resolution */
+        dpr: number
+    }
+
+    type AppGlobalsUpdate = (newValue: Partial<AppGlobals>) => void
+
     interface CanvasProps {
         dpr?: number
         wrapperProps?: WrapperProps

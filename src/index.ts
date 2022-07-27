@@ -1,4 +1,12 @@
-import { computed, createRenderer, Component, ref, watch } from 'vue'
+import {
+    computed,
+    createRenderer,
+    Component,
+    inject,
+    ref,
+    watch,
+    reactive,
+} from 'vue'
 import { nodeOps } from './nodeOps'
 import {
     // createdCamera,
@@ -26,12 +34,15 @@ export {
 } from './core'
 export * from './types'
 
+import * as Keys from './keys'
+export * from './keys'
+
 // Utilities
 export * from './utils/find'
 
 /** Useful globals. */
 export const globals = {
-    dpr: ref(1),
+    // dpr: ref(1),
     inputActive,
     mousePos,
 }
@@ -105,10 +116,45 @@ export const clearCustomRender = () => {
     else queuedCustomRenderFunction = null
 }
 
+/** Use app-level globals. */
+export const useGlobals = () =>
+    inject<Lunch.AppGlobals>(Keys.globalsInjectionKey)!
+
+/** Construct a function to update your app-level globals.
+ *
+ * ```js
+ * // in setup():
+ * const updateGlobals = useUpdateGlobals()
+ *
+ * // ...later, to update the device pixel resolution...
+ * updateGlobals({ dpr: 2 })
+ * ```
+ */
+export const useUpdateGlobals = () =>
+    inject<Lunch.AppGlobalsUpdate>(Keys.updateGlobalsInjectionKey)!
+
 // CREATE APP
 // ====================
 export const createApp = (root: Component) => {
     app = createRenderer(nodeOps).createApp(root) as Lunch.App
+
+    // provide app-level globals & update method
+    const globals: Lunch.AppGlobals = reactive({
+        dpr: 1,
+        // TODO:
+        // inputActive:
+        // mousePos:
+    })
+    app.provide(Keys.globalsInjectionKey, globals)
+    app.provide<Lunch.AppGlobalsUpdate>(
+        Keys.updateGlobalsInjectionKey,
+        (newGlobals: Partial<Lunch.AppGlobals>) => {
+            Object.keys(newGlobals).forEach((key) => {
+                const typedKey = key as keyof typeof globals
+                globals[typedKey] = newGlobals[typedKey]!
+            })
+        }
+    )
 
     // register all components
     Object.keys(components).forEach((key) => {
@@ -146,7 +192,9 @@ export const createApp = (root: Component) => {
     app.setCustomRender = (
         newRender: (opts: Lunch.UpdateCallbackProperties) => void
     ) => {
-        app!.customRender = newRender
+        if (app) {
+            app.customRender = newRender
+        }
     }
 
     // add queued custom render if we have one
@@ -157,7 +205,9 @@ export const createApp = (root: Component) => {
 
     // add custom render removal
     app.clearCustomRender = () => {
-        app!.customRender = null
+        if (app) {
+            app.customRender = null
+        }
     }
 
     // done

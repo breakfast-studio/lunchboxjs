@@ -5,7 +5,7 @@ import {
     ensureRenderer,
     onBeforeRender,
 } from '..'
-import { globals, Lunch } from '../../'
+import { globals, Lunch, useGlobals } from '../../'
 import { ref, watch, WatchStopHandle } from 'vue'
 import { inputActive } from './input'
 import { Intersection } from 'three'
@@ -23,6 +23,10 @@ export const setupAutoRaycaster = (node: Lunch.Node<THREE.Raycaster>) => {
     const instance = node.instance
 
     if (!instance) return
+
+    // TODO: inject doesn't work here. replace this raycaster with a component so we can
+    // `inject` in `setup`?
+    const appLevelGlobals = { dpr: window.devicePixelRatio } //useGlobals()
 
     // add mouse events once renderer is ready
     let stopWatcher: WatchStopHandle | null = null
@@ -42,10 +46,10 @@ export const setupAutoRaycaster = (node: Lunch.Node<THREE.Raycaster>) => {
             mouseMoveListener = (evt) => {
                 const screenWidth =
                     (renderer.instance!.domElement.width ?? 1) /
-                    globals.dpr.value
+                    appLevelGlobals.dpr
                 const screenHeight =
                     (renderer.instance!.domElement.height ?? 1) /
-                    globals.dpr.value
+                    appLevelGlobals.dpr
 
                 mousePos.value.x = (evt.offsetX / screenWidth) * 2 - 1
                 mousePos.value.y = -(evt.offsetY / screenHeight) * 2 + 1
