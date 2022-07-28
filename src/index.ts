@@ -3,7 +3,6 @@ import {
     createRenderer,
     Component,
     inject,
-    ref,
     watch,
     reactive,
 } from 'vue'
@@ -25,13 +24,7 @@ import { components } from './components'
 import { Lunch } from './types'
 
 export { lunchboxRootNode as lunchboxTree } from './core'
-export {
-    offAfterRender,
-    offBeforeRender,
-    onAfterRender,
-    onBeforeRender,
-    onStart,
-} from './core'
+export * from './core'
 export * from './types'
 
 import * as Keys from './keys'
@@ -93,27 +86,45 @@ export function useScene(callback: (newScene: THREE.Scene) => void) {
     )
 }
 
+// let app: Lunch.App | null = null
+// let queuedCustomRenderFunction:
+//     | ((opts: Lunch.UpdateCallbackProperties) => void)
+//     | null = null
+
 // CUSTOM RENDER SUPPORT
 // ====================
-let app: Lunch.App | null = null
-let queuedCustomRenderFunction:
-    | ((opts: Lunch.UpdateCallbackProperties) => void)
-    | null = null
-
 /** Set a custom render function, overriding the Lunchbox app's default render function.
  * Changing this requires the user to manually render their scene.
+ *
+ * Invokes immediately - use `useCustomRender().setCustomRender`
+ * if you need to call somewhere outside of `setup`.
  */
 export const setCustomRender = (
     render: (opts: Lunch.UpdateCallbackProperties) => void
 ) => {
-    if (app) app.setCustomRender(render)
-    else queuedCustomRenderFunction = render
+    useCustomRender()?.setCustomRender?.(render)
 }
 
-/** Clear the active app's custom render function. */
+/** Clear the active app's custom render function.
+ *
+ * Invokes immediately - use `useCustomRender().clearCustomRender`
+ * if you need to call somewhere outside of `setup`.
+ */
 export const clearCustomRender = () => {
-    if (app) app.clearCustomRender()
-    else queuedCustomRenderFunction = null
+    useCustomRender()?.clearCustomRender?.()
+}
+
+/** Provides `setCustomRender` and `clearCustomRender` functions to be called in a non-`setup` context. */
+export const useCustomRender = () => {
+    return {
+        /** Set a custom render function, overriding the Lunchbox app's default render function.
+         * Changing this requires the user to manually render their scene. */
+        setCustomRender: inject<Lunch.CustomRenderFunctionSetter>(
+            Keys.setCustomRenderKey
+        ),
+        /** Clear the active app's custom render function. */
+        clearCustomRender: inject<() => void>(Keys.clearCustomRenderKey),
+    }
 }
 
 /** Use app-level globals. */
@@ -131,14 +142,24 @@ export const useGlobals = () =>
  * ```
  */
 export const useUpdateGlobals = () =>
-    inject<Lunch.AppGlobalsUpdate>(Keys.updateGlobalsInjectionKey)!
+    inject<Lunch.AppGlobalsUpdate>(Keys.updateGlobalsInjectionKey)
+
+/** Update app-level globals.
+ *
+ * Invokes immediately - use `useUpdateGlobals`
+ * if you need to call somewhere outside of `setup`.
+ */
+export const updateGlobals = (newValue: Partial<Lunch.AppGlobals>) => {
+    useUpdateGlobals()?.(newValue)
+}
 
 // CREATE APP
 // ====================
 export const createApp = (root: Component) => {
-    app = createRenderer(nodeOps).createApp(root) as Lunch.App
+    const app = createRenderer(nodeOps).createApp(root) as Lunch.App
 
     // provide app-level globals & update method
+    // ====================
     const globals: Lunch.AppGlobals = reactive({
         dpr: 1,
         // TODO:
@@ -156,12 +177,99 @@ export const createApp = (root: Component) => {
         }
     )
 
+    // provide custom renderer functions
+    // ====================
+    app.provide(
+        Keys.setCustomRenderKey,
+        (render: (opts: Lunch.UpdateCallbackProperties) => void) => {
+            app.setCustomRender(render)
+        }
+    )
+    app.provide(Keys.clearCustomRenderKey, () => {
+        app.clearCustomRender()
+    })
+
+    // before render
+    // ====================
+    const beforeRender = [] as Lunch.UpdateCallback[]
+    app.provide(Keys.beforeRenderKey, beforeRender)
+    app.provide(
+        Keys.onBeforeRenderKey,
+        (cb: Lunch.UpdateCallback, index = Infinity) => {
+            if (index === Infinity) {
+                beforeRender.push(cb)
+            } else {
+                beforeRender.splice(index, 0, cb)
+            }
+        }
+    )
+    app.provide(
+        Keys.offBeforeRenderKey,
+        (cb: Lunch.UpdateCallback | number) => {
+            if (isFinite(cb as number)) {
+                beforeRender.splice(cb as number, 1)
+            } else {
+                const idx = beforeRender.findIndex((v) => v == cb)
+                if (idx !== -1) {
+                    beforeRender.splice(idx, 1)
+                }
+            }
+        }
+    )
+
+    // after render
+    // ====================
+    const afterRender = [] as Lunch.UpdateCallback[]
+    app.provide(Keys.afterRenderKey, afterRender)
+    app.provide(
+        Keys.onAfterRenderKey,
+        (cb: Lunch.UpdateCallback, index = Infinity) => {
+            if (index === Infinity) {
+                afterRender.push(cb)
+            } else {
+                afterRender.splice(index, 0, cb)
+            }
+        }
+    )
+    app.provide(Keys.offAfterRenderKey, (cb: Lunch.UpdateCallback | number) => {
+        if (isFinite(cb as number)) {
+            afterRender.splice(cb as number, 1)
+        } else {
+            const idx = afterRender.findIndex((v) => v == cb)
+            if (idx !== -1) {
+                afterRender.splice(idx, 1)
+            }
+        }
+    })
+
+    // save app-level components
+    // ====================
+    app.config.globalProperties.lunchbox = {
+        afterRender,
+        beforeRender,
+        frameId: -1,
+        watchStopHandle: null,
+    }
+
+    // frame ID (used for update functions)
+    // ====================
+    app.provide(Keys.frameIdKey, app.config.globalProperties.lunchbox.frameId)
+
+    // watch stop handler (used for conditional update loop)
+    // ====================
+    app.provide(
+        Keys.watchStopHandleKey,
+        app.config.globalProperties.lunchbox.watchStopHandle
+    )
+
     // register all components
+    // ====================
     Object.keys(components).forEach((key) => {
         app?.component(key, (components as any)[key])
     })
 
     // update mount function to match Lunchbox.Node
+    // ====================
     const { mount } = app
     app.mount = (root, ...args) => {
         // find DOM element to use as app root
@@ -183,12 +291,14 @@ export const createApp = (root: Component) => {
     }
 
     // embed .extend function
+    // ====================
     app.extend = (targets: Record<string, any>) => {
         extend({ app: app!, ...targets })
         return app!
     }
 
     // prep for custom render support
+    // ====================
     app.setCustomRender = (
         newRender: (opts: Lunch.UpdateCallbackProperties) => void
     ) => {
@@ -197,11 +307,11 @@ export const createApp = (root: Component) => {
         }
     }
 
-    // add queued custom render if we have one
-    if (queuedCustomRenderFunction) {
-        app.setCustomRender(queuedCustomRenderFunction)
-        queuedCustomRenderFunction = null
-    }
+    // // add queued custom render if we have one
+    // if (queuedCustomRenderFunction) {
+    //     app.setCustomRender(queuedCustomRenderFunction)
+    //     queuedCustomRenderFunction = null
+    // }
 
     // add custom render removal
     app.clearCustomRender = () => {

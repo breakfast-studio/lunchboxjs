@@ -1,14 +1,25 @@
+type RendererStandardNode<T = THREE.Object3D> =
+    import('./core').MiniDom.RendererStandardNode<T>
 type RootNode = import('./core/minidom').MiniDom.RendererRootNode
 type VNodeProps = import('vue').VNodeProps
 type VueApp<T> = import('vue').App<T>
 type WatchSource = import('vue').WatchSource
-type RendererStandardNode<T = THREE.Object3D> =
-    import('./core').MiniDom.RendererStandardNode<T>
+type WatchStopHandle = import('vue').WatchStopHandle
 
 export declare namespace Lunch {
     /** Lunchbox app. */
-    type App = VueApp<any> & {
+    type App = Omit<VueApp<any>, 'config'> & {
         clearCustomRender: () => void
+        config: Omit<VueApp<any>['config'], 'globalProperties'> & {
+            globalProperties: {
+                lunchbox: {
+                    afterRender: Lunch.UpdateCallback[]
+                    beforeRender: Lunch.UpdateCallback[]
+                    frameId: number
+                    watchStopHandle: WatchStopHandle | null
+                }
+            } & Record<string, any>
+        }
         customRender: ((opts: UpdateCallbackProperties) => void) | null
         extend: (v: Record<string, any>) => App
         rootNode: RootNode
@@ -40,6 +51,10 @@ export declare namespace Lunch {
     interface CommentMeta extends MetaBase {
         text: string
     }
+
+    type CustomRenderFunctionSetter = (
+        render: (opts: Lunch.UpdateCallbackProperties) => void
+    ) => void
 
     interface DomMeta extends MetaBase {
         domElement: HTMLElement

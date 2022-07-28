@@ -18,7 +18,7 @@ watch(globals, (v) => console.log('dpr set to', v.dpr), { immediate: true })
 
 onMounted(() => {
     setTimeout(() => {
-        updateGlobals({ dpr: 2 })
+        updateGlobals?.({ dpr: 2 })
     }, 1000)
 })
 </script>

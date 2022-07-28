@@ -14,12 +14,7 @@
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-import {
-    offAfterRender,
-    offBeforeRender,
-    onAfterRender,
-    onBeforeRender,
-} from '../../src/'
+import { useBeforeRender, useAfterRender } from '../../src/'
 
 onMounted(() => {
     alert('Open the console to see before/after render events.')
@@ -27,16 +22,19 @@ onMounted(() => {
 
 const beforeLog = () => console.log('Before render (click left box to toggle)')
 
+const { onBeforeRender, offBeforeRender } = useBeforeRender()
+const { onAfterRender, offAfterRender } = useAfterRender()
+
 // Before render
 // ====================
-onBeforeRender(beforeLog)
+onBeforeRender?.(beforeLog)
 
 let beforeRunning = true
 const onClickLeft = () => {
     if (beforeRunning) {
-        offBeforeRender(beforeLog)
+        offBeforeRender?.(beforeLog)
     } else {
-        onBeforeRender(beforeLog)
+        onBeforeRender?.(beforeLog)
     }
 
     beforeRunning = !beforeRunning
@@ -49,9 +47,9 @@ const afterLog = () => console.log('After render (click right box to toggle)')
 let afterRunning = false
 const onClickRight = () => {
     if (afterRunning) {
-        offBeforeRender(afterLog)
+        offAfterRender?.(afterLog)
     } else {
-        onBeforeRender(afterLog)
+        onAfterRender?.(afterLog)
     }
 
     afterRunning = !afterRunning
