@@ -1,13 +1,11 @@
 import {
-    h,
-    ComponentOptions,
     getCurrentInstance,
     onBeforeUnmount,
     onMounted,
+    PropType,
     ref,
     WatchSource,
     WritableComputedRef,
-    inject,
 } from 'vue'
 import {
     cameraReady,
@@ -27,13 +25,9 @@ import {
 } from '../../core'
 import { set } from 'lodash'
 import { Lunch, useGlobals } from '../..'
-// import { Color, Vector2, sRGBEncoding, ACESFilmicToneMapping } from 'three'
 import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
 import { useUpdateGlobals } from '../..'
-
-// TODO:
-// Continue r3f prop - what else (besides camera fov) makes r3f look good?
 
 /** fixed & fill styling for container */
 const fillStyle = (position: string) => {
@@ -49,28 +43,30 @@ const fillStyle = (position: string) => {
     }
 }
 
-export const LunchboxWrapper: ComponentOptions = {
+import { defineComponent } from 'vue'
+
+export const LunchboxWrapper = defineComponent({
     name: 'Lunchbox',
     props: {
         // These should match the Lunchbox.WrapperProps interface
         background: String,
         cameraArgs: Array,
-        cameraLook: Array,
-        cameraLookAt: Array,
-        cameraPosition: Array,
+        cameraLook: Array as unknown as PropType<Lunch.Vector3AsArray>,
+        cameraLookAt: Array as unknown as PropType<Lunch.Vector3AsArray>,
+        cameraPosition: Array as unknown as PropType<Lunch.Vector3AsArray>,
         dpr: Number,
         ortho: Boolean,
         orthographic: Boolean,
         r3f: Boolean,
         rendererArguments: Object,
         rendererProperties: Object,
-        sizePolicy: String,
+        sizePolicy: String as PropType<Lunch.SizePolicy>,
         shadow: [Boolean, Object],
         transparent: Boolean,
         zoom: Number,
-        updateSource: Object,
+        updateSource: Object as PropType<WatchSource>,
     },
-    setup(props: Lunch.WrapperProps, context) {
+    setup(props, context) {
         const canvas = ref<MiniDom.RendererDomNode>()
         const useFallbackRenderer = ref(true)
         let dpr = props.dpr ?? -1
@@ -297,24 +293,25 @@ export const LunchboxWrapper: ComponentOptions = {
         const canvasFillStyle =
             props.sizePolicy === 'container' ? 'static' : 'fixed'
 
-        return () => [
-            context.slots.default?.() ?? null,
-            h(
-                'div',
-                {
-                    style: fillStyle(containerFillStyle),
-                    ref: container,
-                },
-                [
-                    useFallbackRenderer.value
-                        ? h('canvas', {
-                              style: fillStyle(canvasFillStyle),
-                              class: 'lunchbox-canvas',
-                              ref: canvas,
-                          })
-                        : null,
-                ]
-            ),
-        ]
+        return () => (
+            <>
+                {context.slots.default?.()}
+                <div
+                    class="lunchbox-container"
+                    style={fillStyle(containerFillStyle) as any}
+                    ref={container}
+                    data-lunchbox="true"
+                >
+                    {useFallbackRenderer.value && (
+                        <canvas
+                            ref={canvas}
+                            class="lunchbox-canvas"
+                            style={fillStyle(canvasFillStyle) as any}
+                            data-lunchbox="true"
+                        ></canvas>
+                    )}
+                </div>
+            </>
+        )
     },
-}
+})

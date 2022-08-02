@@ -162,12 +162,14 @@ export declare namespace Lunch {
 
     type SizePolicy = 'full' | 'container'
 
+    type Vector3AsArray = [number, number, number]
+
     interface WrapperProps {
         background?: string
         cameraArgs?: any[]
-        cameraLook?: [number, number, number]
-        cameraLookAt?: [number, number, number]
-        cameraPosition?: [number, number, number]
+        cameraLook?: Vector3AsArray
+        cameraLookAt?: Vector3AsArray
+        cameraPosition?: Vector3AsArray
         dpr?: number
         ortho?: boolean
         orthographic?: boolean

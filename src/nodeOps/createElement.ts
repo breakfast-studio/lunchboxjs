@@ -10,13 +10,10 @@ export const createElement = (
     isCustomizedBuiltin?: string,
     vnodeProps?: Lunch.LunchboxMetaProps
 ) => {
-    const options = { type } as Partial<Lunch.MetaBase>
-    if (vnodeProps) {
-        options.props = vnodeProps
-    }
+    const options: Partial<Lunch.MetaBase> = { type, props: vnodeProps }
 
     // handle dom node
-    const isDomNode = isLunchboxDomComponent(type)
+    const isDomNode = isLunchboxDomComponent(options)
     if (isDomNode) {
         const node = createDomNode(options)
         return node
