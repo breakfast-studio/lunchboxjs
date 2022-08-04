@@ -1,6 +1,6 @@
 <template>
-    <Lunchbox :cameraPosition="[0, 0, 5]"
-        ><mesh>
+    <Lunchbox :cameraPosition="[0, 0, 5]">
+        <mesh>
             <boxGeometry />
             <meshBasicMaterial color="#0000ff" />
         </mesh>
