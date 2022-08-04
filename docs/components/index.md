@@ -92,6 +92,30 @@ The main caveat is that you need to wrap all arguments in an array, just like wi
 <example :methodCall="256" />
 ```
 
+:::tip Setting functions
+There is one exception to this rule: some functions (like [onAfterRender](https://threejs.org/docs/?q=mesh#api/en/core/Object3D.onAfterRender) and [onBeforeRender](https://threejs.org/docs/?q=mesh#api/en/core/Object3D.onBeforeRender)) are set rather than called directly:
+
+```js
+const mesh = new THREE.Mesh()
+// onBeforeRender is called internally by Three.js
+// and is set by the user like this:
+mesh.onBeforeRender = () => {
+    /* ... */
+}
+```
+
+Use single values for these rather than arrays:
+
+```html
+<!-- works -->
+<mesh :onBeforeRender="myCustomMethod" />
+
+<!-- doesn't work -->
+<mesh :onBeforeRender="[myCustomMethod]" />
+```
+
+:::
+
 ## Events
 
 All Lunchbox components emit an `onAdded` and `onReady` event:
@@ -116,6 +140,8 @@ Note you can replace `on` with `@` in the event names below. `onClick` is the sa
 
 | Name             | Parameters                             |
 | ---------------- | -------------------------------------- |
+| `onAdded`        | `{ instance: <instantiated type> }`    |
+| `onClick`        | `{ intersection: THREE.Intersection }` |
 | `onClick`        | `{ intersection: THREE.Intersection }` |
 | `onPointerUp`    | `{ intersection: THREE.Intersection }` |
 | `onPointerDown`  | `{ intersection: THREE.Intersection }` |
@@ -124,3 +150,4 @@ Note you can replace `on` with `@` in the event names below. `onClick` is the sa
 | `onPointerEnter` | `{ intersection: THREE.Intersection }` |
 | `onPointerLeave` | `{ intersection: THREE.Intersection }` |
 | `onPointerMove`  | `{ intersection: THREE.Intersection }` |
+| `onReady`        | `{ instance: <instantiated type> }`    |
