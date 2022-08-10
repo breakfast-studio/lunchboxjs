@@ -44,8 +44,8 @@ Run `npm run demo:create` to create a new demo.
     -   `defaultCamera`
     -   `cameraReady`
     -   `ensuredCamera`
-    -   `ensuredRenderer`
-    -   `rendererReady`
+    -   ~~`ensuredRenderer`~~
+    -   ~~`rendererReady`~~
     -   `ensuredScene`
     -   `ensuredRaycaster`
 -   `src/core/allNodes.ts`

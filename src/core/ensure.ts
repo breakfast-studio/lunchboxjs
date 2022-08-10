@@ -168,16 +168,6 @@ export const ensuredCamera = computed<Lunch.Node<THREE.Camera> | null>({
 
 // ENSURE RENDERER
 // ====================
-// export const fallbackRendererUuid = 'FALLBACK_RENDERER'
-// export const ensuredRenderer = buildEnsured(
-//     // TODO: ensure support for css/svg renderers
-//     ['WebGLRenderer'], //, 'CSS2DRenderer', 'CSS3DRenderer', 'SVGRenderer'],
-//     fallbackRendererUuid,
-//     {}
-// ) as unknown as WritableComputedRef<Lunch.Node<THREE.WebGLRenderer>>
-/** Special value to be changed ONLY in `LunchboxWrapper`.
- * Functions waiting for a Renderer need to wait for this to be true.  */
-// export const rendererReady = ref(true)
 export const ensureRenderer = <
     T extends THREE.Renderer = THREE.WebGLRenderer
 >() => inject<ComputedRef<T>>(Keys.appRenderersKey)
