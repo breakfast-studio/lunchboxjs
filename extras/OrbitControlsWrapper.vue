@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { onBeforeRender, globals, Lunch, camera, renderer } from '../src'
+import { onBeforeRender, globals, Lunch, camera, useRenderer } from '../src'
 
 // props
 const props = defineProps<{
@@ -20,12 +20,10 @@ const props = defineProps<{
 }>()
 
 // computed
-// const camera = globals.camera
-// const renderer = globals.renderer
 const ready = computed(() => {
-    return camera.value !== null && renderer.value?.domElement
+    return camera.value !== null && useRenderer()?.domElement
 })
-const orbitArgs = computed(() => [camera.value, renderer.value?.domElement])
+const orbitArgs = computed(() => [camera.value, useRenderer()?.domElement])
 // watch(() => orbitArgs.value, console.log, { immediate: true })
 // console.log(renderer)
 

@@ -5,14 +5,20 @@ import { resizeCanvas } from './resizeCanvas'
 
 const getInnerDimensions = (node: Element) => {
     const computedStyle = getComputedStyle(node)
-    const width = node.clientWidth - parseFloat(computedStyle.paddingLeft) - parseFloat(computedStyle.paddingRight)
-    const height = node.clientHeight - parseFloat(computedStyle.paddingTop) - parseFloat(computedStyle.paddingBottom)
+    const width =
+        node.clientWidth -
+        parseFloat(computedStyle.paddingLeft) -
+        parseFloat(computedStyle.paddingRight)
+    const height =
+        node.clientHeight -
+        parseFloat(computedStyle.paddingTop) -
+        parseFloat(computedStyle.paddingBottom)
     return { width, height }
 }
 
 export const prepCanvas = (
     container: Ref<MiniDom.RendererDomNode | undefined>,
-    canvasElement: HTMLCanvasElement,
+    renderer: THREE.Renderer,
     onBeforeUnmount: Function,
     sizePolicy?: Lunch.SizePolicy
 ) => {
@@ -22,18 +28,16 @@ export const prepCanvas = (
     // save...
     // ...and size element
     const resizeCanvasByPolicy = () => {
-        if (sizePolicy === "container") {
-            const dims = getInnerDimensions(containerElement);
-            resizeCanvas(dims.width, dims.height);
-        }
-        else
-            resizeCanvas()
-    };
-    resizeCanvasByPolicy();
+        if (sizePolicy === 'container') {
+            const dims = getInnerDimensions(containerElement)
+            resizeCanvas(renderer, dims.width, dims.height)
+        } else resizeCanvas(renderer)
+    }
+    resizeCanvasByPolicy()
 
     // attach listeners
     const observer = new ResizeObserver(([canvas]) => {
-        resizeCanvasByPolicy();
+        resizeCanvasByPolicy()
     })
     // window.addEventListener('resize', resizeCanvas)
     if (containerElement) {
@@ -41,9 +45,9 @@ export const prepCanvas = (
     }
 
     // cleanup
-    onBeforeUnmount(() => {
-        if (canvasElement) {
-            observer.unobserve(canvasElement)
-        }
-    })
+    // onBeforeUnmount(() => {
+    //     if (canvasElement) {
+    //         observer.unobserve(canvasElement)
+    //     }
+    // })
 }

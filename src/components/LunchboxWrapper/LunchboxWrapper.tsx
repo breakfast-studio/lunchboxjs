@@ -3,6 +3,7 @@ import {
     onBeforeUnmount,
     onMounted,
     PropType,
+    reactive,
     ref,
     WatchSource,
     WritableComputedRef,
@@ -13,21 +14,22 @@ import {
     cancelUpdateSource,
     createNode,
     ensuredCamera,
-    ensureRenderer,
+    // ensureRenderer,
     ensuredScene,
     fallbackCameraUuid,
-    fallbackRendererUuid,
+    // fallbackRendererUuid,
     MiniDom,
-    rendererReady,
+    // rendererReady,
     startCallbacks,
     tryGetNodeWithInstanceType,
     update,
 } from '../../core'
 import { set } from 'lodash'
-import { Lunch, useGlobals } from '../..'
+import { Lunch, useApp, useGlobals, useRootNode } from '../..'
 import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
 import { useUpdateGlobals } from '../..'
+import * as Keys from '../../keys'
 
 /** fixed & fill styling for container */
 const fillStyle = (position: string) => {
@@ -43,7 +45,7 @@ const fillStyle = (position: string) => {
     }
 }
 
-import { defineComponent } from 'vue'
+import { defineComponent, watch } from 'vue'
 
 export const LunchboxWrapper = defineComponent({
     name: 'Lunchbox',
@@ -71,21 +73,34 @@ export const LunchboxWrapper = defineComponent({
         const useFallbackRenderer = ref(true)
         let dpr = props.dpr ?? -1
         const container = ref<MiniDom.RendererDomNode>()
-        let renderer: Lunch.Node<THREE.WebGLRenderer> | null
+        // let renderer: Lunch.Node<THREE.WebGLRenderer> | null
+        const renderer = ref<Lunch.LunchboxComponent<THREE.Renderer>>()
         let camera: Lunch.Node<THREE.Camera> | null
         let scene: MiniDom.RendererStandardNode<THREE.Scene>
 
         const globals = useGlobals()
         const updateGlobals = useUpdateGlobals()
+        let rendererArgs: THREE.WebGLRendererParameters = reactive({
+            alpha: props.transparent,
+            antialias: true,
+            canvas: canvas.value?.domElement,
+            powerPreference: !!props.r3f ? 'high-performance' : 'default',
+            ...(props.rendererArguments ?? {}),
+        })
+
+        const root = useRootNode()
+        const app = useApp()
 
         // https://threejs.org/docs/index.html#manual/en/introduction/Color-management
         if (props.r3f && (THREE as any)?.ColorManagement) {
             ;(THREE as any).ColorManagement.legacyMode = false
         }
 
+        const addOnBeforeUnmount = (func: () => void) => onBeforeUnmount(func)
+
         // MOUNT
         // ====================
-        onMounted(() => {
+        onMounted(async () => {
             // canvas needs to exist
             if (!canvas.value) throw new Error('missing canvas')
 
@@ -93,14 +108,18 @@ export const LunchboxWrapper = defineComponent({
             // ====================
             // is there already a renderer?
             // TODO: allow other renderer types
-            renderer = tryGetNodeWithInstanceType([
-                'WebGLRenderer',
-            ]) as unknown as Lunch.Node<THREE.WebGLRenderer> | null
+            // console.log(root)
+            // renderer.value =
+            // tryGetNodeWithInstanceType([
+            //     'WebGLRenderer',
+            // ]) as unknown as Lunch.Node<THREE.WebGLRenderer> | null
+            // console.log(renderer.value)
 
             // if renderer is missing, initialize with options
+            /*
             if (!renderer) {
                 // build renderer args
-                const rendererArgs: THREE.WebGLRendererParameters = {
+                rendererArgs = {
                     alpha: props.transparent,
                     antialias: true,
                     canvas: canvas.value.domElement,
@@ -162,13 +181,17 @@ export const LunchboxWrapper = defineComponent({
                 }
 
                 // update using created renderer
-                renderer = rendererAsWebGlRenderer.value
+                // renderer = rendererAsWebGlRenderer.value
             } else {
                 useFallbackRenderer.value = false
                 // the user has initialized the renderer, so anything depending
                 // on the renderer can execute
                 rendererReady.value = true
             }
+            */
+
+            // update using created renderer
+            // renderer = rendererAsWebGlRenderer.value
 
             // CAMERA
             // ====================
@@ -239,31 +262,73 @@ export const LunchboxWrapper = defineComponent({
             }
             updateGlobals?.({ dpr })
 
-            if (renderer?.instance) {
-                renderer.instance.setPixelRatio(globals.dpr)
-                // TODO: update DPR on monitor switch
-                // prep canvas (sizing, observe, unmount, etc)
-                prepCanvas(
-                    container,
-                    renderer.instance.domElement,
-                    onBeforeUnmount,
-                    props.sizePolicy
-                )
-            } else {
-                throw new Error('missing renderer')
+            while (!renderer.value?.$el?.instance) {
+                await new Promise((r) => requestAnimationFrame(r))
             }
+            // if (!renderer.value?.$el?.instance) {
+            //     throw new Error('missing renderer')
+            // }
+
+            const rendererAsWebGlRenderer = renderer.value?.$el
+                ?.instance as THREE.WebGLRenderer
+
+            rendererAsWebGlRenderer.setPixelRatio(globals.dpr)
+            // TODO: update DPR on monitor switch
+            // prep canvas (sizing, observe, unmount, etc)
+            prepCanvas(
+                container,
+                renderer.value.$el.instance,
+                addOnBeforeUnmount,
+                props.sizePolicy
+            )
+
+            if (props.r3f) {
+                rendererAsWebGlRenderer.outputEncoding = THREE.sRGBEncoding
+                rendererAsWebGlRenderer.toneMapping =
+                    THREE.ACESFilmicToneMapping
+            }
+
+            // update render sugar
+            const sugar = {
+                shadow: props.shadow,
+            }
+            if (sugar?.shadow) {
+                rendererAsWebGlRenderer.shadowMap.enabled = true
+                if (typeof sugar.shadow === 'object') {
+                    rendererAsWebGlRenderer.shadowMap.type = sugar.shadow.type
+                }
+            }
+
+            // set renderer props if needed
+            // if (props.rendererProperties) {
+            //     Object.keys(props.rendererProperties).forEach((key) => {
+            //         set(
+            //             rendererAsWebGlRenderer,
+            //             key,
+            //             (props.rendererProperties as any)[key]
+            //         )
+            //     })
+            // }
 
             // CALLBACK PREP
             // ====================
-            const app = getCurrentInstance()!.appContext.app as Lunch.App
+            // const app = getCurrentInstance()!.appContext.app as Lunch.App
 
             // START
             // ====================
+            if (!app) {
+                throw new Error('error creating app')
+            }
+
+            // provide renderer
+            app.config.globalProperties.lunchbox.renderer =
+                renderer.value.$el.instance
+
             for (let startCallback of startCallbacks) {
                 startCallback({
                     app,
                     camera: camera.instance,
-                    renderer: renderer.instance,
+                    renderer: renderer.value?.$el?.instance,
                     scene: scene.instance,
                 })
             }
@@ -273,7 +338,7 @@ export const LunchboxWrapper = defineComponent({
             update({
                 app,
                 camera: camera.instance,
-                renderer: renderer.instance,
+                renderer: renderer.value?.$el?.instance,
                 scene: scene.instance,
                 updateSource: props.updateSource,
             })
@@ -295,22 +360,43 @@ export const LunchboxWrapper = defineComponent({
 
         return () => (
             <>
-                {context.slots.default?.()}
                 <div
                     class="lunchbox-container"
                     style={fillStyle(containerFillStyle) as any}
                     ref={container}
                     data-lunchbox="true"
                 >
-                    {useFallbackRenderer.value && (
-                        <canvas
-                            ref={canvas}
-                            class="lunchbox-canvas"
-                            style={fillStyle(canvasFillStyle) as any}
-                            data-lunchbox="true"
-                        ></canvas>
-                    )}
+                    <canvas
+                        ref={canvas}
+                        class="lunchbox-canvas"
+                        style={fillStyle(canvasFillStyle) as any}
+                        data-lunchbox="true"
+                    ></canvas>
                 </div>
+                {canvas.value?.domElement &&
+                    (context.slots?.renderer?.() ?? (
+                        <>
+                            {
+                                <webGLRenderer
+                                    {...(props.rendererProperties ?? {})}
+                                    ref={renderer}
+                                    args={[
+                                        {
+                                            alpha: props.transparent,
+                                            antialias: true,
+                                            canvas: canvas.value?.domElement,
+                                            powerPreference: !!props.r3f
+                                                ? 'high-performance'
+                                                : 'default',
+                                            ...(props.rendererArguments ?? {}),
+                                        },
+                                    ]}
+                                />
+                            }
+                        </>
+                    ))}
+
+                {context.slots?.default?.()}
             </>
         )
     },

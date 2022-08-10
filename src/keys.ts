@@ -14,3 +14,7 @@ export const offAfterRenderKey = Symbol()
 
 export const frameIdKey = Symbol()
 export const watchStopHandleKey = Symbol()
+
+export const appRootNodeKey = Symbol()
+export const appKey = Symbol()
+export const appRenderersKey = Symbol()

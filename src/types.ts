@@ -5,6 +5,7 @@ type VNodeProps = import('vue').VNodeProps
 type VueApp<T> = import('vue').App<T>
 type WatchSource = import('vue').WatchSource
 type WatchStopHandle = import('vue').WatchStopHandle
+type ThreeRenderer = import('three').Renderer
 
 export declare namespace Lunch {
     /** Lunchbox app. */
@@ -16,6 +17,7 @@ export declare namespace Lunch {
                     afterRender: Lunch.UpdateCallback[]
                     beforeRender: Lunch.UpdateCallback[]
                     frameId: number
+                    renderer: ThreeRenderer | null
                     watchStopHandle: WatchStopHandle | null
                 }
             } & Record<string, any>

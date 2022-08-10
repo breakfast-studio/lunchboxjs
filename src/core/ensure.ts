@@ -1,7 +1,15 @@
 import { allNodes, createNode, isMinidomNode, MiniDom } from '.'
 import { setupAutoRaycaster } from './interaction/setupAutoRaycaster'
-import { computed, reactive, ref, WritableComputedRef } from 'vue'
+import {
+    ComputedRef,
+    computed,
+    inject,
+    reactive,
+    ref,
+    WritableComputedRef,
+} from 'vue'
 import { Lunch } from '..'
+import * as Keys from '../keys'
 
 // ENSURE ROOT
 // ====================
@@ -160,29 +168,19 @@ export const ensuredCamera = computed<Lunch.Node<THREE.Camera> | null>({
 
 // ENSURE RENDERER
 // ====================
-export const fallbackRendererUuid = 'FALLBACK_RENDERER'
-export const ensuredRenderer = buildEnsured(
-    // TODO: ensure support for css/svg renderers
-    ['WebGLRenderer'], //, 'CSS2DRenderer', 'CSS3DRenderer', 'SVGRenderer'],
-    fallbackRendererUuid,
-    {}
-) as unknown as WritableComputedRef<Lunch.Node<THREE.WebGLRenderer>>
+// export const fallbackRendererUuid = 'FALLBACK_RENDERER'
+// export const ensuredRenderer = buildEnsured(
+//     // TODO: ensure support for css/svg renderers
+//     ['WebGLRenderer'], //, 'CSS2DRenderer', 'CSS3DRenderer', 'SVGRenderer'],
+//     fallbackRendererUuid,
+//     {}
+// ) as unknown as WritableComputedRef<Lunch.Node<THREE.WebGLRenderer>>
 /** Special value to be changed ONLY in `LunchboxWrapper`.
  * Functions waiting for a Renderer need to wait for this to be true.  */
-export const rendererReady = ref(false)
-
-export const ensureRenderer = computed<Lunch.Node<THREE.WebGLRenderer> | null>({
-    get() {
-        return (
-            rendererReady.value ? (ensuredRenderer.value as any) : (null as any)
-        ) as any
-    },
-    set(val: any) {
-        const t = val.type ?? ''
-        const pascalType = t[0].toUpperCase() + t.slice(1)
-        overrides[pascalType] = val as any
-    },
-})
+// export const rendererReady = ref(true)
+export const ensureRenderer = <
+    T extends THREE.Renderer = THREE.WebGLRenderer
+>() => inject<ComputedRef<T>>(Keys.appRenderersKey)
 
 // ENSURE SCENE
 // ====================

@@ -1,8 +1,12 @@
-import { ensuredCamera, ensureRenderer, ensuredScene } from '../../core'
+import { ensuredCamera, ensuredScene } from '../../core'
 import { toRaw } from 'vue'
 
-export const resizeCanvas = (width?: number, height?: number) => {
-    const renderer = ensureRenderer.value?.instance
+export const resizeCanvas = (
+    renderer: THREE.Renderer,
+    width?: number,
+    height?: number
+) => {
+    // const renderer = ensureRenderer.value?.instance
     const scene = ensuredScene.value.instance
     const camera = ensuredCamera.value
 

@@ -14,16 +14,17 @@ import {
     ensuredCamera,
     ensureRenderer,
     ensuredScene,
-    ensureRootNode,
+    // ensureRootNode,
     extend,
     inputActive,
     mousePos,
     rootUuid,
+    MiniDom,
 } from './core'
 import { components } from './components'
 import { Lunch } from './types'
 
-export { lunchboxRootNode as lunchboxTree } from './core'
+// export { lunchboxRootNode as lunchboxTree } from './core'
 export * from './core'
 export * from './types'
 
@@ -56,21 +57,10 @@ export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
     )
 }
 
-/** The current renderer. Often easier to use `useRenderer` instead of this. */
-export const renderer = computed(() => ensureRenderer.value?.instance ?? null)
+/** The current renderer as a computed value. Often easier to use `useRenderer` instead of this. */
+export const renderer = ensureRenderer
 /** Run a function using the current renderer when it's present. */
-export function useRenderer<T extends THREE.Renderer = THREE.WebGLRenderer>(
-    callback: (rend: T) => void
-) {
-    return watch(
-        renderer,
-        (newVal) => {
-            if (!newVal) return
-            callback(newVal as unknown as T)
-        },
-        { immediate: true }
-    )
-}
+export const useRenderer = () => ensureRenderer()?.value
 
 /** The current scene. Often easier to use `useScene` instead of this. */
 export const scene = computed(() => ensuredScene.value.instance)
@@ -153,13 +143,21 @@ export const updateGlobals = (newValue: Partial<Lunch.AppGlobals>) => {
     useUpdateGlobals()?.(newValue)
 }
 
+// TODO: document
+export const useRootNode = () =>
+    inject<MiniDom.RendererRootNode>(Keys.appRootNodeKey)
+
+// TODO: document
+export const useApp = () => inject<Lunch.App>(Keys.appKey)
+
 // CREATE APP
 // ====================
 export const createApp = (root: Component) => {
     const app = createRenderer(nodeOps).createApp(root) as Lunch.App
 
-    // provide app-level globals & update method
+    // provide app-level globals & globals update method
     // ====================
+    // TODO: migrate to app.config.globalProperties.lunchbox
     const globals: Lunch.AppGlobals = reactive({
         dpr: 1,
         // TODO:
@@ -244,12 +242,13 @@ export const createApp = (root: Component) => {
 
     // save app-level components
     // ====================
-    app.config.globalProperties.lunchbox = {
+    app.config.globalProperties.lunchbox = reactive({
         afterRender,
         beforeRender,
         frameId: -1,
+        renderer: null,
         watchStopHandle: null,
-    }
+    })
 
     // frame ID (used for update functions)
     // ====================
@@ -277,7 +276,7 @@ export const createApp = (root: Component) => {
             typeof root === 'string' ? document.querySelector(root) : root
         ) as HTMLElement
         // create or find root node
-        const rootNode = ensureRootNode({
+        const rootNode = new MiniDom.RendererRootNode({
             domElement,
             isLunchboxRootNode: true,
             name: 'root',
@@ -285,7 +284,8 @@ export const createApp = (root: Component) => {
             type: 'root',
             uuid: rootUuid,
         })
-        app!.rootNode = rootNode
+        app.rootNode = rootNode
+        app.provide(Keys.appRootNodeKey, rootNode)
         const mounted = mount(rootNode, ...args)
         return mounted
     }
@@ -319,6 +319,14 @@ export const createApp = (root: Component) => {
             app.customRender = null
         }
     }
+
+    // provide app
+    // ====================
+    app.provide(Keys.appKey, app)
+    app.provide(
+        Keys.appRenderersKey,
+        computed(() => app.config.globalProperties.lunchbox.renderer)
+    )
 
     // done
     return app
