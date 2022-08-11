@@ -1,27 +1,28 @@
 import {
-    getCurrentInstance,
+    computed,
+    // getCurrentInstance,
     onBeforeUnmount,
     onMounted,
     PropType,
     reactive,
     ref,
     WatchSource,
-    WritableComputedRef,
+    // WritableComputedRef,
 } from 'vue'
 import {
-    cameraReady,
+    // cameraReady,
     cancelUpdate,
     cancelUpdateSource,
-    createNode,
-    ensuredCamera,
+    // createNode,
+    // ensuredCamera,
     // ensureRenderer,
-    ensuredScene,
-    fallbackCameraUuid,
+    // ensuredScene,
+    // fallbackCameraUuid,
     // fallbackRendererUuid,
     MiniDom,
     // rendererReady,
     startCallbacks,
-    tryGetNodeWithInstanceType,
+    // tryGetNodeWithInstanceType,
     update,
 } from '../../core'
 import { set } from 'lodash'
@@ -30,6 +31,9 @@ import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
 import { useUpdateGlobals } from '../..'
 import * as Keys from '../../keys'
+// TODO: fix ts-ignore
+// @ts-ignore
+import LunchboxScene from './LunchboxScene.vue'
 
 /** fixed & fill styling for container */
 const fillStyle = (position: string) => {
@@ -75,8 +79,13 @@ export const LunchboxWrapper = defineComponent({
         const container = ref<MiniDom.RendererDomNode>()
         // let renderer: Lunch.Node<THREE.WebGLRenderer> | null
         const renderer = ref<Lunch.LunchboxComponent<THREE.Renderer>>()
-        let camera: Lunch.Node<THREE.Camera> | null
-        let scene: MiniDom.RendererStandardNode<THREE.Scene>
+        // if (context.slots?.renderer?.()?.length) {
+        //     renderer.value = context.slots?.renderer?.()[0].props
+        //     // renderer.value = context.slots?.renderer?.()[0].ref?
+        // }
+        const camera = ref<Lunch.LunchboxComponent<THREE.Camera>>()
+        // let scene: MiniDom.RendererStandardNode<THREE.Scene>
+        const scene = ref<Lunch.LunchboxComponent<THREE.Scene>>()
 
         const globals = useGlobals()
         const updateGlobals = useUpdateGlobals()
@@ -98,11 +107,14 @@ export const LunchboxWrapper = defineComponent({
 
         const addOnBeforeUnmount = (func: () => void) => onBeforeUnmount(func)
 
+        const consolidatedCameraProperties: Record<string, any> = reactive({})
+
         // MOUNT
         // ====================
         onMounted(async () => {
             // canvas needs to exist
-            if (!canvas.value) throw new Error('missing canvas')
+            if (!canvas.value && !context.slots?.renderer?.()?.length)
+                throw new Error('missing canvas')
 
             // RENDERER
             // ====================
@@ -196,63 +208,120 @@ export const LunchboxWrapper = defineComponent({
             // CAMERA
             // ====================
             // is there already a camera?
-            camera = tryGetNodeWithInstanceType([
-                'PerspectiveCamera',
-                'OrthographicCamera',
-            ])
-            // if not, let's create one
-            if (!camera) {
-                // create ortho camera
-                if (props.ortho || props.orthographic) {
-                    ensuredCamera.value = createNode<THREE.OrthographicCamera>({
-                        props: { args: props.cameraArgs ?? [] },
-                        type: 'OrthographicCamera',
-                        uuid: fallbackCameraUuid,
-                    })
-                } else {
-                    ensuredCamera.value = createNode<THREE.PerspectiveCamera>({
-                        props: {
-                            args: props.cameraArgs ?? [
-                                props.r3f ? 75 : 45,
-                                0.5625,
-                                1,
-                                1000,
-                            ],
-                        },
-                        type: 'PerspectiveCamera',
-                        uuid: fallbackCameraUuid,
-                    })
+            // camera = tryGetNodeWithInstanceType([
+            //     'PerspectiveCamera',
+            //     'OrthographicCamera',
+            // ])
+            // // if not, let's create one
+            // if (!camera) {
+            //     // create ortho camera
+            //     if (props.ortho || props.orthographic) {
+            //         ensuredCamera.value = createNode<THREE.OrthographicCamera>({
+            //             props: { args: props.cameraArgs ?? [] },
+            //             type: 'OrthographicCamera',
+            //             uuid: fallbackCameraUuid,
+            //         })
+            //     } else {
+            //         ensuredCamera.value = createNode<THREE.PerspectiveCamera>({
+            //             props: {
+            //                 args: props.cameraArgs ?? [
+            //                     props.r3f ? 75 : 45,
+            //                     0.5625,
+            //                     1,
+            //                     1000,
+            //                 ],
+            //             },
+            //             type: 'PerspectiveCamera',
+            //             uuid: fallbackCameraUuid,
+            //         })
+            //     }
+
+            //     cameraReady.value = true
+
+            //     camera = ensuredCamera.value
+            // } else {
+            //     cameraReady.value = true
+            // }
+            // if (!camera.instance) {
+            //     throw new Error('Error creating camera.')
+            // }
+            // // move camera if needed
+            // if (camera && props.cameraPosition) {
+            //     camera.instance.position.set(...props.cameraPosition)
+            // }
+            // // angle camera if needed
+            // if (camera && (props.cameraLookAt || props.cameraLook)) {
+            //     const source = (props.cameraLookAt || props.cameraLook)!
+            //     camera.instance.lookAt(...source)
+            // }
+            // // zoom camera if needed
+            // if (camera && props.zoom !== undefined) {
+            //     ;(camera.instance as THREE.OrthographicCamera).zoom = props.zoom
+            // }
+
+            // no camera provided, so let's create one
+
+            if (!context.slots?.camera?.()?.length) {
+                if (props.cameraPosition) {
+                    consolidatedCameraProperties.position = props.cameraPosition
+                }
+                if (props.cameraLook || props.cameraLookAt) {
+                    consolidatedCameraProperties.lookAt =
+                        props.cameraLook || props.cameraLookAt
+                }
+                if (props.zoom !== undefined) {
+                    consolidatedCameraProperties.position = props.zoom
                 }
 
-                cameraReady.value = true
-
-                camera = ensuredCamera.value
-            } else {
-                cameraReady.value = true
-            }
-            if (!camera.instance) {
-                throw new Error('Error creating camera.')
-            }
-            // move camera if needed
-            if (camera && props.cameraPosition) {
-                camera.instance.position.set(...props.cameraPosition)
-            }
-            // angle camera if needed
-            if (camera && (props.cameraLookAt || props.cameraLook)) {
-                const source = (props.cameraLookAt || props.cameraLook)!
-                camera.instance.lookAt(...source)
-            }
-            // zoom camera if needed
-            if (camera && props.zoom !== undefined) {
-                ;(camera.instance as THREE.OrthographicCamera).zoom = props.zoom
+                // if (props.ortho || props.orthographic) {
+                //     // camera.value = (
+                //     //     <orthographicCamera
+                //     //         args={props.cameraArgs ?? []}
+                //     //         {...consolidatedCameraProperties}
+                //     //     />
+                //     // ) as any
+                //     // createNode<THREE.OrthographicCamera>({
+                //     //     props: { args: props.cameraArgs ?? [] },
+                //     //     type: 'OrthographicCamera',
+                //     //     uuid: fallbackCameraUuid,
+                //     // })
+                // } else {
+                //     camera.value = (
+                //         <perspectiveCamera
+                //             args={
+                //                 props.cameraArgs ?? [
+                //                     props.r3f ? 75 : 45,
+                //                     0.5625,
+                //                     1,
+                //                     1000,
+                //                 ]
+                //             }
+                //             {...consolidatedCameraProperties}
+                //         />
+                //     ) as any
+                //     // ensuredCamera.value = createNode<THREE.PerspectiveCamera>({
+                //     //     props: {
+                //     //         args: props.cameraArgs ?? [
+                //     //             props.r3f ? 75 : 45,
+                //     //             0.5625,
+                //     //             1,
+                //     //             1000,
+                //     //         ],
+                //     //     },
+                //     //     type: 'PerspectiveCamera',
+                //     //     uuid: fallbackCameraUuid,
+                //     // })
+                // }
             }
 
             // SCENE
             // ====================
-            scene = ensuredScene.value
+            // scene = ensuredScene.value
             // set background color
-            if (scene && scene.instance && props.background) {
-                scene.instance.background = new THREE.Color(props.background)
+            if (scene.value?.$el?.instance && props.background) {
+                scene.value.$el.instance.background = new THREE.Color(
+                    props.background
+                )
             }
 
             // MISC PROPERTIES
@@ -262,40 +331,66 @@ export const LunchboxWrapper = defineComponent({
             }
             updateGlobals?.({ dpr })
 
-            while (!renderer.value?.$el?.instance) {
+            while (
+                !renderer.value?.$el?.instance &&
+                // TODO: remove `as any`
+                !(renderer.value as any)?.component?.ctx.$el?.instance
+            ) {
                 await new Promise((r) => requestAnimationFrame(r))
             }
+
+            while (
+                !scene.value?.$el?.instance &&
+                // TODO: remove `as any`
+                !(scene.value as any)?.component?.ctx.$el?.instance
+            ) {
+                await new Promise((r) => requestAnimationFrame(r))
+            }
+
             // if (!renderer.value?.$el?.instance) {
             //     throw new Error('missing renderer')
             // }
 
-            const rendererAsWebGlRenderer = renderer.value?.$el
-                ?.instance as THREE.WebGLRenderer
+            const normalizedRenderer = (renderer.value?.$el?.instance ??
+                (renderer.value as any)?.component?.ctx.$el
+                    ?.instance) as THREE.WebGLRenderer
 
-            rendererAsWebGlRenderer.setPixelRatio(globals.dpr)
+            normalizedRenderer.setPixelRatio(globals.dpr)
+
+            const normalizedScene = (scene.value?.$el?.instance ??
+                (scene.value as any)?.component?.ctx.$el
+                    ?.instance) as THREE.Scene
+
+            const normalizedCamera = (camera.value?.$el?.instance ??
+                (camera.value as any)?.component?.ctx.$el
+                    ?.instance) as THREE.Camera
+
             // TODO: update DPR on monitor switch
             // prep canvas (sizing, observe, unmount, etc)
-            prepCanvas(
-                container,
-                renderer.value.$el.instance,
-                addOnBeforeUnmount,
-                props.sizePolicy
-            )
+            // (only run if no custom renderer)
+            if (!context.slots?.renderer?.()?.length) {
+                prepCanvas(
+                    container,
+                    normalizedRenderer,
+                    normalizedScene,
+                    addOnBeforeUnmount,
+                    props.sizePolicy
+                )
 
-            if (props.r3f) {
-                rendererAsWebGlRenderer.outputEncoding = THREE.sRGBEncoding
-                rendererAsWebGlRenderer.toneMapping =
-                    THREE.ACESFilmicToneMapping
-            }
+                if (props.r3f) {
+                    normalizedRenderer.outputEncoding = THREE.sRGBEncoding
+                    normalizedRenderer.toneMapping = THREE.ACESFilmicToneMapping
+                }
 
-            // update render sugar
-            const sugar = {
-                shadow: props.shadow,
-            }
-            if (sugar?.shadow) {
-                rendererAsWebGlRenderer.shadowMap.enabled = true
-                if (typeof sugar.shadow === 'object') {
-                    rendererAsWebGlRenderer.shadowMap.type = sugar.shadow.type
+                // update render sugar
+                const sugar = {
+                    shadow: props.shadow,
+                }
+                if (sugar?.shadow) {
+                    normalizedRenderer.shadowMap.enabled = true
+                    if (typeof sugar.shadow === 'object') {
+                        normalizedRenderer.shadowMap.type = sugar.shadow.type
+                    }
                 }
             }
 
@@ -320,16 +415,17 @@ export const LunchboxWrapper = defineComponent({
                 throw new Error('error creating app')
             }
 
-            // provide renderer
-            app.config.globalProperties.lunchbox.renderer =
-                renderer.value.$el.instance
+            // save renderer, scene, camera
+            app.config.globalProperties.lunchbox.camera = normalizedCamera
+            app.config.globalProperties.lunchbox.renderer = normalizedRenderer
+            app.config.globalProperties.lunchbox.scene = normalizedScene
 
             for (let startCallback of startCallbacks) {
                 startCallback({
                     app,
-                    camera: camera.instance,
-                    renderer: renderer.value?.$el?.instance,
-                    scene: scene.instance,
+                    camera: normalizedCamera,
+                    renderer: normalizedRenderer,
+                    scene: normalizedScene,
                 })
             }
 
@@ -337,9 +433,9 @@ export const LunchboxWrapper = defineComponent({
             // ====================
             update({
                 app,
-                camera: camera.instance,
-                renderer: renderer.value?.$el?.instance,
-                scene: scene.instance,
+                camera: normalizedCamera,
+                renderer: normalizedRenderer,
+                scene: normalizedScene,
                 updateSource: props.updateSource,
             })
         })
@@ -351,6 +447,48 @@ export const LunchboxWrapper = defineComponent({
             cancelUpdateSource()
         })
 
+        // update scene as needed
+        // if (context.slots?.scene?.()?.length) {
+        //     watch(context.slots.scene, ([newScene]) => {
+        //         console.log(newScene.component)
+        //         app.config.globalProperties.lunchbox.scene = (newScene?.$el
+        //             ?.instance ??
+        //             (newScene as any)?.component?.ctx.$el
+        //                 ?.instance) as THREE.Scene
+        //     })
+        // }
+
+        // const cmpScene = computed(() => context.slots?.scene?.()[0])
+        // // const sceneComponent = computed(() => cmpScene.value)
+        // watch(
+        //     cmpScene,
+        //     (newScene) => {
+        //         // console.log(newScene)
+        //         // app!
+        //         // console.log(newScene)
+        //         // app!.config.globalProperties.lunchbox.scene =
+        //         //     newScene?.$el?.instance
+        //     },
+        //     { deep: true }
+        // )
+        // const sceneInt = ref()
+        // watch(sceneInt, (v) => {
+        //     console.log(v.component, v.el, v.children)
+        // })
+
+        const visibleScene = computed(() => context.slots?.scene?.()[0])
+        if (context.slots?.scene?.()?.length) {
+            // watch(
+            //     visibleScene,
+            //     (newValue) => {
+            //         scene.value = newValue
+            //         console.log(scene.value)
+            //         // app!.config.globalProperties.lunchbox.scene = newValue
+            //     },
+            //     { immediate: true }
+            // )
+        }
+
         // RENDER FUNCTION
         // ====================
         const containerFillStyle =
@@ -360,43 +498,83 @@ export const LunchboxWrapper = defineComponent({
 
         return () => (
             <>
-                <div
-                    class="lunchbox-container"
-                    style={fillStyle(containerFillStyle) as any}
-                    ref={container}
-                    data-lunchbox="true"
-                >
-                    <canvas
-                        ref={canvas}
-                        class="lunchbox-canvas"
-                        style={fillStyle(canvasFillStyle) as any}
-                        data-lunchbox="true"
-                    ></canvas>
-                </div>
-                {canvas.value?.domElement &&
-                    (context.slots?.renderer?.() ?? (
-                        <>
-                            {
-                                <webGLRenderer
-                                    {...(props.rendererProperties ?? {})}
-                                    ref={renderer}
-                                    args={[
-                                        {
-                                            alpha: props.transparent,
-                                            antialias: true,
-                                            canvas: canvas.value?.domElement,
-                                            powerPreference: !!props.r3f
-                                                ? 'high-performance'
-                                                : 'default',
-                                            ...(props.rendererArguments ?? {}),
-                                        },
-                                    ]}
-                                />
-                            }
-                        </>
-                    ))}
+                {/* use renderer slot if provided... */}
+                {context.slots?.renderer?.()?.length ? (
+                    // TODO: remove `as any` cast
+                    (renderer.value = context.slots?.renderer?.()[0] as any)
+                ) : (
+                    // ...otherwise, add canvas...
+                    <>
+                        <div
+                            class="lunchbox-container"
+                            style={fillStyle(containerFillStyle) as any}
+                            ref={container}
+                            data-lunchbox="true"
+                        >
+                            <canvas
+                                ref={canvas}
+                                class="lunchbox-canvas"
+                                style={fillStyle(canvasFillStyle) as any}
+                                data-lunchbox="true"
+                            ></canvas>
+                        </div>
+                        {/* ...and create default renderer once canvas is present */}
+                        {canvas.value?.domElement && (
+                            <webGLRenderer
+                                {...(props.rendererProperties ?? {})}
+                                ref={renderer}
+                                args={[
+                                    {
+                                        alpha: props.transparent,
+                                        antialias: true,
+                                        canvas: canvas.value?.domElement,
+                                        powerPreference: !!props.r3f
+                                            ? 'high-performance'
+                                            : 'default',
+                                        ...(props.rendererArguments ?? {}),
+                                    },
+                                ]}
+                            />
+                        )}
+                    </>
+                )}
 
-                {context.slots?.default?.()}
+                {/* use scene slot if provided... */}
+                {context.slots?.scene?.()?.length ? (
+                    // TODO: remove `as any` cast
+                    (scene.value = context.slots?.scene?.()[0] as any)
+                ) : (
+                    // ...otherwise, add default scene
+                    // TODO: why does this need to be a separate component? <scene> throws an error
+                    <LunchboxScene ref={scene}>
+                        {context.slots?.default?.()}
+                    </LunchboxScene>
+                )}
+
+                {/* use camera slot if provided... */}
+                {context.slots?.camera?.()?.length ? (
+                    // TODO: remove `any` cast
+                    (camera.value = context.slots?.camera?.()[0] as any)
+                ) : props.ortho || props.orthographic ? (
+                    <orthographicCamera
+                        ref={camera}
+                        args={props.cameraArgs ?? []}
+                        {...consolidatedCameraProperties}
+                    />
+                ) : (
+                    <perspectiveCamera
+                        ref={camera}
+                        args={
+                            props.cameraArgs ?? [
+                                props.r3f ? 75 : 45,
+                                0.5625,
+                                1,
+                                1000,
+                            ]
+                        }
+                        {...consolidatedCameraProperties}
+                    />
+                )}
             </>
         )
     },

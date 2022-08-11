@@ -1,4 +1,5 @@
 import {
+    ComputedRef,
     computed,
     createRenderer,
     Component,
@@ -42,35 +43,36 @@ export const globals = {
 }
 
 /** The current camera. Often easier to use `useCamera` instead of this. */
-export const camera = computed(() => ensuredCamera.value?.instance ?? null)
+export const camera = ensuredCamera
+export const useCamera = () => ensuredCamera()
 /** Run a function using the current camera when it's present. */
-export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
-    callback: (cam: T) => void
-) {
-    return watch(
-        camera,
-        (newVal) => {
-            if (!newVal) return
-            callback(newVal as unknown as T)
-        },
-        { immediate: true }
-    )
-}
+// export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
+//     callback: (cam: T) => void
+// ) {
+//     return watch(
+//         camera,
+//         (newVal) => {
+//             if (!newVal) return
+//             callback(newVal as unknown as T)
+//         },
+//         { immediate: true }
+//     )
+// }
 
 /** The current renderer as a computed value. Often easier to use `useRenderer` instead of this. */
 export const renderer = ensureRenderer
 /** Run a function using the current renderer when it's present. */
-export const useRenderer = () => ensureRenderer()?.value
+export const useRenderer = () => ensureRenderer()!
 
 /** The current scene. Often easier to use `useScene` instead of this. */
-export const scene = computed(() => ensuredScene.value.instance)
+export const scene = ensuredScene
 /** Run a function using the current scene when it's present. */
 export function useScene(callback: (newScene: THREE.Scene) => void) {
     return watch(
         scene,
         (newVal) => {
             if (!newVal) return
-            callback(newVal as any)
+            callback(newVal.value)
         },
         { immediate: true }
     )
@@ -245,8 +247,10 @@ export const createApp = (root: Component) => {
     app.config.globalProperties.lunchbox = reactive({
         afterRender,
         beforeRender,
+        camera: null,
         frameId: -1,
         renderer: null,
+        scene: null,
         watchStopHandle: null,
     })
 
@@ -326,6 +330,14 @@ export const createApp = (root: Component) => {
     app.provide(
         Keys.appRenderersKey,
         computed(() => app.config.globalProperties.lunchbox.renderer)
+    )
+    app.provide(
+        Keys.appSceneKey,
+        computed(() => app.config.globalProperties.lunchbox.scene)
+    )
+    app.provide(
+        Keys.appCameraKey,
+        computed(() => app.config.globalProperties.lunchbox.camera)
     )
 
     // done

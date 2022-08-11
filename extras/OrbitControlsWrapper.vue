@@ -12,7 +12,14 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { onBeforeRender, globals, Lunch, camera, useRenderer } from '../src'
+import {
+    onBeforeRender,
+    globals,
+    Lunch,
+    // camera,
+    useRenderer,
+    useCamera,
+} from '../src'
 
 // props
 const props = defineProps<{
@@ -21,11 +28,14 @@ const props = defineProps<{
 
 // computed
 const ready = computed(() => {
-    return camera.value !== null && useRenderer()?.domElement
+    return camera.value !== null && renderer.value.domElement
 })
-const orbitArgs = computed(() => [camera.value, useRenderer()?.domElement])
+const camera = useCamera()
+const renderer = useRenderer()
+const orbitArgs = computed(() => [camera.value, renderer.value?.domElement])
 // watch(() => orbitArgs.value, console.log, { immediate: true })
 // console.log(renderer)
+watch(camera, console.log)
 
 // update
 const controls = ref<Lunch.LunchboxComponent>()

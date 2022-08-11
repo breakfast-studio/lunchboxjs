@@ -1,8 +1,8 @@
 <template>
     <Lunchbox :cameraPosition="[0, 0, 5]">
-        <!-- <template #renderer>
+        <template #renderer>
             <webGLRenderer ref="r" />
-        </template> -->
+        </template>
 
         <mesh :rotation-y="rotation">
             <boxGeometry />
@@ -15,15 +15,10 @@
 import { ref } from '@vue/reactivity'
 import { watch } from 'vue'
 import * as THREE from 'three'
-import { Lunch, useCamera, useScene } from '../../src'
+import { Lunch } from '../../src'
 
 const r = ref<Lunch.LunchboxComponent<THREE.Renderer>>()
 let renderer: THREE.Renderer
-
-let camera: THREE.Camera, scene: THREE.Scene
-
-useCamera((c) => (camera = c))
-useScene((s) => (scene = s))
 
 const rotation = ref(0)
 setInterval(() => {
@@ -43,17 +38,6 @@ watch(
         if (canvas) {
             document.body.appendChild(canvas)
         }
-
-        // start render loop
-        const update = () => {
-            if (scene && camera) {
-                renderer.render(scene, camera)
-            } else {
-                console.log(scene, camera)
-            }
-            requestAnimationFrame(update)
-        }
-        update()
     },
     { immediate: true }
 )

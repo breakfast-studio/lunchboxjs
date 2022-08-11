@@ -13,7 +13,7 @@ import { ref } from 'vue'
 
 const rotation = ref({ x: 0, y: 0 })
 
-onBeforeRender(() => {
+onBeforeRender(({ renderer }) => {
     rotation.value.x += 0.01
     rotation.value.y += 0.01
 })

@@ -1,5 +1,5 @@
 import { isLunchboxRootNode } from '../utils'
-import { instantiateThreeObject, MiniDom, ensuredScene } from '.'
+import { instantiateThreeObject, MiniDom } from '.'
 import { Lunch } from '..'
 import { ensuredCamera } from './ensure'
 
@@ -78,7 +78,7 @@ export function createNode<T extends object = THREE.Object3D>(
     // TODO: these manual overrides are a bit brittle - replace?
     if (node.type?.toLowerCase() === 'scene') {
         // manually set scene override
-        ensuredScene.value = node as Lunch.Node<THREE.Scene>
+        // ensuredScene.value = node as Lunch.Node<THREE.Scene>
     } else if (node.type?.toLowerCase().endsWith('camera')) {
         ensuredCamera.value = node as Lunch.Node<THREE.Camera>
     }

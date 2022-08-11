@@ -143,28 +143,30 @@ function buildEnsured<T extends THREE.Object3D>(
 
 // ENSURE CAMERA
 // ====================
-export const fallbackCameraUuid = 'FALLBACK_CAMERA'
-export const defaultCamera = buildEnsured(
-    ['PerspectiveCamera', 'OrthographicCamera'],
-    fallbackCameraUuid,
-    { args: [45, 0.5625, 1, 1000] }
-) as unknown as WritableComputedRef<Lunch.Node<THREE.Camera>>
+// export const fallbackCameraUuid = 'FALLBACK_CAMERA'
+// export const defaultCamera = buildEnsured(
+//     ['PerspectiveCamera', 'OrthographicCamera'],
+//     fallbackCameraUuid,
+//     { args: [45, 0.5625, 1, 1000] }
+// ) as unknown as WritableComputedRef<Lunch.Node<THREE.Camera>>
 /** Special value to be changed ONLY in `LunchboxWrapper`.
  * Functions waiting for a Camera need to wait for this to be true.  */
-export const cameraReady = ref(false)
+// export const cameraReady = ref(false)
 
-export const ensuredCamera = computed<Lunch.Node<THREE.Camera> | null>({
-    get() {
-        return (
-            cameraReady.value ? (defaultCamera.value as any) : (null as any)
-        ) as any
-    },
-    set(val: any) {
-        const t = val.type ?? ''
-        const pascalType = t[0].toUpperCase() + t.slice(1)
-        overrides[pascalType] = val as any
-    },
-})
+export const ensuredCamera = <T extends THREE.Camera = THREE.Camera>() =>
+    inject<ComputedRef<T>>(Keys.appCameraKey)!
+// computed<Lunch.Node<THREE.Camera> | null>({
+//     get() {
+//         return (
+//             cameraReady.value ? (defaultCamera.value as any) : (null as any)
+//         ) as any
+//     },
+//     set(val: any) {
+//         const t = val.type ?? ''
+//         const pascalType = t[0].toUpperCase() + t.slice(1)
+//         overrides[pascalType] = val as any
+//     },
+// })
 
 // ENSURE RENDERER
 // ====================
@@ -174,11 +176,13 @@ export const ensureRenderer = <
 
 // ENSURE SCENE
 // ====================
-export const fallbackSceneUuid = 'FALLBACK_SCENE'
-export const ensuredScene = buildEnsured<THREE.Scene>(
-    'Scene',
-    fallbackSceneUuid
-)
+// export const fallbackSceneUuid = 'FALLBACK_SCENE'
+// export const ensuredScene = buildEnsured<THREE.Scene>(
+//     'Scene',
+//     fallbackSceneUuid
+// )
+export const ensuredScene = <T extends THREE.Scene = THREE.Scene>() =>
+    inject<ComputedRef<T>>(Keys.appSceneKey)
 
 // ENSURE AUTO-RAYCASTER
 export const autoRaycasterUuid = 'AUTO_RAYCASTER'

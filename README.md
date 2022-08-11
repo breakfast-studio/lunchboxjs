@@ -41,12 +41,12 @@ Run `npm run demo:create` to create a new demo.
     -   `lunchboxRootNode`
     -   `autoCreated`
     -   `overrides`
-    -   `defaultCamera`
-    -   `cameraReady`
-    -   `ensuredCamera`
+    -   ~~`defaultCamera`~~
+    -   ~~`cameraReady`~~
+    -   ~~`ensuredCamera`~~
     -   ~~`ensuredRenderer`~~
     -   ~~`rendererReady`~~
-    -   `ensuredScene`
+    -   ~~`ensuredScene`~~
     -   `ensuredRaycaster`
 -   `src/core/allNodes.ts`
     -   `allNodes`

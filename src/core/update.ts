@@ -1,6 +1,6 @@
 import {
     //ensureRenderer,
-    ensuredScene,
+    // ensuredScene,
     ensuredCamera,
 } from '.'
 import { Lunch } from '..'
@@ -22,7 +22,7 @@ const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {
             update({
                 app: opts.app,
                 renderer: opts.renderer,
-                scene: ensuredScene.value.instance,
+                scene: opts.scene,
                 camera: ensuredCamera.value?.instance,
                 updateSource: opts.updateSource,
             })
@@ -61,7 +61,11 @@ export const update: Lunch.UpdateCallback = (opts) => {
         if (app.customRender) {
             app.customRender(opts)
         } else {
-            renderer.render(toRaw(scene), toRaw(camera))
+            renderer.render(
+                toRaw(scene),
+                // opts.app.config.globalProperties.lunchbox.camera!
+                toRaw(camera)
+            )
         }
     }
 

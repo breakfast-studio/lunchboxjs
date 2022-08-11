@@ -1,13 +1,14 @@
-import { ensuredCamera, ensuredScene } from '../../core'
+import { ensuredCamera } from '../../core'
 import { toRaw } from 'vue'
 
 export const resizeCanvas = (
     renderer: THREE.Renderer,
+    scene: THREE.Scene,
     width?: number,
     height?: number
 ) => {
     // const renderer = ensureRenderer.value?.instance
-    const scene = ensuredScene.value.instance
+    // const scene = ensuredScene()?.value
     const camera = ensuredCamera.value
 
     // ignore if no element

@@ -8,7 +8,12 @@ export function instantiateThreeObject<T>(node: Lunch.StandardMeta<T>) {
 
     // what class will we be instantiating?
     const uppercaseType = node.type[0].toUpperCase() + node.type.slice(1)
-    const targetClass = catalogue[node.type] || (THREE as any)[uppercaseType]
+    const translatedType = uppercaseType.replace(/Lunchbox$/, '')
+    const targetClass =
+        catalogue[node.type] ||
+        (THREE as any)[uppercaseType] ||
+        catalogue[translatedType] ||
+        (THREE as any)[translatedType]
     if (!targetClass)
         throw `${uppercaseType} is not part of the THREE namespace! Did you forget to extend? import {extend} from 'lunchbox'; extend({app, YourComponent, ...})`
 

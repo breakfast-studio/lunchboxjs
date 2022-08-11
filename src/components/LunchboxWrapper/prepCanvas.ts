@@ -19,6 +19,7 @@ const getInnerDimensions = (node: Element) => {
 export const prepCanvas = (
     container: Ref<MiniDom.RendererDomNode | undefined>,
     renderer: THREE.Renderer,
+    scene: THREE.Scene,
     onBeforeUnmount: Function,
     sizePolicy?: Lunch.SizePolicy
 ) => {
@@ -30,8 +31,8 @@ export const prepCanvas = (
     const resizeCanvasByPolicy = () => {
         if (sizePolicy === 'container') {
             const dims = getInnerDimensions(containerElement)
-            resizeCanvas(renderer, dims.width, dims.height)
-        } else resizeCanvas(renderer)
+            resizeCanvas(renderer, scene, dims.width, dims.height)
+        } else resizeCanvas(renderer, scene)
     }
     resizeCanvasByPolicy()
 
