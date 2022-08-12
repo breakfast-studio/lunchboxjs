@@ -5,7 +5,11 @@
 //     ensureRenderer,
 //     onBeforeRender,
 // } from '..'
-import { globals, Lunch, useGlobals } from '../../'
+import {
+    // globals,
+    Lunch,
+    useGlobals,
+} from '../../'
 import { ref, watch, WatchStopHandle } from 'vue'
 import { inputActive } from './input'
 import { Intersection } from 'three'

@@ -36,11 +36,11 @@ export * from './keys'
 export * from './utils/find'
 
 /** Useful globals. */
-export const globals = {
-    // dpr: ref(1),
-    inputActive,
-    mousePos,
-}
+// export const globals = {
+//     // dpr: ref(1),
+//     inputActive,
+//     mousePos,
+// }
 
 /** The current camera. Often easier to use `useCamera` instead of this. */
 // TODO: update docs
@@ -175,26 +175,6 @@ export const onStart = (cb: Lunch.UpdateCallback, index = Infinity) => {
 export const createApp = (root: Component) => {
     const app = createRenderer(nodeOps).createApp(root) as Lunch.App
 
-    // provide app-level globals & globals update method
-    // ====================
-    // TODO: migrate to app.config.globalProperties.lunchbox
-    const globals: Lunch.AppGlobals = reactive({
-        dpr: 1,
-        // TODO:
-        // inputActive:
-        // mousePos:
-    })
-    app.provide(Keys.globalsInjectionKey, globals)
-    app.provide<Lunch.AppGlobalsUpdate>(
-        Keys.updateGlobalsInjectionKey,
-        (newGlobals: Partial<Lunch.AppGlobals>) => {
-            Object.keys(newGlobals).forEach((key) => {
-                const typedKey = key as keyof typeof globals
-                globals[typedKey] = newGlobals[typedKey]!
-            })
-        }
-    )
-
     // provide custom renderer functions
     // ====================
     app.provide(
@@ -266,11 +246,37 @@ export const createApp = (root: Component) => {
         afterRender,
         beforeRender,
         camera: null,
+        dpr: 1,
         frameId: -1,
         renderer: null,
         scene: null,
         watchStopHandle: null,
+
+        // TODO: inputActive, mousePos
     })
+
+    // provide app-level globals & globals update method
+    // ====================
+    // TODO: migrate to app.config.globalProperties.lunchbox
+    // const globals: Lunch.AppGlobals = reactive({
+    //     dpr: 1,
+    //     // TODO:
+    //     // inputActive:
+    //     // mousePos:
+    // })
+    app.provide(Keys.globalsInjectionKey, app.config.globalProperties.lunchbox)
+    app.provide<Lunch.AppGlobalsUpdate>(
+        Keys.updateGlobalsInjectionKey,
+        (newGlobals: Partial<Lunch.AppGlobals>) => {
+            Object.keys(newGlobals).forEach((key) => {
+                const typedKey = key as keyof Lunch.AppGlobals
+                // TODO: fix
+                app.config.globalProperties.lunchbox[typedKey] = newGlobals[
+                    typedKey
+                ] as any
+            })
+        }
+    )
 
     // frame ID (used for update functions)
     // ====================

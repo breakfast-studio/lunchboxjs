@@ -18,11 +18,11 @@ Run `npm run demo:create` to create a new demo.
 
 ## App-level globals migration
 
--   `src/index.ts`
-    -   `globals`
+-   ~~`src/index.ts`~~
+    -   ~~`globals`~~
         -   ~~`dpr`~~
-        -   `inputActive`
-        -   `mousePos`
+        -   ~~`inputActive`~~
+        -   ~~`mousePos`~~
     -   ~~`camera`~~
     -   ~~`renderer`~~
     -   ~~`scene`~~

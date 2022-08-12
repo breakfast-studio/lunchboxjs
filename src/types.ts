@@ -19,6 +19,7 @@ export declare namespace Lunch {
                     afterRender: Lunch.UpdateCallback[]
                     beforeRender: Lunch.UpdateCallback[]
                     camera: ThreeCamera | null
+                    dpr: number
                     frameId: number
                     renderer: ThreeRenderer | null
                     scene: ThreeScene | null
@@ -35,10 +36,11 @@ export declare namespace Lunch {
         update: UpdateCallback
     }
 
-    type AppGlobals = {
-        /** Device pixel resolution */
-        dpr: number
-    }
+    // type AppGlobals = {
+    //     /** Device pixel resolution */
+    //     dpr: number
+    // }
+    type AppGlobals = App['config']['globalProperties']['lunchbox']
 
     type AppGlobalsUpdate = (newValue: Partial<AppGlobals>) => void
 
