@@ -37,17 +37,17 @@ Run `npm run demo:create` to create a new demo.
     -   ~~`startCallbacks`~~
 -   ~~`src/core/minidom.ts`~~
     -   ~~`rootNode`~~
--   `src/core/ensure.ts`
-    -   `lunchboxRootNode`
-    -   `autoCreated`
-    -   `overrides`
+-   ~~`src/core/ensure.ts`~~
+    -   ~~`lunchboxRootNode`~~
+    -   ~~`autoCreated`~~
+    -   ~~`overrides`~~
     -   ~~`defaultCamera`~~
     -   ~~`cameraReady`~~
     -   ~~`ensuredCamera`~~
     -   ~~`ensuredRenderer`~~
     -   ~~`rendererReady`~~
     -   ~~`ensuredScene`~~
-    -   `ensuredRaycaster`
+    -   ~~`ensuredRaycaster`~~
 -   `src/core/allNodes.ts`
     -   `allNodes`
 -   `src/core/interaction/input.ts`
@@ -55,10 +55,10 @@ Run `npm run demo:create` to create a new demo.
 -   `src/core/interaction/interactables.ts`
     -   `interactables`
 -   `src/core/interaction/setupAutoRaycaster.ts`
-    -   `mouseMoveListener`
-    -   `mouseDownListener`
-    -   `mouseUpListener`
+    -   ~~`mouseMoveListener`~~
+    -   ~~`mouseDownListener`~~
+    -   ~~`mouseUpListener`~~
     -   `mousePos`
-    -   `autoRaycasterEventsInitialized`
-    -   `frameId`
+    -   ~~`autoRaycasterEventsInitialized`~~
+    -   ~~`frameId`~~
     -   `currentIntersections`

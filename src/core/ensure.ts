@@ -1,4 +1,4 @@
-import { allNodes, createNode, isMinidomNode, MiniDom } from '.'
+// import { allNodes, createNode, isMinidomNode, MiniDom } from '.'
 // import { setupAutoRaycaster } from './interaction/setupAutoRaycaster'
 import {
     ComputedRef,
@@ -24,47 +24,47 @@ import * as Keys from '../keys'
 
 // This is used in `buildEnsured` below and `LunchboxWrapper`
 /** Search the overrides record and the node tree for a node in the given types */
-export function tryGetNodeWithInstanceType<T extends THREE.Object3D>(
-    pascalCaseTypes: string | string[]
-) {
-    if (!Array.isArray(pascalCaseTypes)) {
-        pascalCaseTypes = [pascalCaseTypes]
-    }
+// export function tryGetNodeWithInstanceType<T extends THREE.Object3D>(
+//     pascalCaseTypes: string | string[]
+// ) {
+//     if (!Array.isArray(pascalCaseTypes)) {
+//         pascalCaseTypes = [pascalCaseTypes]
+//     }
 
-    // default to override if we have one
-    for (let singleType of pascalCaseTypes) {
-        if (overrides[singleType]) return overrides[singleType] as Lunch.Node<T>
-    }
+//     // default to override if we have one
+//     for (let singleType of pascalCaseTypes) {
+//         if (overrides[singleType]) return overrides[singleType] as Lunch.Node<T>
+//     }
 
-    // look for auto-created node
-    for (let singleType of pascalCaseTypes) {
-        const found =
-            autoCreated[singleType] ||
-            allNodes.find(
-                (node) =>
-                    (node as MiniDom.RendererBaseNode).type?.toLowerCase() ===
-                    singleType.toLowerCase()
-            )
+//     // look for auto-created node
+//     for (let singleType of pascalCaseTypes) {
+//         const found =
+//             autoCreated[singleType] ||
+//             allNodes.find(
+//                 (node) =>
+//                     (node as MiniDom.RendererBaseNode).type?.toLowerCase() ===
+//                     singleType.toLowerCase()
+//             )
 
-        // cancel if found example is marked !isDefault
-        if (
-            isMinidomNode(found) &&
-            (found.props['is-default'] === false ||
-                !found.props['isDefault'] === false)
-        ) {
-            return null
-        }
+//         // cancel if found example is marked !isDefault
+//         if (
+//             isMinidomNode(found) &&
+//             (found.props['is-default'] === false ||
+//                 !found.props['isDefault'] === false)
+//         ) {
+//             return null
+//         }
 
-        // if we have one, save and return
-        if (found) {
-            const createdAsNode = found as MiniDom.RendererStandardNode<T>
-            autoCreated[singleType] = createdAsNode
-            return createdAsNode
-        }
-    }
+//         // if we have one, save and return
+//         if (found) {
+//             const createdAsNode = found as MiniDom.RendererStandardNode<T>
+//             autoCreated[singleType] = createdAsNode
+//             return createdAsNode
+//         }
+//     }
 
-    return null
-}
+//     return null
+// }
 
 // GENERIC ENSURE FUNCTION
 // ====================
@@ -80,8 +80,8 @@ export function tryGetNodeWithInstanceType<T extends THREE.Object3D>(
 // ensuredXyz.value (...)
 // and:
 // ensuredXyz.value = ...
-export const autoCreated: Record<string, Lunch.Node | null> = reactive({})
-export const overrides: Record<string, Lunch.Node | null> = reactive({})
+// export const autoCreated: Record<string, Lunch.Node | null> = reactive({})
+// export const overrides: Record<string, Lunch.Node | null> = reactive({})
 
 /**
  * Build a computed ensured value with a getter and setter.
