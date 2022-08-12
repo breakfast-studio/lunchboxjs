@@ -19,7 +19,7 @@ import {
     extend,
     inputActive,
     mousePos,
-    rootUuid,
+    // rootUuid,
     MiniDom,
 } from './core'
 import { components } from './components'
@@ -304,7 +304,7 @@ export const createApp = (root: Component) => {
             name: 'root',
             metaType: 'rootMeta',
             type: 'root',
-            uuid: rootUuid,
+            uuid: 'LUNCHBOX_ROOT',
         })
         app.rootNode = rootNode
         app.provide(Keys.appRootNodeKey, rootNode)

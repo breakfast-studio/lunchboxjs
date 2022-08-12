@@ -256,5 +256,5 @@ export function isMinidomNode(item: any): item is MiniDom.RendererBaseNode {
     return (item as MiniDom.BaseNode)?.minidomType === 'RendererNode'
 }
 
-export const rootNode = new MiniDom.RendererRootNode()
-rootNode.minidomType = 'RootNode'
+// export const rootNode = new MiniDom.RendererRootNode()
+// rootNode.minidomType = 'RootNode'

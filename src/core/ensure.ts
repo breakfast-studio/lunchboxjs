@@ -1,5 +1,5 @@
 import { allNodes, createNode, isMinidomNode, MiniDom } from '.'
-import { setupAutoRaycaster } from './interaction/setupAutoRaycaster'
+// import { setupAutoRaycaster } from './interaction/setupAutoRaycaster'
 import {
     ComputedRef,
     computed,
@@ -13,14 +13,14 @@ import * as Keys from '../keys'
 
 // ENSURE ROOT
 // ====================
-export const rootUuid = 'LUNCHBOX_ROOT'
-export let lunchboxRootNode: MiniDom.RendererRootNode
-export function ensureRootNode(options: Partial<Lunch.RootMeta> = {}) {
-    if (!lunchboxRootNode) {
-        lunchboxRootNode = new MiniDom.RendererRootNode(options)
-    }
-    return lunchboxRootNode
-}
+// export const rootUuid = 'LUNCHBOX_ROOT'
+// export let lunchboxRootNode: MiniDom.RendererRootNode
+// export function ensureRootNode(options: Partial<Lunch.RootMeta> = {}) {
+//     if (!lunchboxRootNode) {
+//         lunchboxRootNode = new MiniDom.RendererRootNode(options)
+//     }
+//     return lunchboxRootNode
+// }
 
 // This is used in `buildEnsured` below and `LunchboxWrapper`
 /** Search the overrides record and the node tree for a node in the given types */
@@ -90,56 +90,56 @@ export const overrides: Record<string, Lunch.Node | null> = reactive({})
  * @param props Props to pass to autocreated element
  * @returns Computed getter/setter for ensured object.
  */
-function buildEnsured<T extends THREE.Object3D>(
-    pascalCaseTypes: string | string[],
-    fallbackUuid: string,
-    props: Record<string, any> = {},
-    callback: ((node: MiniDom.RendererStandardNode<T>) => void) | null = null
-) {
-    // make sure we've got an array
-    if (!Array.isArray(pascalCaseTypes)) {
-        pascalCaseTypes = [pascalCaseTypes]
-    }
+// function buildEnsured<T extends THREE.Object3D>(
+//     pascalCaseTypes: string | string[],
+//     fallbackUuid: string,
+//     props: Record<string, any> = {},
+//     callback: ((node: MiniDom.RendererStandardNode<T>) => void) | null = null
+// ) {
+//     // make sure we've got an array
+//     if (!Array.isArray(pascalCaseTypes)) {
+//         pascalCaseTypes = [pascalCaseTypes]
+//     }
 
-    // add type for autoCreated and overrides
-    for (let singleType of pascalCaseTypes) {
-        if (!autoCreated[singleType]) {
-            autoCreated[singleType] = null
-        }
-        if (!overrides[singleType]) {
-            overrides[singleType] = null
-        }
-    }
+//     // add type for autoCreated and overrides
+//     for (let singleType of pascalCaseTypes) {
+//         if (!autoCreated[singleType]) {
+//             autoCreated[singleType] = null
+//         }
+//         if (!overrides[singleType]) {
+//             overrides[singleType] = null
+//         }
+//     }
 
-    return computed({
-        get(): MiniDom.RendererStandardNode<T> {
-            // try to get existing type
-            const existing = tryGetNodeWithInstanceType<T>(
-                pascalCaseTypes as string[]
-            )
-            if (existing) return existing
+//     return computed({
+//         get(): MiniDom.RendererStandardNode<T> {
+//             // try to get existing type
+//             const existing = tryGetNodeWithInstanceType<T>(
+//                 pascalCaseTypes as string[]
+//             )
+//             if (existing) return existing
 
-            // otherwise, create a new node
-            const root = ensureRootNode()
-            const node = createNode<T>({
-                type: pascalCaseTypes[0],
-                uuid: fallbackUuid,
-                props,
-            })
-            root.addChild(node)
-            autoCreated[pascalCaseTypes[0]] = node
-            if (callback) {
-                callback(node)
-            }
-            return node
-        },
-        set(val: MiniDom.RendererStandardNode<T>) {
-            const t = val.type ?? ''
-            const pascalType = t[0].toUpperCase() + t.slice(1)
-            overrides[pascalType] = val
-        },
-    })
-}
+//             // otherwise, create a new node
+//             const root = ensureRootNode()
+//             const node = createNode<T>({
+//                 type: pascalCaseTypes[0],
+//                 uuid: fallbackUuid,
+//                 props,
+//             })
+//             root.addChild(node)
+//             autoCreated[pascalCaseTypes[0]] = node
+//             if (callback) {
+//                 callback(node)
+//             }
+//             return node
+//         },
+//         set(val: MiniDom.RendererStandardNode<T>) {
+//             const t = val.type ?? ''
+//             const pascalType = t[0].toUpperCase() + t.slice(1)
+//             overrides[pascalType] = val
+//         },
+//     })
+// }
 
 // ENSURE CAMERA
 // ====================
@@ -185,11 +185,11 @@ export const ensuredScene = <T extends THREE.Scene = THREE.Scene>() =>
     inject<ComputedRef<T>>(Keys.appSceneKey)
 
 // ENSURE AUTO-RAYCASTER
-export const autoRaycasterUuid = 'AUTO_RAYCASTER'
+// export const autoRaycasterUuid = 'AUTO_RAYCASTER'
 // `unknown` is intentional here - we need to typecast the node since Raycaster isn't an Object3D
-export const ensuredRaycaster = buildEnsured(
-    'Raycaster',
-    autoRaycasterUuid,
-    {},
-    (node) => setupAutoRaycaster(node as unknown as Lunch.Node<THREE.Raycaster>)
-) as unknown as WritableComputedRef<Lunch.Node<THREE.Raycaster>>
+// export const ensuredRaycaster = buildEnsured(
+//     'Raycaster',
+//     autoRaycasterUuid,
+//     {},
+//     (node) => setupAutoRaycaster(node as unknown as Lunch.Node<THREE.Raycaster>)
+// ) as unknown as WritableComputedRef<Lunch.Node<THREE.Raycaster>>
