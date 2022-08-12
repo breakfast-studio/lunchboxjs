@@ -272,7 +272,7 @@ export const LunchboxWrapper = defineComponent({
                         props.cameraLook || props.cameraLookAt
                 }
                 if (props.zoom !== undefined) {
-                    consolidatedCameraProperties.position = props.zoom
+                    consolidatedCameraProperties.zoom = props.zoom
                 }
 
                 // if (props.ortho || props.orthographic) {
