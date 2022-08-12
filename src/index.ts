@@ -43,7 +43,9 @@ export const globals = {
 }
 
 /** The current camera. Often easier to use `useCamera` instead of this. */
+// TODO: update docs
 export const camera = ensuredCamera
+// TODO: update docs
 export const useCamera = () => ensuredCamera()
 /** Run a function using the current camera when it's present. */
 // export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
@@ -65,8 +67,10 @@ export const renderer = ensureRenderer
 export const useRenderer = () => ensureRenderer()!
 
 /** The current scene. Often easier to use `useScene` instead of this. */
+// TODO: update docs
 export const scene = ensuredScene
 /** Run a function using the current scene when it's present. */
+// TODO: update docs
 export function useScene(callback: (newScene: THREE.Scene) => void) {
     return watch(
         scene,

@@ -23,9 +23,9 @@ Run `npm run demo:create` to create a new demo.
         -   ~~`dpr`~~
         -   `inputActive`
         -   `mousePos`
-    -   `camera`
-    -   `renderer`
-    -   `scene`
+    -   ~~`camera`~~
+    -   ~~`renderer`~~
+    -   ~~`scene`~~
     -   ~~`app`~~
     -   ~~`queuedCustomRenderFunction`~~
 -   ~~`src/core/update.ts`~~
