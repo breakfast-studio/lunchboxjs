@@ -33,8 +33,8 @@ Run `npm run demo:create` to create a new demo.
     -   ~~`watchStopHandle`~~
     -   ~~`beforeRender`~~
     -   ~~`afterRender`~~
--   `src/core/start.ts`
-    -   `startCallbacks`
+-   ~~`src/core/start.ts`~~
+    -   ~~`startCallbacks`~~
 -   `src/core/minidom.ts`
     -   `rootNode`
 -   `src/core/ensure.ts`

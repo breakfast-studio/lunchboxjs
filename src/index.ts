@@ -156,6 +156,20 @@ export const useRootNode = () =>
 // TODO: document
 export const useApp = () => inject<Lunch.App>(Keys.appKey)
 
+// TODO: document
+export const useStartCallbacks = () =>
+    inject<Lunch.UpdateCallback[]>(Keys.startCallbackKey) //[] as Lunch.UpdateCallback[]
+
+// TODO: document
+export const onStart = (cb: Lunch.UpdateCallback, index = Infinity) => {
+    const callbacks = useStartCallbacks()
+    if (index === Infinity) {
+        callbacks?.push(cb)
+    } else {
+        callbacks?.splice(index, 0, cb)
+    }
+}
+
 // CREATE APP
 // ====================
 export const createApp = (root: Component) => {
@@ -304,6 +318,11 @@ export const createApp = (root: Component) => {
         extend({ app: app!, ...targets })
         return app!
     }
+
+    // start callback functions
+    // ====================
+    const startCallbacks: Lunch.UpdateCallback[] = []
+    app.provide(Keys.startCallbackKey, startCallbacks)
 
     // prep for custom render support
     // ====================

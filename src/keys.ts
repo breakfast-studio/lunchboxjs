@@ -20,3 +20,5 @@ export const appKey = Symbol()
 export const appRenderersKey = Symbol()
 export const appSceneKey = Symbol()
 export const appCameraKey = Symbol()
+
+export const startCallbackKey = Symbol()

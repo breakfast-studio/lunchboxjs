@@ -21,7 +21,7 @@ import {
     // fallbackRendererUuid,
     MiniDom,
     // rendererReady,
-    startCallbacks,
+    // startCallbacks,
     // tryGetNodeWithInstanceType,
     update,
 } from '../../core'
@@ -29,7 +29,7 @@ import { set } from 'lodash'
 import { Lunch, useApp, useGlobals, useRootNode } from '../..'
 import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
-import { useUpdateGlobals } from '../..'
+import { useUpdateGlobals, useStartCallbacks } from '../..'
 import * as Keys from '../../keys'
 // TODO: fix ts-ignore
 // @ts-ignore
@@ -108,6 +108,8 @@ export const LunchboxWrapper = defineComponent({
         const addOnBeforeUnmount = (func: () => void) => onBeforeUnmount(func)
 
         const consolidatedCameraProperties: Record<string, any> = reactive({})
+
+        const startCallbacks = useStartCallbacks()
 
         // MOUNT
         // ====================
@@ -420,7 +422,7 @@ export const LunchboxWrapper = defineComponent({
             app.config.globalProperties.lunchbox.renderer = normalizedRenderer
             app.config.globalProperties.lunchbox.scene = normalizedScene
 
-            for (let startCallback of startCallbacks) {
+            for (let startCallback of startCallbacks ?? []) {
                 startCallback({
                     app,
                     camera: normalizedCamera,
