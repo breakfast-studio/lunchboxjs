@@ -48,8 +48,8 @@ Run `npm run demo:create` to create a new demo.
     -   ~~`rendererReady`~~
     -   ~~`ensuredScene`~~
     -   ~~`ensuredRaycaster`~~
--   `src/core/allNodes.ts`
-    -   `allNodes`
+-   ~~`src/core/allNodes.ts`~~
+    -   ~~`allNodes`~~
 -   `src/core/interaction/input.ts`
     -   `inputActive`
 -   `src/core/interaction/interactables.ts`

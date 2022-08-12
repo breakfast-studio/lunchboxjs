@@ -1,4 +1,7 @@
-import { allNodes, MiniDom } from '../core'
+import {
+    // allNodes,
+    MiniDom,
+} from '../core'
 import { isLunchboxStandardNode } from '../utils'
 // import { overrides } from '../core'
 
@@ -40,9 +43,9 @@ export const remove = (node: MiniDom.RendererBaseNode) => {
         n.drop()
 
         // remove Lunchbox node from main list
-        const idx = allNodes.findIndex((v) => v.uuid === n.uuid)
-        if (idx !== -1) {
-            allNodes.splice(idx, 1)
-        }
+        // const idx = allNodes.findIndex((v) => v.uuid === n.uuid)
+        // if (idx !== -1) {
+        //     allNodes.splice(idx, 1)
+        // }
     })
 }

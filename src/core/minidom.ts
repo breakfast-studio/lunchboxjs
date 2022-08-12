@@ -1,5 +1,5 @@
 import { v4 as createUuid } from 'uuid'
-import { allNodes } from '.'
+// import { allNodes } from '.'
 import { Lunch } from '..'
 
 // MiniDom recreates DOM node properties and methods.
@@ -17,7 +17,7 @@ export namespace MiniDom {
             this.minidomType = 'MinidomBaseNode'
             this.uuid = options?.uuid ?? createUuid()
 
-            allNodes.push(this)
+            // allNodes.push(this)
         }
         uuid: Lunch.Uuid
 
@@ -89,10 +89,10 @@ export namespace MiniDom {
         /** Drop this node. Removes parent's knowledge of this node
          * and resets this node's internal parent. */
         drop() {
-            // remove parent
-            this.parentNode = null
             // remove as child
             this.removeAsChildFromAnyParents()
+            // remove parent
+            this.parentNode = null
         }
 
         /** Walk over the entire subtree. Return falsey value in callback to end early. */
@@ -124,7 +124,7 @@ export namespace MiniDom {
         minidomType: MiniDom.NodeType
 
         removeAsChildFromAnyParents() {
-            allNodes.forEach((node) => node.removeChild(this))
+            this.parentNode?.removeChild(this)
         }
     }
 
