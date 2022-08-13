@@ -1,36 +1,16 @@
 import {
-    computed,
-    // getCurrentInstance,
     onBeforeUnmount,
     onMounted,
     PropType,
     reactive,
     ref,
     WatchSource,
-    // WritableComputedRef,
 } from 'vue'
-import {
-    // cameraReady,
-    cancelUpdate,
-    cancelUpdateSource,
-    // createNode,
-    // ensuredCamera,
-    // ensureRenderer,
-    // ensuredScene,
-    // fallbackCameraUuid,
-    // fallbackRendererUuid,
-    MiniDom,
-    // rendererReady,
-    // startCallbacks,
-    // tryGetNodeWithInstanceType,
-    update,
-} from '../../core'
-import { set } from 'lodash'
-import { Lunch, useApp, useGlobals, useRootNode } from '../..'
+import { cancelUpdate, cancelUpdateSource, MiniDom, update } from '../../core'
+import { Lunch, useApp, useGlobals } from '../..'
 import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
 import { useUpdateGlobals, useStartCallbacks } from '../..'
-import * as Keys from '../../keys'
 // TODO: fix ts-ignore
 // @ts-ignore
 import LunchboxScene from './LunchboxScene.vue'
@@ -49,7 +29,7 @@ const fillStyle = (position: string) => {
     }
 }
 
-import { defineComponent, watch } from 'vue'
+import { defineComponent } from 'vue'
 
 export const LunchboxWrapper = defineComponent({
     name: 'Lunchbox',
@@ -74,50 +54,30 @@ export const LunchboxWrapper = defineComponent({
     },
     setup(props, context) {
         const canvas = ref<MiniDom.RendererDomNode>()
-        const useFallbackRenderer = ref(true)
         let dpr = props.dpr ?? -1
         const container = ref<MiniDom.RendererDomNode>()
-        // let renderer: Lunch.Node<THREE.WebGLRenderer> | null
         const renderer = ref<Lunch.LunchboxComponent<THREE.Renderer>>()
-        // if (context.slots?.renderer?.()?.length) {
-        //     renderer.value = context.slots?.renderer?.()[0].props
-        //     // renderer.value = context.slots?.renderer?.()[0].ref?
-        // }
         const camera = ref<Lunch.LunchboxComponent<THREE.Camera>>()
-        // let scene: MiniDom.RendererStandardNode<THREE.Scene>
         const scene = ref<Lunch.LunchboxComponent<THREE.Scene>>()
-
         const globals = useGlobals()
         const updateGlobals = useUpdateGlobals()
-        let rendererArgs: THREE.WebGLRendererParameters = reactive({
-            alpha: props.transparent,
-            antialias: true,
-            canvas: canvas.value?.domElement,
-            powerPreference: !!props.r3f ? 'high-performance' : 'default',
-            ...(props.rendererArguments ?? {}),
-        })
-
-        const root = useRootNode()
         const app = useApp()
+        const consolidatedCameraProperties: Record<string, any> = reactive({})
+        const startCallbacks = useStartCallbacks()
 
         // https://threejs.org/docs/index.html#manual/en/introduction/Color-management
         if (props.r3f && (THREE as any)?.ColorManagement) {
             ;(THREE as any).ColorManagement.legacyMode = false
         }
 
-        const consolidatedCameraProperties: Record<string, any> = reactive({})
-
-        const startCallbacks = useStartCallbacks()
-
         // MOUNT
         // ====================
         onMounted(async () => {
-            // canvas needs to exist
+            // canvas needs to exist (or user needs to handle it on their own)
             if (!canvas.value && !context.slots?.renderer?.()?.length)
                 throw new Error('missing canvas')
 
             // no camera provided, so let's create one
-
             if (!context.slots?.camera?.()?.length) {
                 if (props.cameraPosition) {
                     consolidatedCameraProperties.position = props.cameraPosition
@@ -133,7 +93,6 @@ export const LunchboxWrapper = defineComponent({
 
             // SCENE
             // ====================
-            // scene = ensuredScene.value
             // set background color
             if (scene.value?.$el?.instance && props.background) {
                 scene.value.$el.instance.background = new THREE.Color(
@@ -163,10 +122,6 @@ export const LunchboxWrapper = defineComponent({
             ) {
                 await new Promise((r) => requestAnimationFrame(r))
             }
-
-            // if (!renderer.value?.$el?.instance) {
-            //     throw new Error('missing renderer')
-            // }
 
             const normalizedRenderer = (renderer.value?.$el?.instance ??
                 (renderer.value as any)?.component?.ctx.$el
