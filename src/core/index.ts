@@ -1,4 +1,3 @@
-export * from './allNodes'
 export * from './createNode'
 export * from './ensure'
 export * from './interaction'

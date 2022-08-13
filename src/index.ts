@@ -1,5 +1,4 @@
 import {
-    ComputedRef,
     computed,
     createRenderer,
     Component,
@@ -9,17 +8,10 @@ import {
 } from 'vue'
 import { nodeOps } from './nodeOps'
 import {
-    // createdCamera,
-    // createdRenderer,
-    // autoScene,
     ensuredCamera,
     ensureRenderer,
     ensuredScene,
-    // ensureRootNode,
     extend,
-    inputActive,
-    mousePos,
-    // rootUuid,
     MiniDom,
 } from './core'
 import { components } from './components'
@@ -35,31 +27,11 @@ export * from './keys'
 // Utilities
 export * from './utils/find'
 
-/** Useful globals. */
-// export const globals = {
-//     // dpr: ref(1),
-//     inputActive,
-//     mousePos,
-// }
-
 /** The current camera. Often easier to use `useCamera` instead of this. */
 // TODO: update docs
 export const camera = ensuredCamera
 // TODO: update docs
 export const useCamera = () => ensuredCamera()
-/** Run a function using the current camera when it's present. */
-// export function useCamera<T extends THREE.Camera = THREE.PerspectiveCamera>(
-//     callback: (cam: T) => void
-// ) {
-//     return watch(
-//         camera,
-//         (newVal) => {
-//             if (!newVal) return
-//             callback(newVal as unknown as T)
-//         },
-//         { immediate: true }
-//     )
-// }
 
 /** The current renderer as a computed value. Often easier to use `useRenderer` instead of this. */
 export const renderer = ensureRenderer
@@ -81,11 +53,6 @@ export function useScene(callback: (newScene: THREE.Scene) => void) {
         { immediate: true }
     )
 }
-
-// let app: Lunch.App | null = null
-// let queuedCustomRenderFunction:
-//     | ((opts: Lunch.UpdateCallbackProperties) => void)
-//     | null = null
 
 // CUSTOM RENDER SUPPORT
 // ====================
@@ -257,13 +224,6 @@ export const createApp = (root: Component) => {
 
     // provide app-level globals & globals update method
     // ====================
-    // TODO: migrate to app.config.globalProperties.lunchbox
-    // const globals: Lunch.AppGlobals = reactive({
-    //     dpr: 1,
-    //     // TODO:
-    //     // inputActive:
-    //     // mousePos:
-    // })
     app.provide(Keys.globalsInjectionKey, app.config.globalProperties.lunchbox)
     app.provide<Lunch.AppGlobalsUpdate>(
         Keys.updateGlobalsInjectionKey,
@@ -339,12 +299,6 @@ export const createApp = (root: Component) => {
             app.customRender = newRender
         }
     }
-
-    // // add queued custom render if we have one
-    // if (queuedCustomRenderFunction) {
-    //     app.setCustomRender(queuedCustomRenderFunction)
-    //     queuedCustomRenderFunction = null
-    // }
 
     // add custom render removal
     app.clearCustomRender = () => {

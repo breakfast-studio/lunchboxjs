@@ -1,5 +1,4 @@
 import { v4 as createUuid } from 'uuid'
-// import { allNodes } from '.'
 import { Lunch } from '..'
 
 // MiniDom recreates DOM node properties and methods.
@@ -255,6 +254,3 @@ export namespace MiniDom {
 export function isMinidomNode(item: any): item is MiniDom.RendererBaseNode {
     return (item as MiniDom.BaseNode)?.minidomType === 'RendererNode'
 }
-
-// export const rootNode = new MiniDom.RendererRootNode()
-// rootNode.minidomType = 'RootNode'

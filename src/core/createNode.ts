@@ -1,7 +1,6 @@
 import { isLunchboxRootNode } from '../utils'
 import { instantiateThreeObject, MiniDom } from '.'
 import { Lunch } from '..'
-import { ensuredCamera } from './ensure'
 
 /** Create a new Lunchbox comment node. */
 export function createCommentNode(options: Partial<Lunch.CommentMeta> = {}) {
@@ -59,13 +58,6 @@ export function createNode<T extends object = THREE.Object3D>(
     })
 
     if (node.type && !isLunchboxRootNode(node) && !node.instance) {
-        // if (node.type.includes('Camera')) {
-        //     console.log(node.type, {
-        //         ...node.props,
-        //         ...props,
-        //     })
-        //     console.trace()
-        // }
         node.instance = instantiateThreeObject({
             ...node,
             props: {
@@ -73,14 +65,6 @@ export function createNode<T extends object = THREE.Object3D>(
                 ...props,
             },
         })
-    }
-
-    // TODO: these manual overrides are a bit brittle - replace?
-    if (node.type?.toLowerCase() === 'scene') {
-        // manually set scene override
-        // ensuredScene.value = node as Lunch.Node<THREE.Scene>
-    } else if (node.type?.toLowerCase().endsWith('camera')) {
-        ensuredCamera.value = node as Lunch.Node<THREE.Camera>
     }
 
     return node

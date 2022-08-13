@@ -105,8 +105,6 @@ export const LunchboxWrapper = defineComponent({
             ;(THREE as any).ColorManagement.legacyMode = false
         }
 
-        const addOnBeforeUnmount = (func: () => void) => onBeforeUnmount(func)
-
         const consolidatedCameraProperties: Record<string, any> = reactive({})
 
         const startCallbacks = useStartCallbacks()
@@ -371,11 +369,12 @@ export const LunchboxWrapper = defineComponent({
             // prep canvas (sizing, observe, unmount, etc)
             // (only run if no custom renderer)
             if (!context.slots?.renderer?.()?.length) {
-                prepCanvas(
+                // TODO: use dispose
+                const { dispose } = prepCanvas(
                     container,
+                    normalizedCamera,
                     normalizedRenderer,
                     normalizedScene,
-                    addOnBeforeUnmount,
                     props.sizePolicy
                 )
 

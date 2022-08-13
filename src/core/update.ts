@@ -1,8 +1,8 @@
-import {
-    //ensureRenderer,
-    // ensuredScene,
-    ensuredCamera,
-} from '.'
+// import {
+//ensureRenderer,
+// ensuredScene,
+// ensuredCamera,
+// } from '.'
 import { Lunch } from '..'
 import { inject, toRaw, watch, WatchStopHandle } from 'vue'
 import * as Keys from '../keys'
@@ -23,7 +23,7 @@ const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {
                 app: opts.app,
                 renderer: opts.renderer,
                 scene: opts.scene,
-                camera: ensuredCamera.value?.instance,
+                camera: opts.camera,
                 updateSource: opts.updateSource,
             })
     )
