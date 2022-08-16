@@ -1,9 +1,19 @@
 import { nodeResolve } from '@rollup/plugin-node-resolve'
+import { babel } from '@rollup/plugin-babel'
 import { terser } from 'rollup-plugin-terser'
 import del from 'rollup-plugin-delete'
 
 const commonConfig = {
-    plugins: [nodeResolve()],
+    plugins: [
+        babel({
+            babelHelpers: 'bundled',
+            plugins: [
+                // '@babel/plugin-transform-runtime',
+                '@vue/babel-plugin-jsx',
+            ],
+        }),
+        nodeResolve({ extensions: ['.js', '.jsx'] }),
+    ],
     input: 'js/index.js',
     output: {
         globals: {
@@ -13,42 +23,30 @@ const commonConfig = {
             lodash: 'lodash',
         },
     },
-    external: [
-        'lodash',
-        'THREE',
-        'three',
-        'vue',
-    ],
+    external: ['lodash', 'THREE', 'three', 'vue'],
 }
-
 
 export default [
     // umd
     {
         ...commonConfig,
-        plugins: [
-            del({ targets: 'dist/*' }),
-            ...commonConfig.plugins,
-        ],
+        plugins: [del({ targets: 'dist/*' }), ...commonConfig.plugins],
         output: {
             ...commonConfig.output,
             file: 'dist/lunchboxjs.js',
             format: 'umd',
-            name: 'LunchboxRenderer',
+            name: 'Lunchbox',
         },
     },
     // minified umd
     {
         ...commonConfig,
-        plugins: [
-            ...commonConfig.plugins,
-            terser(),
-        ],
+        plugins: [...commonConfig.plugins, terser()],
         output: {
             ...commonConfig.output,
             file: 'dist/lunchboxjs.min.js',
             format: 'umd',
-            name: 'LunchboxRenderer',
+            name: 'Lunchbox',
         },
     },
     // esm module
@@ -59,5 +57,5 @@ export default [
             file: 'dist/lunchboxjs.module.js',
             format: 'esm',
         },
-    }
+    },
 ]

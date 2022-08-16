@@ -142,6 +142,12 @@ export const onStart = (cb: Lunch.UpdateCallback, index = Infinity) => {
 export const createApp = (root: Component) => {
     const app = createRenderer(nodeOps).createApp(root) as Lunch.App
 
+    // register all components
+    // ====================
+    Object.keys(components).forEach((key) => {
+        app?.component(key, (components as any)[key])
+    })
+
     // provide custom renderer functions
     // ====================
     app.provide(
@@ -248,12 +254,6 @@ export const createApp = (root: Component) => {
         Keys.watchStopHandleKey,
         app.config.globalProperties.lunchbox.watchStopHandle
     )
-
-    // register all components
-    // ====================
-    Object.keys(components).forEach((key) => {
-        app?.component(key, (components as any)[key])
-    })
 
     // update mount function to match Lunchbox.Node
     // ====================

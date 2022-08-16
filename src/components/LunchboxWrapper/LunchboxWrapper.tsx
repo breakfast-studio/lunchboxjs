@@ -1,4 +1,5 @@
 import {
+    defineComponent,
     onBeforeUnmount,
     onMounted,
     PropType,
@@ -11,9 +12,7 @@ import { Lunch, useApp, useGlobals } from '../..'
 import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
 import { useUpdateGlobals, useStartCallbacks } from '../..'
-// TODO: fix ts-ignore
-// @ts-ignore
-import LunchboxScene from './LunchboxScene.vue'
+import { LunchboxScene } from './LunchboxScene'
 
 /** fixed & fill styling for container */
 const fillStyle = (position: string) => {
@@ -28,8 +27,6 @@ const fillStyle = (position: string) => {
         display: 'block',
     }
 }
-
-import { defineComponent } from 'vue'
 
 export const LunchboxWrapper = defineComponent({
     name: 'Lunchbox',
@@ -107,21 +104,26 @@ export const LunchboxWrapper = defineComponent({
             }
             updateGlobals?.({ dpr })
 
+            console.log(1)
             while (
                 !renderer.value?.$el?.instance &&
                 // TODO: remove `as any`
                 !(renderer.value as any)?.component?.ctx.$el?.instance
             ) {
+                console.log(2)
                 await new Promise((r) => requestAnimationFrame(r))
             }
 
+            console.log(3)
             while (
                 !scene.value?.$el?.instance &&
                 // TODO: remove `as any`
                 !(scene.value as any)?.component?.ctx.$el?.instance
             ) {
+                console.log(4)
                 await new Promise((r) => requestAnimationFrame(r))
             }
+            console.log(5)
 
             const normalizedRenderer = (renderer.value?.$el?.instance ??
                 (renderer.value as any)?.component?.ctx.$el

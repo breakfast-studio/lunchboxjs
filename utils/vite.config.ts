@@ -7,8 +7,11 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 
 // dynamically add demo urls to build
 const demoPages = demos.reduce((acc, curr) => {
-    acc[curr.title] =
-        (curr.url || camelCase(curr.title)).replace(/^\//, '') + '/index.html'
+    acc[curr.title] = `${
+        (
+            curr.url?.replace(/\/$/, '') || 'demo/' + camelCase(curr.title)
+        ).replace(/^\//g, '') + '/index.html'
+    }`
     return acc
 }, {} as Record<string, string>)
 
