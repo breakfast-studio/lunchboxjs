@@ -1,17 +1,6 @@
-// import {
-//ensureRenderer,
-// ensuredScene,
-// ensuredCamera,
-// } from '.'
-import { Lunch } from '..'
-import { inject, toRaw, watch, WatchStopHandle } from 'vue'
+import type { Lunch } from '..'
+import { inject, toRaw, watch } from 'vue'
 import * as Keys from '../keys'
-
-// let frameID: number
-// let watchStopHandle: WatchStopHandle
-
-// export const beforeRender = [] as Lunch.UpdateCallback[]
-// export const afterRender = [] as Lunch.UpdateCallback[]
 
 const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {
     if (typeof opts.app.config.globalProperties.lunchbox.frameId === 'number') {
@@ -116,23 +105,6 @@ export const onAfterRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
 export const offAfterRender = (cb: Lunch.UpdateCallback | number) => {
     useBeforeRender().offBeforeRender?.(cb)
 }
-
-// export const onAfterRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
-//     if (index === Infinity) {
-//         afterRender.push(cb)
-//     } else {
-//         afterRender.splice(index, 0, cb)
-//     }
-// }
-
-// export const offAfterRender = (cb: Lunch.UpdateCallback | number) => {
-//     if (isFinite(cb as number)) {
-//         afterRender.splice(cb as number, 1)
-//     } else {
-//         const idx = afterRender.findIndex((v) => v == cb)
-//         afterRender.splice(idx, 1)
-//     }
-// }
 
 // TODO: document
 export const useCancelUpdate = () => {

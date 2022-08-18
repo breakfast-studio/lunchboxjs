@@ -36,10 +36,6 @@ export declare namespace Lunch {
         update: UpdateCallback
     }
 
-    // type AppGlobals = {
-    //     /** Device pixel resolution */
-    //     dpr: number
-    // }
     type AppGlobals = App['config']['globalProperties']['lunchbox']
 
     type AppGlobalsUpdate = (newValue: Partial<AppGlobals>) => void
@@ -159,10 +155,6 @@ export declare namespace Lunch {
         renderer?: THREE.Renderer | null
         camera?: THREE.Camera | null
         updateSource?: WatchSource | null
-
-        // sceneNode: Node<THREE.Scene> | null
-        // rendererNode: Node<THREE.Renderer> | null
-        // cameraNode: Node<THREE.Camera> | null
     }
 
     /** Universally unique identifier. */

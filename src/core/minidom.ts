@@ -1,5 +1,5 @@
 import { v4 as createUuid } from 'uuid'
-import { Lunch } from '..'
+import type { Lunch } from '..'
 
 // MiniDom recreates DOM node properties and methods.
 // Since Vue 3 is a DOM-first framework, many of its nodeOps depend on

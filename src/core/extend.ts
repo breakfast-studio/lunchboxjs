@@ -1,6 +1,6 @@
 import { h, defineComponent } from 'vue'
 import { catalogue } from '../components'
-import { Lunch } from '..'
+import type { Lunch } from '..'
 
 const createComponent = (tag: string) =>
     defineComponent({

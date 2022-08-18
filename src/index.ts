@@ -5,8 +5,9 @@ import {
     inject,
     watch,
     reactive,
+    Ref,
 } from 'vue'
-import { nodeOps } from './nodeOps'
+import { createNodeOps } from './nodeOps'
 import {
     ensuredCamera,
     ensureRenderer,
@@ -17,7 +18,6 @@ import {
 import { components } from './components'
 import { Lunch } from './types'
 
-// export { lunchboxRootNode as lunchboxTree } from './core'
 export * from './core'
 export * from './types'
 
@@ -48,7 +48,7 @@ export function useScene(callback: (newScene: THREE.Scene) => void) {
         scene,
         (newVal) => {
             if (!newVal) return
-            callback(newVal.value)
+            callback(newVal.value as THREE.Scene)
         },
         { immediate: true }
     )
@@ -137,10 +137,19 @@ export const onStart = (cb: Lunch.UpdateCallback, index = Infinity) => {
     }
 }
 
+// TODO: document
+export const useLunchboxInteractables = () =>
+    inject<Ref<Lunch.Node[]>>(Keys.lunchboxInteractables)
+
 // CREATE APP
 // ====================
 export const createApp = (root: Component) => {
+    const { nodeOps, interactables } = createNodeOps()
     const app = createRenderer(nodeOps).createApp(root) as Lunch.App
+
+    // provide Lunchbox interaction handlers flag (modified when user references events via
+    // @click, etc)
+    app.provide(Keys.lunchboxInteractables, interactables)
 
     // register all components
     // ====================

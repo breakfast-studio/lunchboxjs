@@ -8,11 +8,12 @@ import {
     WatchSource,
 } from 'vue'
 import { cancelUpdate, cancelUpdateSource, MiniDom, update } from '../../core'
-import { Lunch, useApp, useGlobals } from '../..'
+import { Lunch, useApp, useGlobals, useLunchboxInteractables } from '../..'
 import * as THREE from 'three'
 import { prepCanvas } from './prepCanvas'
 import { useUpdateGlobals, useStartCallbacks } from '../..'
 import { LunchboxScene } from './LunchboxScene'
+import { LunchboxEventHandlers } from '../LunchboxEventHandlers'
 
 /** fixed & fill styling for container */
 const fillStyle = (position: string) => {
@@ -67,6 +68,8 @@ export const LunchboxWrapper = defineComponent({
             ;(THREE as any).ColorManagement.legacyMode = false
         }
 
+        const interactables = useLunchboxInteractables()
+
         // MOUNT
         // ====================
         onMounted(async () => {
@@ -104,26 +107,21 @@ export const LunchboxWrapper = defineComponent({
             }
             updateGlobals?.({ dpr })
 
-            console.log(1)
             while (
                 !renderer.value?.$el?.instance &&
                 // TODO: remove `as any`
                 !(renderer.value as any)?.component?.ctx.$el?.instance
             ) {
-                console.log(2)
                 await new Promise((r) => requestAnimationFrame(r))
             }
 
-            console.log(3)
             while (
                 !scene.value?.$el?.instance &&
                 // TODO: remove `as any`
                 !(scene.value as any)?.component?.ctx.$el?.instance
             ) {
-                console.log(4)
                 await new Promise((r) => requestAnimationFrame(r))
             }
-            console.log(5)
 
             const normalizedRenderer = (renderer.value?.$el?.instance ??
                 (renderer.value as any)?.component?.ctx.$el
@@ -293,6 +291,9 @@ export const LunchboxWrapper = defineComponent({
                         {...consolidatedCameraProperties}
                     />
                 )}
+
+                {/* Lunchbox interaction handlers */}
+                {interactables?.value.length && <LunchboxEventHandlers />}
             </>
         )
     },

@@ -1,7 +1,7 @@
 import { catalogue } from '../../components'
 import * as THREE from 'three'
 import { processPropAsArray } from './processProps'
-import { Lunch } from '../..'
+import type { Lunch } from '../..'
 
 export function instantiateThreeObject<T>(node: Lunch.StandardMeta<T>) {
     if (!node.type) return null
