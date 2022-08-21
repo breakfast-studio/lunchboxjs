@@ -14,6 +14,9 @@
         "docs:serve": "vitepress serve docs",
         "demo:create": "node utils/createExample"
     },
+    "engines": {
+        "npm": ">=16.0.0"
+    },
     "dependencies": {
         "uuid": "8.3.2",
         "vue": "^3.2.16"
