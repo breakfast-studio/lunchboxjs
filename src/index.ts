@@ -2,19 +2,14 @@ import {
     computed,
     createRenderer,
     Component,
+    ComputedRef,
     inject,
     watch,
     reactive,
     Ref,
 } from 'vue'
 import { createNodeOps } from './nodeOps'
-import {
-    ensuredCamera,
-    ensureRenderer,
-    ensuredScene,
-    extend,
-    MiniDom,
-} from './core'
+import { extend, MiniDom } from './core'
 import { components } from './components'
 import { Lunch } from './types'
 
@@ -27,15 +22,15 @@ export * from './keys'
 // Utilities
 export * from './utils/find'
 
-/** The current camera. Often easier to use `onCameraReady` instead of this. */
-// TODO: update docs
-export const camera = ensuredCamera
-// TODO: update docs
+/** The current camera as a computed value. */
+export const useCamera = <T extends THREE.Camera = THREE.Camera>() =>
+    inject<ComputedRef<T>>(Keys.appCameraKey)!
+/** Run a function using the current camera when it's present. */
 export const onCameraReady = <T extends THREE.Camera = THREE.Camera>(
     cb: (camera?: T) => void
 ) => {
     const stopWatch = watch(
-        camera<T>(),
+        useCamera<T>(),
         (newVal) => {
             if (newVal) {
                 cb(newVal)
@@ -46,14 +41,15 @@ export const onCameraReady = <T extends THREE.Camera = THREE.Camera>(
     )
 }
 
-/** The current renderer as a computed value. Often easier to use `onRendererReady` instead of this. */
-export const renderer = ensureRenderer
+/** The current renderer as a computed value. */
+export const useRenderer = <T extends THREE.Renderer = THREE.WebGLRenderer>() =>
+    inject<ComputedRef<T>>(Keys.appRenderersKey)!
 /** Run a function using the current renderer when it's present. */
 export const onRendererReady = <T extends THREE.Renderer = THREE.Renderer>(
     cb: (renderer?: T) => void
 ) => {
     const stopWatch = watch(
-        renderer<T>(),
+        useRenderer<T>(),
         (newVal) => {
             if (newVal) {
                 cb(newVal)
@@ -64,15 +60,15 @@ export const onRendererReady = <T extends THREE.Renderer = THREE.Renderer>(
     )
 }
 
-/** The current scene. Often easier to use `onSceneReady` instead of this. */
-// TODO: update docs
-export const scene = ensuredScene
+/** The current scene as a computed value. */
+export const useScene = <T extends THREE.Scene = THREE.Scene>() =>
+    inject<ComputedRef<T>>(Keys.appSceneKey)!
 /** Run a function using the current scene when it's present. */
 export const onSceneReady = <T extends THREE.Scene = THREE.Scene>(
     cb: (scene?: T) => void
 ) => {
     const stopWatch = watch(
-        scene<T>(),
+        useScene<T>(),
         (newVal) => {
             if (newVal) {
                 cb(newVal)

@@ -1,5 +1,4 @@
 export * from './createNode'
-export * from './ensure'
 export * from './interaction'
 export * from './extend'
 export * from './instantiateThreeObject'

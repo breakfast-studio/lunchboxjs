@@ -1,6 +1,6 @@
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue'
 import {
-    camera,
+    useCamera,
     Lunch,
     useGlobals,
     useLunchboxInteractables,
@@ -68,7 +68,7 @@ export const LunchboxEventHandlers = defineComponent({
             domElement.addEventListener('pointerup', mouseUpListener)
         })
 
-        const cam = camera()
+        const cam = useCamera()
         const update = () => {
             const c = cam.value
             if (!c) return

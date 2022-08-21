@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { onBeforeRender, globals, Lunch, camera, renderer } from '../../src'
+import { onBeforeRender, useCamera, useRenderer } from '../../src'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
 
 // props
@@ -15,9 +15,12 @@ const props = defineProps<{
 }>()
 
 const ready = computed(() => {
-    return camera.value !== null && renderer.value?.domElement
+    return useCamera().value !== null && useRenderer().value?.domElement
 })
-const controlsArgs = computed(() => [camera.value, renderer.value?.domElement])
+const controlsArgs = computed(() => [
+    useCamera().value,
+    useRenderer().value?.domElement,
+])
 
 // update
 let added = false
