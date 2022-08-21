@@ -14,11 +14,10 @@
 import { computed, ref, watch } from 'vue'
 import {
     onBeforeRender,
-    globals,
     Lunch,
     // camera,
-    useRenderer,
-    useCamera,
+    camera,
+    renderer,
 } from '../src'
 
 // props
@@ -28,11 +27,11 @@ const props = defineProps<{
 
 // computed
 const ready = computed(() => {
-    return camera.value !== null && renderer.value.domElement
+    return cam.value !== null && r.value.domElement
 })
-const camera = useCamera()
-const renderer = useRenderer()
-const orbitArgs = computed(() => [camera.value, renderer.value?.domElement])
+const cam = camera()
+const r = renderer()
+const orbitArgs = computed(() => [cam.value, r.value?.domElement])
 // watch(() => orbitArgs.value, console.log, { immediate: true })
 // console.log(renderer)
 watch(camera, console.log)

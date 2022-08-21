@@ -8,9 +8,9 @@ export const ensuredCamera = <T extends THREE.Camera = THREE.Camera>() =>
 // ====================
 export const ensureRenderer = <
     T extends THREE.Renderer = THREE.WebGLRenderer
->() => inject<ComputedRef<T>>(Keys.appRenderersKey)
+>() => inject<ComputedRef<T>>(Keys.appRenderersKey)!
 
 // ENSURE SCENE
 // ====================
 export const ensuredScene = <T extends THREE.Scene = THREE.Scene>() =>
-    inject<ComputedRef<T>>(Keys.appSceneKey)
+    inject<ComputedRef<T>>(Keys.appSceneKey)!

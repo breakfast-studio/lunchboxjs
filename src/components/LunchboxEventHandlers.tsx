@@ -1,7 +1,7 @@
 import { defineComponent, onBeforeUnmount, ref, watch } from 'vue'
 import {
+    camera,
     Lunch,
-    useCamera,
     useGlobals,
     useLunchboxInteractables,
     useRenderer,
@@ -13,8 +13,6 @@ export const LunchboxEventHandlers = defineComponent({
     name: 'LunchboxEventHandlers',
     setup() {
         const interactables = useLunchboxInteractables()
-        const camera = useCamera()
-        const renderer = useRenderer()
         const globals = useGlobals()
         const mousePos = ref({ x: Infinity, y: Infinity })
         const inputActive = ref(false)
@@ -49,36 +47,30 @@ export const LunchboxEventHandlers = defineComponent({
         }
 
         // add mouse listener to renderer DOM element when the element is ready
-        const stopWatch = watch(
-            renderer,
-            (v) => {
-                if (!v?.domElement) return
+        useRenderer((v) => {
+            if (!v?.domElement) return
 
-                // we have a DOM element, so let's add mouse listeners
-                const { domElement } = v
+            // we have a DOM element, so let's add mouse listeners
+            const { domElement } = v
 
-                const mouseMoveListener = (evt: PointerEvent) => {
-                    const screenWidth = (domElement.width ?? 1) / globals.dpr
-                    const screenHeight = (domElement.height ?? 1) / globals.dpr
-                    mousePos.value.x = (evt.offsetX / screenWidth) * 2 - 1
-                    mousePos.value.y = -(evt.offsetY / screenHeight) * 2 + 1
-                }
-                const mouseDownListener = () => (inputActive.value = true)
-                const mouseUpListener = () => (inputActive.value = false)
+            const mouseMoveListener = (evt: PointerEvent) => {
+                const screenWidth = (domElement.width ?? 1) / globals.dpr
+                const screenHeight = (domElement.height ?? 1) / globals.dpr
+                mousePos.value.x = (evt.offsetX / screenWidth) * 2 - 1
+                mousePos.value.y = -(evt.offsetY / screenHeight) * 2 + 1
+            }
+            const mouseDownListener = () => (inputActive.value = true)
+            const mouseUpListener = () => (inputActive.value = false)
 
-                // add mouse events
-                domElement.addEventListener('pointermove', mouseMoveListener)
-                domElement.addEventListener('pointerdown', mouseDownListener)
-                domElement.addEventListener('pointerup', mouseUpListener)
+            // add mouse events
+            domElement.addEventListener('pointermove', mouseMoveListener)
+            domElement.addEventListener('pointerdown', mouseDownListener)
+            domElement.addEventListener('pointerup', mouseUpListener)
+        })
 
-                // stop the watcher
-                stopWatch()
-            },
-            { immediate: true }
-        )
-
+        const cam = camera()
         const update = () => {
-            const c = camera.value
+            const c = cam.value
             if (!c) return
 
             raycaster.setFromCamera(mousePos.value, c)

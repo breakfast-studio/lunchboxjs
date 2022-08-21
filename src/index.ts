@@ -31,27 +31,44 @@ export * from './utils/find'
 // TODO: update docs
 export const camera = ensuredCamera
 // TODO: update docs
-export const useCamera = () => ensuredCamera()
+export const useCamera = <T extends THREE.Camera = THREE.Camera>(
+    cb: (camera?: T) => void
+) => {
+    const stopWatch = watch(camera<T>(), (newVal) => {
+        if (newVal) {
+            cb(newVal)
+            stopWatch()
+        }
+    })
+}
 
 /** The current renderer as a computed value. Often easier to use `useRenderer` instead of this. */
 export const renderer = ensureRenderer
 /** Run a function using the current renderer when it's present. */
-export const useRenderer = () => ensureRenderer()!
+export const useRenderer = <T extends THREE.Renderer = THREE.Renderer>(
+    cb: (renderer?: T) => void
+) => {
+    const stopWatch = watch(renderer<T>(), (newVal) => {
+        if (newVal) {
+            cb(newVal)
+            stopWatch()
+        }
+    })
+}
 
 /** The current scene. Often easier to use `useScene` instead of this. */
 // TODO: update docs
 export const scene = ensuredScene
 /** Run a function using the current scene when it's present. */
-// TODO: update docs
-export function useScene(callback: (newScene: THREE.Scene) => void) {
-    return watch(
-        scene,
-        (newVal) => {
-            if (!newVal) return
-            callback(newVal.value as THREE.Scene)
-        },
-        { immediate: true }
-    )
+export const useScene = <T extends THREE.Scene = THREE.Scene>(
+    cb: (scene?: T) => void
+) => {
+    const stopWatch = watch(scene<T>(), (newVal) => {
+        if (newVal) {
+            cb(newVal)
+            stopWatch()
+        }
+    })
 }
 
 // CUSTOM RENDER SUPPORT
