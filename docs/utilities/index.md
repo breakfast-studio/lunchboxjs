@@ -57,27 +57,27 @@ onStart(({ scene }) => {
 
 ## `camera`, `renderer`, and `scene`
 
-The current camera, renderer, and scene are all available as exports. Note that when your code runs, these may be null or undefined, so the [`useX`](#usecamera-userenderer-and-usescene)version of these might be easier to use.
+The current camera, renderer, and scene are all available as exports. Note that when your code runs, these may be null or undefined, so the [`useX`](#onCameraReady-userenderer-and-usescene)version of these might be easier to use.
 
-## `useCamera`, `useRenderer`, and `useScene`
+## `onCameraReady`, `useRenderer`, and `useScene`
 
 Provide a function to be called when the camera, renderer, or scene is available. Accepts the primary camera, renderer, or scene as an argument.
 
 ```js
-import { useCamera, useRenderer, useScene } from '../../src'
+import { onCameraReady, useRenderer, useScene } from '../../src'
 
 // run every camera/renderer/scene change
-useCamera((cam) => console.log(cam))
+onCameraReady((cam) => console.log(cam))
 useRenderer((renderer) => console.log(renderer))
 useScene((scene) => console.log(scene))
 ```
 
-Note that in TypeScript, `useCamera` and `useRenderer` can support generic types:
+Note that in TypeScript, `onCameraReady` and `useRenderer` can support generic types:
 
 ```ts
-import { useCamera, useRenderer } from '../../src'
+import { onCameraReady, useRenderer } from '../../src'
 
-useCamera<THREE.OrthographicCamera>((cam) => {
+onCameraReady<THREE.OrthographicCamera>((cam) => {
     // `cam` is an instance of OrthographicCamera
     console.log(cam)
 })

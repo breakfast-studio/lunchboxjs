@@ -27,19 +27,23 @@ export * from './keys'
 // Utilities
 export * from './utils/find'
 
-/** The current camera. Often easier to use `useCamera` instead of this. */
+/** The current camera. Often easier to use `onCameraReady` instead of this. */
 // TODO: update docs
 export const camera = ensuredCamera
 // TODO: update docs
-export const useCamera = <T extends THREE.Camera = THREE.Camera>(
+export const onCameraReady = <T extends THREE.Camera = THREE.Camera>(
     cb: (camera?: T) => void
 ) => {
-    const stopWatch = watch(camera<T>(), (newVal) => {
-        if (newVal) {
-            cb(newVal)
-            stopWatch()
-        }
-    })
+    const stopWatch = watch(
+        camera<T>(),
+        (newVal) => {
+            if (newVal) {
+                cb(newVal)
+                stopWatch()
+            }
+        },
+        { immediate: true }
+    )
 }
 
 /** The current renderer as a computed value. Often easier to use `useRenderer` instead of this. */
@@ -48,12 +52,16 @@ export const renderer = ensureRenderer
 export const useRenderer = <T extends THREE.Renderer = THREE.Renderer>(
     cb: (renderer?: T) => void
 ) => {
-    const stopWatch = watch(renderer<T>(), (newVal) => {
-        if (newVal) {
-            cb(newVal)
-            stopWatch()
-        }
-    })
+    const stopWatch = watch(
+        renderer<T>(),
+        (newVal) => {
+            if (newVal) {
+                cb(newVal)
+                stopWatch()
+            }
+        },
+        { immediate: true }
+    )
 }
 
 /** The current scene. Often easier to use `useScene` instead of this. */
@@ -63,12 +71,16 @@ export const scene = ensuredScene
 export const useScene = <T extends THREE.Scene = THREE.Scene>(
     cb: (scene?: T) => void
 ) => {
-    const stopWatch = watch(scene<T>(), (newVal) => {
-        if (newVal) {
-            cb(newVal)
-            stopWatch()
-        }
-    })
+    const stopWatch = watch(
+        scene<T>(),
+        (newVal) => {
+            if (newVal) {
+                cb(newVal)
+                stopWatch()
+            }
+        },
+        { immediate: true }
+    )
 }
 
 // CUSTOM RENDER SUPPORT

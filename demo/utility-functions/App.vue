@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useCamera, useRenderer, useScene } from '../../src'
+import { onCameraReady, useRenderer, useScene } from '../../src'
 
-useCamera((cam) => console.log(cam))
+onCameraReady((cam) => console.log(cam))
 useRenderer((renderer) => console.log(renderer))
 useScene((scene) => console.log(scene))
 </script>
