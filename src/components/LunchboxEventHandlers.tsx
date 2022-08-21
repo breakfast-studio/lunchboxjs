@@ -4,7 +4,7 @@ import {
     Lunch,
     useGlobals,
     useLunchboxInteractables,
-    useRenderer,
+    onRendererReady,
 } from '..'
 import * as THREE from 'three'
 import { offBeforeRender, onBeforeRender } from '../core'
@@ -47,7 +47,7 @@ export const LunchboxEventHandlers = defineComponent({
         }
 
         // add mouse listener to renderer DOM element when the element is ready
-        useRenderer((v) => {
+        onRendererReady((v) => {
             if (!v?.domElement) return
 
             // we have a DOM element, so let's add mouse listeners

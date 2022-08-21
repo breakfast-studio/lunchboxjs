@@ -55,7 +55,7 @@ A Scene can be added directly to the wrapper:
 
 By default, the first Scene in the user's markup is saved as the default Scene, which is provided to `onStart`, `onBeforeRender`, and several other places.
 
-This means you can alternate between different Scenes. Changing Scenes will trigger a `useScene` callback, if you import and use that function:
+This means you can alternate between different Scenes. Changing Scenes will trigger a `onSceneReady` callback, if you import and use that function:
 
 ```html
 <template>
@@ -70,14 +70,14 @@ This means you can alternate between different Scenes. Changing Scenes will trig
 </template>
 
 <script setup>
-    import { useScene } from 'lunchboxjs'
+    import { onSceneReady } from 'lunchboxjs'
     import { ref } from 'vue'
 
     // alternate scene every 1000ms
     const showSceneOne = ref(true)
     setInterval(() => (showSceneOne.value = !showSceneOne.value), 1000)
 
-    useScene((scene) => {
+    onSceneReady((scene) => {
         // fires each scene change
         console.log(scene)
     })

@@ -46,10 +46,10 @@ export const onCameraReady = <T extends THREE.Camera = THREE.Camera>(
     )
 }
 
-/** The current renderer as a computed value. Often easier to use `useRenderer` instead of this. */
+/** The current renderer as a computed value. Often easier to use `onRendererReady` instead of this. */
 export const renderer = ensureRenderer
 /** Run a function using the current renderer when it's present. */
-export const useRenderer = <T extends THREE.Renderer = THREE.Renderer>(
+export const onRendererReady = <T extends THREE.Renderer = THREE.Renderer>(
     cb: (renderer?: T) => void
 ) => {
     const stopWatch = watch(
@@ -64,11 +64,11 @@ export const useRenderer = <T extends THREE.Renderer = THREE.Renderer>(
     )
 }
 
-/** The current scene. Often easier to use `useScene` instead of this. */
+/** The current scene. Often easier to use `onSceneReady` instead of this. */
 // TODO: update docs
 export const scene = ensuredScene
 /** Run a function using the current scene when it's present. */
-export const useScene = <T extends THREE.Scene = THREE.Scene>(
+export const onSceneReady = <T extends THREE.Scene = THREE.Scene>(
     cb: (scene?: T) => void
 ) => {
     const stopWatch = watch(
