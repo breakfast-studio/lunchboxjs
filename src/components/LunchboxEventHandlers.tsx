@@ -68,10 +68,12 @@ export const LunchboxEventHandlers = defineComponent({
             domElement.addEventListener('pointerup', mouseUpListener)
         })
 
-        const cam = useCamera()
+        const camera = useCamera()
         const update = () => {
-            const c = cam.value
+            const c = camera.value
             if (!c) return
+
+            // console.log(camera.value)
 
             raycaster.setFromCamera(mousePos.value, c)
             const intersections = raycaster.intersectObjects(
@@ -194,6 +196,10 @@ export const LunchboxEventHandlers = defineComponent({
             'onPointerUp',
         ]
         watch(inputActive, (isDown) => {
+            // run raycaster on click (necessary when `update` is not automatically called,
+            // for example in `updateSource` functions)
+            update()
+
             // meshes with multiple intersections receive multiple callbacks by default -
             // let's make it so they only receive one callback of each type per frame.
             // (ie usually when you click on a mesh, you expect only one click event to fire, even

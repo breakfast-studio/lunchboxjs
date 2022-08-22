@@ -5,8 +5,8 @@ Lunchbox [guidelines](/dev/#guidelines) mention providing clear overrides whenev
 ```
 | Root
 | -- Renderer
-| -- Camera
 | -- Scene
+| -- Camera
 ```
 
 From here, most apps will implicitly add objects (meshes, models, lights, etc) to the Scene:
@@ -39,7 +39,7 @@ results in:
 
 This is enough for many Three.js apps, but in order to support more complex setups and be as futureproof as possible, Lunchbox makes it possible to override these default assumptions.
 
-## Custom Scene, Camera, and Renderer
+## Custom Scene, Camera, and Renderer (DEPRECATED)
 
 (The rules for these three object types are the same, so we'll be using a Scene as an example.)
 

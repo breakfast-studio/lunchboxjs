@@ -1,10 +1,12 @@
 import {
+    computed,
     defineComponent,
     onBeforeUnmount,
     onMounted,
     PropType,
     reactive,
     ref,
+    watch,
     WatchSource,
 } from 'vue'
 import { cancelUpdate, cancelUpdateSource, MiniDom, update } from '../../core'
@@ -14,6 +16,8 @@ import { prepCanvas } from './prepCanvas'
 import { useUpdateGlobals, useStartCallbacks } from '../..'
 import { LunchboxScene } from './LunchboxScene'
 import { LunchboxEventHandlers } from '../LunchboxEventHandlers'
+import * as Keys from '../../keys'
+import { waitFor } from '../../utils'
 
 /** fixed & fill styling for container */
 const fillStyle = (position: string) => {
@@ -212,6 +216,43 @@ export const LunchboxWrapper = defineComponent({
         const canvasFillStyle =
             props.sizePolicy === 'container' ? 'static' : 'fixed'
 
+        // REACTIVE CUSTOM CAMERAS
+        // ====================
+        // find first camera with `type.name` property
+        // (which indicates a Lunch.Node)
+        const activeCamera = computed(() => {
+            const output = context.slots
+                ?.camera?.()
+                .find((c) => (c.type as any)?.name)
+            if (output) {
+                return output
+            }
+
+            return output
+        })
+
+        // TODO: make custom cameras reactive
+        watch(
+            activeCamera,
+            async (newVal, oldVal) => {
+                // console.log('got camera', newVal)
+                if (newVal && newVal?.props?.key !== oldVal?.props?.key) {
+                    // TODO: remove cast
+                    camera.value = newVal as any
+
+                    // TODO: why isn't this updating app camera?
+                    // const el = await waitFor(() => newVal.el)
+                    // console.log(el)
+                    // camera.value = el
+                    // console.log(newVal.uuid)
+                    // updateGlobals?.({ camera: el })
+                }
+            },
+            { immediate: true }
+        )
+
+        // RENDER FUNCTION
+        // ====================
         return () => (
             <>
                 {/* use renderer slot if provided... */}
@@ -270,7 +311,7 @@ export const LunchboxWrapper = defineComponent({
                 {/* use camera slot if provided... */}
                 {context.slots?.camera?.()?.length ? (
                     // TODO: remove `any` cast
-                    (camera.value = context.slots?.camera?.()[0] as any)
+                    camera.value
                 ) : props.ortho || props.orthographic ? (
                     <orthographicCamera
                         ref={camera}

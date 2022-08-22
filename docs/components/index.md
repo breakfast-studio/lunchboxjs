@@ -94,7 +94,7 @@ The main caveat is that you need to wrap all arguments in an array, just like wi
 
 ## Events
 
-All Lunchbox components emit an `onAdded` and `onReady` event:
+All Lunchbox components emit an `onAdded` (or `@added`) and `onReady` (or `@ready`) event:
 
 ```html
 <mesh @added="yourAddedMethod" @ready="yourReadyMethod" />

@@ -1,6 +1,6 @@
-# Utilities
+# Composables
 
-Lunchbox comes with several built-in utilities to make development easier.
+Lunchbox comes with several built-in [composables](https://vuejs.org/guide/reusability/composables.html) and other utility functions to make development easier.
 
 ## `onBeforeRender` and `onAfterRender`
 
@@ -55,9 +55,20 @@ onStart(({ scene }) => {
 })
 ```
 
-## `camera`, `renderer`, and `scene`
+## `useCamera`, `useRenderer`, and `useScene`
 
-The current camera, renderer, and scene are all available as exports. Note that when your code runs, these may be null or undefined, so the [`useX`](#onCameraReady-onRendererReady-and-onSceneReady)version of these might be easier to use.
+The current camera, renderer, and scene are all available as composables:
+
+```html
+<script setup>
+    import { useCamera } from 'lunchboxjs'
+
+    const camera = useCamera()
+    // `camera.value` available to work with
+</script>
+```
+
+Note that when your code runs, these may be null or undefined, so the [`onXReady`](#onCameraReady-onRendererReady-and-onSceneReady)version of these might be easier to use.
 
 ## `onCameraReady`, `onRendererReady`, and `onSceneReady`
 

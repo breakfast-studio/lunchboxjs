@@ -27,7 +27,10 @@ const geometry = new THREE.BoxGeometry(1, 1, 1)
 const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
 // combine geometry + material in mesh
 const mesh = new THREE.Mesh(geometry, material)
-// add that mesh to the scene (assuming you've created a scene)
+
+// create a scene...
+const scene = new THREE.Scene()
+// ... and add the mesh to the scene
 scene.add(mesh)
 ```
 
@@ -44,9 +47,11 @@ In Lunchbox, this produces the same result:
 
 A few points to note:
 
+-   Lunchbox creates a Scene, Camera, and Renderer automatically. Adding children to your Lunchbox wrapper adds them to the Scene by default. (There's also support for [overriding defaults](/advanced/custom-cameras-renderers-and-scenes/) for more advanced use cases.)
+
 -   Lunchbox component names match camelCased Three.js class names.
 
-```
+```jsx
 // three.js
 new THREE.Mesh()
 
@@ -85,6 +90,14 @@ would map to this in Lunchbox:
 <meshBasicMaterial :color="0xffff00" />
 ```
 
+-   Any property without a value will be set to `true` by default:
+
+```html
+<meshBasicMaterial wireframe />
+<!-- is the same as: -->
+<meshBasicMaterial :wireframe="true" />
+```
+
 -   You can set a property that would normally use dot notation with a dash in the prop name. For example, this in Three.js:
 
 ```js
@@ -100,7 +113,7 @@ would map to this in Lunchbox:
 
 ## Components
 
-You can use most Three.js classes in Lunchbox, such as:
+You can use the most common Three.js classes in Lunchbox right away, such as:
 
 -   `Group`
 -   `Mesh`

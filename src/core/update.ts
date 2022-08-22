@@ -38,7 +38,7 @@ export const update: Lunch.UpdateCallback = (opts) => {
     }
 
     // prep options
-    const { app, renderer, scene, camera } = opts
+    const { app, renderer, scene } = opts
 
     // BEFORE RENDER
     app.config.globalProperties.lunchbox.beforeRender.forEach((cb) => {
@@ -46,14 +46,14 @@ export const update: Lunch.UpdateCallback = (opts) => {
     })
 
     // RENDER
-    if (renderer && scene && camera) {
+    if (renderer && scene && opts.app.config.globalProperties.lunchbox.camera) {
         if (app.customRender) {
             app.customRender(opts)
         } else {
             renderer.render(
                 toRaw(scene),
-                // opts.app.config.globalProperties.lunchbox.camera!
-                toRaw(camera)
+                opts.app.config.globalProperties.lunchbox.camera
+                // toRaw(camera)
             )
         }
     }
@@ -66,7 +66,7 @@ export const update: Lunch.UpdateCallback = (opts) => {
 
 // before render
 // ====================
-// TODO: document
+/** Obtain callback methods for `onBeforeRender` and `offBeforeRender`. Usually used internally by Lunchbox. */
 export const useBeforeRender = () => {
     return {
         onBeforeRender: inject<typeof onBeforeRender>(Keys.onBeforeRenderKey),
@@ -76,19 +76,25 @@ export const useBeforeRender = () => {
     }
 }
 
-// TODO: document
+/** Run a function before every render.
+ *
+ * Note that if `updateSource` is set in the Lunchbox wrapper component, this will **only** run
+ * before a render triggered by that `updateSource`. Normally, the function should run every frame.
+ */
 export const onBeforeRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
     useBeforeRender().onBeforeRender?.(cb, index)
 }
 
-// TODO: document
+/** Remove a function from the `beforeRender` callback list. Useful for tearing down functions added
+ * by `onBeforeRender`.
+ */
 export const offBeforeRender = (cb: Lunch.UpdateCallback | number) => {
     useBeforeRender().offBeforeRender?.(cb)
 }
 
 // after render
 // ====================
-// TODO: document
+/** Obtain callback methods for `onAfterRender` and `offAfterRender`. Usually used internally by Lunchbox. */
 export const useAfterRender = () => {
     return {
         onAfterRender: inject<typeof onAfterRender>(Keys.onBeforeRenderKey),
@@ -96,17 +102,25 @@ export const useAfterRender = () => {
     }
 }
 
-// TODO: document
+/** Run a function after every render.
+ *
+ * Note that if `updateSource` is set in the Lunchbox wrapper component, this will **only** run
+ * after a render triggered by that `updateSource`. Normally, the function should run every frame.
+ */
 export const onAfterRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
     useBeforeRender().onBeforeRender?.(cb, index)
 }
 
-// TODO: document
+/** Remove a function from the `afterRender` callback list. Useful for tearing down functions added
+ * by `onAfterRender`.
+ */
 export const offAfterRender = (cb: Lunch.UpdateCallback | number) => {
     useBeforeRender().offBeforeRender?.(cb)
 }
 
-// TODO: document
+/** Obtain a function used to cancel the current update frame. Use `cancelUpdate` if you wish
+ * to immediately invoke the cancellation function. Usually used internally by Lunchbox.
+ */
 export const useCancelUpdate = () => {
     const frameId = inject<number>(Keys.frameIdKey)
     return () => {
@@ -114,12 +128,14 @@ export const useCancelUpdate = () => {
     }
 }
 
-// TODO: document
+/** Cancel the current update frame. Usually used internally by Lunchbox. */
 export const cancelUpdate = () => {
     useCancelUpdate()?.()
 }
 
-// TODO: document
+/** Obtain a function used to cancel an update source. Use `cancelUpdateSource` if you wish to
+ * immediately invoke the cancellation function. Usually used internally by Lunchbox.
+ */
 export const useCancelUpdateSource = () => {
     const cancel = inject<
         Lunch.App['config']['globalProperties']['watchStopHandle']
@@ -127,7 +143,7 @@ export const useCancelUpdateSource = () => {
     return () => cancel?.()
 }
 
-// TODO: document
+/** Cancel an update source. Usually used internally by Lunchbox. */
 export const cancelUpdateSource = () => {
     useCancelUpdateSource()?.()
 }

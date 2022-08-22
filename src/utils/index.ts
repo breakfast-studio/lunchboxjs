@@ -43,3 +43,13 @@ export const isLunchboxStandardNode = (
 export const isLunchboxRootNode = (node: any): node is Lunch.RootMeta => {
     return node.isLunchboxRootNode
 }
+
+export const waitFor = async (get: () => any) => {
+    let output = get()
+    while (!output) {
+        await new Promise((resolve) => requestAnimationFrame(resolve))
+        output = get()
+        console.log(output)
+    }
+    return output
+}

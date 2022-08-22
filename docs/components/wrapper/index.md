@@ -1,4 +1,4 @@
-# Wrapper
+# Lunchbox Wrapper
 
 A Lunchbox app needs to be wrapped in a `Lunchbox` wrapper:
 
@@ -29,3 +29,35 @@ The `Lunchbox` component comes with several shortcut props:
 | `transparent`        | Boolean           | Add or set to true to make the renderer's background transparent.                                                                                                                                                                                                                                                                                                   |
 | `updateSource`       | Object            | Set to only rerender when this value changes. See [this PR](https://github.com/breakfast-studio/lunchboxjs/pull/23) for more details.                                                                                                                                                                                                                               |
 | `zoom`               | Number            | Set to change an orthographic camera's zoom.                                                                                                                                                                                                                                                                                                                        |
+
+## Examples
+
+-   A renderer with a blue background:
+
+```html
+<Lunchbox background="#0000ff">
+    <!-- Your code -->
+</Lunchbox>
+```
+
+-   A renderer with a transparent background:
+
+```html
+<Lunchbox transparent>
+    <!-- Your code -->
+</Lunchbox>
+```
+
+-   Soft shadows enabled:
+
+```html
+<template>
+    <Lunchbox :shadow="{ type: THREE.PCFSoftShadowMap }">
+        <!-- Your code -->
+    </Lunchbox>
+</template>
+
+<script setup>
+    import * as THREE from 'three'
+</script>
+```

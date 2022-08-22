@@ -1,17 +1,14 @@
 <template>
-    <group v-if="ready">
-        <TransformControls />
-    </group>
+    <TransformControls @added="onAdded" v-if="ready" :args="controlsArgs" />
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
-import { onBeforeRender, useCamera, useRenderer } from '../../src'
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+import { computed } from 'vue'
+import { useCamera, useRenderer } from '../../src'
 
 // props
 const props = defineProps<{
-    options?: object
+    attachTo?: object
 }>()
 
 const ready = computed(() => {
@@ -22,13 +19,7 @@ const controlsArgs = computed(() => [
     useRenderer().value?.domElement,
 ])
 
-// update
-let added = false
-const controls = ref<any>() //<Lunch.LunchboxComponent<TransformControls>>()
-onBeforeRender(({ scene }) => {
-    const instance = controls.value?.$el.instance as any
-    if (instance && ready.value) {
-        instance.update()
-    }
-})
+const onAdded = ({ instance }: any) => {
+    instance.attach(props.attachTo)
+}
 </script>

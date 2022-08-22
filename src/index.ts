@@ -141,18 +141,15 @@ export const updateGlobals = (newValue: Partial<Lunch.AppGlobals>) => {
     useUpdateGlobals()?.(newValue)
 }
 
-// TODO: document
-export const useRootNode = () =>
-    inject<MiniDom.RendererRootNode>(Keys.appRootNodeKey)
-
-// TODO: document
+/** Use the current Lunchbox app. Usually used internally by Lunchbox. */
 export const useApp = () => inject<Lunch.App>(Keys.appKey)
 
-// TODO: document
+/** Obtain a list of the start callback functions. Usually used internally by Lunchbox. */
 export const useStartCallbacks = () =>
-    inject<Lunch.UpdateCallback[]>(Keys.startCallbackKey) //[] as Lunch.UpdateCallback[]
+    inject<Lunch.UpdateCallback[]>(Keys.startCallbackKey)
 
-// TODO: document
+/** Run a given callback once when the Lunchbox app starts. Include an index to
+ * splice the callback at that index in the callback queue. */
 export const onStart = (cb: Lunch.UpdateCallback, index = Infinity) => {
     const callbacks = useStartCallbacks()
     if (index === Infinity) {
@@ -162,7 +159,7 @@ export const onStart = (cb: Lunch.UpdateCallback, index = Infinity) => {
     }
 }
 
-// TODO: document
+/** Obtain a list of interactable objects (registered via onClick, onHover, etc events). Usually used internally by Lunchbox. */
 export const useLunchboxInteractables = () =>
     inject<Ref<Lunch.Node[]>>(Keys.lunchboxInteractables)
 

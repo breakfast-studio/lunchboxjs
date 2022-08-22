@@ -29,7 +29,7 @@ export default defineConfig({
                 children: [
                     { text: 'Wrapper', link: '/components/wrapper/' },
                     { text: 'Components', link: '/components/' },
-                    { text: 'Utilities', link: '/utilities/' },
+                    { text: 'Composables', link: '/composables/' },
                     { text: 'Extend', link: '/components/extend/' },
                 ],
             },
