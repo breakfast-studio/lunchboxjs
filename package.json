@@ -1,6 +1,6 @@
 {
     "name": "lunchboxjs",
-    "version": "0.2.1001-beta.2",
+    "version": "0.2.1001-beta.3",
     "scripts": {
         "dev": "vite -c utils/vite.config.ts",
         "build": "vue-tsc --noEmit && vite build -c utils/vite.config.ts",
@@ -15,7 +15,7 @@
         "demo:create": "node utils/createExample"
     },
     "engines": {
-        "npm": ">=16.0.0"
+        "node": ">=16.0.0"
     },
     "dependencies": {
         "uuid": "8.3.2",
