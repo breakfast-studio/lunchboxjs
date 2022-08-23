@@ -58,6 +58,7 @@ export function updateObjectProp({
     }
 
     // change property
+    // first, save as array in case we need to spread it
     if (liveProperty && isNumber(value) && liveProperty.setScalar) {
         // if value is a number and the property has a `setScalar` method, use that
         liveProperty.setScalar(value)
@@ -66,8 +67,21 @@ export function updateObjectProp({
         const nextValueAsArray = Array.isArray(value) ? value : [value]
         ;(target as any)[finalKey].set(...nextValueAsArray)
     } else if (typeof liveProperty === 'function') {
-        // if property is a function, let's try calling it
-        liveProperty.bind(node.instance)(...value)
+        // some function properties are set rather than called, so let's handle them
+        if (
+            finalKey.toLowerCase() === 'onbeforerender' ||
+            finalKey.toLowerCase() === 'onafterrender'
+        ) {
+            ;(target as any)[finalKey] = value
+        } else {
+            if (!Array.isArray(value)) {
+                throw new Error(
+                    'Arguments on a declarative method must be wrapped in an array.\nWorks:\n<example :methodCall="[256]" />\nDoesn\'t work:\n<example :methodCall="256" />'
+                )
+            }
+            // if property is a function, let's try calling it
+            liveProperty.bind(node.instance)(...value)
+        }
 
         // pass the result to the parent
         // const parent = node.parentNode
