@@ -1,6 +1,6 @@
 {
     "name": "lunchboxjs",
-    "version": "0.2.1001-beta.302",
+    "version": "0.2.1011",
     "scripts": {
         "dev": "vite -c utils/vite.config.ts",
         "build": "vue-tsc --noEmit && vite build -c utils/vite.config.ts",
