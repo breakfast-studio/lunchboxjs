@@ -1,4 +1,3 @@
-import { lunchboxDomComponentNames } from '../components'
 import { Lunch } from '..'
 
 export * from './find'
@@ -32,9 +31,7 @@ export const isLunchboxComponent = (
 export const isLunchboxDomComponent = (node: any): node is Lunch.DomMeta => {
     if ((node as Lunch.MetaBase)?.metaType === 'domMeta') return true
 
-    const typeToCheck = typeof node === 'string' ? node : node?.type
-
-    return lunchboxDomComponentNames.includes(typeToCheck ?? '')
+    return node?.props?.['data-lunchbox']
 }
 
 export const isLunchboxStandardNode = (
@@ -45,4 +42,14 @@ export const isLunchboxStandardNode = (
 
 export const isLunchboxRootNode = (node: any): node is Lunch.RootMeta => {
     return node.isLunchboxRootNode
+}
+
+export const waitFor = async (get: () => any) => {
+    let output = get()
+    while (!output) {
+        await new Promise((resolve) => requestAnimationFrame(resolve))
+        output = get()
+        console.log(output)
+    }
+    return output
 }

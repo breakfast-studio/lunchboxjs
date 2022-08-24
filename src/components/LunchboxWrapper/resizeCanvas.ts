@@ -1,11 +1,12 @@
-import { ensuredCamera, ensureRenderer, ensuredScene } from '../../core'
 import { toRaw } from 'vue'
 
-export const resizeCanvas = (width?: number, height?: number) => {
-    const renderer = ensureRenderer.value?.instance
-    const scene = ensuredScene.value.instance
-    const camera = ensuredCamera.value
-
+export const resizeCanvas = (
+    camera: THREE.Camera,
+    renderer: THREE.Renderer,
+    scene: THREE.Scene,
+    width?: number,
+    height?: number
+) => {
     // ignore if no element
     if (!renderer?.domElement || !scene || !camera) return
 
@@ -15,12 +16,12 @@ export const resizeCanvas = (width?: number, height?: number) => {
     // update camera
     const aspect = width / height
     if (camera.type?.toLowerCase() === 'perspectivecamera') {
-        const perspectiveCamera = camera.instance as THREE.PerspectiveCamera
+        const perspectiveCamera = camera as THREE.PerspectiveCamera
         perspectiveCamera.aspect = aspect
         perspectiveCamera.updateProjectionMatrix()
     } else if (camera.type?.toLowerCase() === 'orthographiccamera') {
-        // console.log('TODO: ortho camera update')
-        const orthoCamera = camera.instance as THREE.OrthographicCamera
+        // TODO: ortho camera update
+        const orthoCamera = camera as THREE.OrthographicCamera
         const heightInTermsOfWidth = height / width
         orthoCamera.top = heightInTermsOfWidth * 10
         orthoCamera.bottom = -heightInTermsOfWidth * 10
@@ -28,13 +29,13 @@ export const resizeCanvas = (width?: number, height?: number) => {
         orthoCamera.left = -10
         orthoCamera.updateProjectionMatrix()
     } else {
-        console.log('TODO: non-ortho or perspective camera')
+        // TODO: non-ortho or perspective camera
     }
 
     // update canvas
     renderer.setSize(width, height)
     // render immediately so there's no flicker
-    if (scene && camera.instance) {
-        renderer.render(toRaw(scene), toRaw(camera.instance))
+    if (scene && camera) {
+        renderer.render(toRaw(scene), toRaw(camera))
     }
 }

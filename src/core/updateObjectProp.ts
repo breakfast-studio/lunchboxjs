@@ -1,34 +1,25 @@
 import { isEventKey, isLunchboxStandardNode } from '../utils'
 import { addEventListener } from './interaction'
 import { get, isNumber, set } from 'lodash'
-import { Lunch } from '..'
-
-/** Update the given node so all of its props are current. */
-export function updateAllObjectProps({ node }: { node: Lunch.Node }) {
-    // set props
-    const props = node.props || {}
-    let output = node
-    Object.keys(props).forEach((key) => {
-        output = updateObjectProp({ node, key, value: props[key] })
-    })
-
-    return output
-}
+import type { Lunch } from '..'
+import type { Ref } from 'vue'
 
 /** Update a single prop on a given node. */
 export function updateObjectProp({
     node,
     key,
+    interactables,
     value,
 }: {
     node: Lunch.Node
     key: string
+    interactables: Ref<Lunch.Node[]>
     value: any
 }) {
     // handle and return early if prop is an event
     // (event list from react-three-fiber)
     if (isEventKey(key)) {
-        return addEventListener({ node, key, value })
+        return addEventListener({ node, key, interactables, value })
     }
 
     // update THREE property

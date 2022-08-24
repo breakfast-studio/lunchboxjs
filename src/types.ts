@@ -1,14 +1,32 @@
+type RendererStandardNode<T = THREE.Object3D> =
+    import('./core').MiniDom.RendererStandardNode<T>
 type RootNode = import('./core/minidom').MiniDom.RendererRootNode
 type VNodeProps = import('vue').VNodeProps
 type VueApp<T> = import('vue').App<T>
 type WatchSource = import('vue').WatchSource
-type RendererStandardNode<T = THREE.Object3D> =
-    import('./core').MiniDom.RendererStandardNode<T>
+type WatchStopHandle = import('vue').WatchStopHandle
+type ThreeCamera = import('three').Camera
+type ThreeRenderer = import('three').Renderer
+type ThreeScene = import('three').Scene
 
 export declare namespace Lunch {
     /** Lunchbox app. */
-    type App = VueApp<any> & {
+    type App = Omit<VueApp<any>, 'config'> & {
         clearCustomRender: () => void
+        config: Omit<VueApp<any>['config'], 'globalProperties'> & {
+            globalProperties: {
+                lunchbox: {
+                    afterRender: Lunch.UpdateCallback[]
+                    beforeRender: Lunch.UpdateCallback[]
+                    camera: ThreeCamera | null
+                    dpr: number
+                    frameId: number
+                    renderer: ThreeRenderer | null
+                    scene: ThreeScene | null
+                    watchStopHandle: WatchStopHandle | null
+                }
+            } & Record<string, any>
+        }
         customRender: ((opts: UpdateCallbackProperties) => void) | null
         extend: (v: Record<string, any>) => App
         rootNode: RootNode
@@ -17,6 +35,10 @@ export declare namespace Lunch {
         ) => void
         update: UpdateCallback
     }
+
+    type AppGlobals = App['config']['globalProperties']['lunchbox']
+
+    type AppGlobalsUpdate = (newValue: Partial<AppGlobals>) => void
 
     interface CanvasProps {
         dpr?: number
@@ -33,6 +55,10 @@ export declare namespace Lunch {
     interface CommentMeta extends MetaBase {
         text: string
     }
+
+    type CustomRenderFunctionSetter = (
+        render: (opts: Lunch.UpdateCallbackProperties) => void
+    ) => void
 
     interface DomMeta extends MetaBase {
         domElement: HTMLElement
@@ -129,10 +155,6 @@ export declare namespace Lunch {
         renderer?: THREE.Renderer | null
         camera?: THREE.Camera | null
         updateSource?: WatchSource | null
-
-        // sceneNode: Node<THREE.Scene> | null
-        // rendererNode: Node<THREE.Renderer> | null
-        // cameraNode: Node<THREE.Camera> | null
     }
 
     /** Universally unique identifier. */
@@ -140,12 +162,14 @@ export declare namespace Lunch {
 
     type SizePolicy = 'full' | 'container'
 
+    type Vector3AsArray = [number, number, number]
+
     interface WrapperProps {
         background?: string
         cameraArgs?: any[]
-        cameraLook?: [number, number, number]
-        cameraLookAt?: [number, number, number]
-        cameraPosition?: [number, number, number]
+        cameraLook?: Vector3AsArray
+        cameraLookAt?: Vector3AsArray
+        cameraPosition?: Vector3AsArray
         dpr?: number
         ortho?: boolean
         orthographic?: boolean

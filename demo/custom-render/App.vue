@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { clearCustomRender, setCustomRender } from '../../src'
+import { useCustomRender } from '../../src'
 import OrbitControlsWrapper from '../../extras/OrbitControlsWrapper.vue'
 import { Vector2 } from 'three'
 
@@ -21,9 +21,11 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 
 let composer: EffectComposer | null = null
 
+const { setCustomRender, clearCustomRender } = useCustomRender()
+
 // function to add fx to scene
 const addFx = () =>
-    setCustomRender((opts) => {
+    setCustomRender?.((opts) => {
         const canvas = opts.renderer?.domElement
 
         // ignore if no canvas
@@ -54,7 +56,7 @@ addFx()
 let fxOn = true
 const toggleEffects = () => {
     if (fxOn) {
-        clearCustomRender()
+        clearCustomRender?.()
     } else {
         addFx()
     }

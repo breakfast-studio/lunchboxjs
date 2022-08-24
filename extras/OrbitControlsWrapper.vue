@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
-import { onBeforeRender, globals, Lunch, camera, renderer } from '../src'
+import { computed, ref } from 'vue'
+import { onBeforeRender, Lunch, useCamera, useRenderer } from '../src'
 
 // props
 const props = defineProps<{
@@ -20,14 +20,12 @@ const props = defineProps<{
 }>()
 
 // computed
-// const camera = globals.camera
-// const renderer = globals.renderer
 const ready = computed(() => {
-    return camera.value !== null && renderer.value?.domElement
+    return camera.value !== null && renderer.value.domElement
 })
+const camera = useCamera()
+const renderer = useRenderer()
 const orbitArgs = computed(() => [camera.value, renderer.value?.domElement])
-// watch(() => orbitArgs.value, console.log, { immediate: true })
-// console.log(renderer)
 
 // update
 const controls = ref<Lunch.LunchboxComponent>()

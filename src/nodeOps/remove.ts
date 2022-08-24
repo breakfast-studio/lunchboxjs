@@ -1,10 +1,8 @@
-import { allNodes, MiniDom } from '../core'
+import { MiniDom } from '../core'
 import { isLunchboxStandardNode } from '../utils'
-import { overrides } from '../core'
 
 export const remove = (node: MiniDom.RendererBaseNode) => {
     if (!node) return
-    const overrideKeys = Object.keys(overrides)
     // prep subtree
     const subtree: MiniDom.BaseNode[] = []
     node.walk((descendant) => {
@@ -14,14 +12,6 @@ export const remove = (node: MiniDom.RendererBaseNode) => {
 
     // clean up subtree
     subtree.forEach((n) => {
-        const overrideKey = overrideKeys.find(
-            (key) => overrides[key]?.uuid === n.uuid
-        )
-        // if this node is an override, remove it from the overrides list
-        if (overrideKey) {
-            overrides[overrideKey] = null
-        }
-
         if (isLunchboxStandardNode(n)) {
             // try to remove three object
             n.instance?.removeFromParent?.()
@@ -38,11 +28,5 @@ export const remove = (node: MiniDom.RendererBaseNode) => {
 
         // drop tree node
         n.drop()
-
-        // remove Lunchbox node from main list
-        const idx = allNodes.findIndex((v) => v.uuid === n.uuid)
-        if (idx !== -1) {
-            allNodes.splice(idx, 1)
-        }
     })
 }

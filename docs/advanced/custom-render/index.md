@@ -10,11 +10,8 @@ setCustomRender((options) => {
     options = {
         app,        // The Lunchbox app
         scene,      // The current scene
-                    // (equivalent to `import { scene } from 'lunchbox'`)
         renderer,   // The current renderer
-                    // (equivalent to `import { renderer } from 'lunchbox'`)
         camera,     // The current camera
-                    // (equivalent to `import { camera } from 'lunchbox'`)
     }
     */
 })

@@ -1,6 +1,6 @@
 <template>
-    <Lunchbox :cameraPosition="[0, 0, 5]"
-        ><mesh>
+    <Lunchbox :cameraPosition="[0, 0, 5]">
+        <mesh>
             <boxGeometry />
             <meshBasicMaterial color="#ff00ff" />
         </mesh>
@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useCamera, useRenderer, useScene } from '../../src'
+import { onCameraReady, onRendererReady, onSceneReady } from '../../src'
 
-useCamera((cam) => console.log(cam))
-useRenderer((renderer) => console.log(renderer))
-useScene((scene) => console.log(scene))
+onCameraReady((cam) => console.log(cam))
+onRendererReady((renderer) => console.log(renderer))
+onSceneReady((scene) => console.log(scene))
 </script>

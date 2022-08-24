@@ -1,6 +1,6 @@
-# Utilities
+# Composables
 
-Lunchbox comes with several built-in utilities to make development easier.
+Lunchbox comes with several built-in [composables](https://vuejs.org/guide/reusability/composables.html) and other utility functions to make development easier.
 
 ## `onBeforeRender` and `onAfterRender`
 
@@ -55,33 +55,44 @@ onStart(({ scene }) => {
 })
 ```
 
-## `camera`, `renderer`, and `scene`
-
-The current camera, renderer, and scene are all available as exports. Note that when your code runs, these may be null or undefined, so the [`useX`](#usecamera-userenderer-and-usescene)version of these might be easier to use.
-
 ## `useCamera`, `useRenderer`, and `useScene`
+
+The current camera, renderer, and scene are all available as composables:
+
+```html
+<script setup>
+    import { useCamera } from 'lunchboxjs'
+
+    const camera = useCamera()
+    // `camera.value` available to work with
+</script>
+```
+
+Note that when your code runs, these may be null or undefined, so the [`onXReady`](#onCameraReady-onRendererReady-and-onSceneReady)version of these might be easier to use.
+
+## `onCameraReady`, `onRendererReady`, and `onSceneReady`
 
 Provide a function to be called when the camera, renderer, or scene is available. Accepts the primary camera, renderer, or scene as an argument.
 
 ```js
-import { useCamera, useRenderer, useScene } from '../../src'
+import { onCameraReady, onRendererReady, onSceneReady } from '../../src'
 
 // run every camera/renderer/scene change
-useCamera((cam) => console.log(cam))
-useRenderer((renderer) => console.log(renderer))
-useScene((scene) => console.log(scene))
+onCameraReady((cam) => console.log(cam))
+onRendererReady((renderer) => console.log(renderer))
+onSceneReady((scene) => console.log(scene))
 ```
 
-Note that in TypeScript, `useCamera` and `useRenderer` can support generic types:
+Note that in TypeScript, `onCameraReady` and `onRendererReady` can support generic types:
 
 ```ts
-import { useCamera, useRenderer } from '../../src'
+import { onCameraReady, onRendererReady } from '../../src'
 
-useCamera<THREE.OrthographicCamera>((cam) => {
+onCameraReady<THREE.OrthographicCamera>((cam) => {
     // `cam` is an instance of OrthographicCamera
     console.log(cam)
 })
-useRenderer</* any type inheriting from THREE.Renderer */>((renderer) =>
+onRendererReady</* any type inheriting from THREE.Renderer */>((renderer) =>
     console.log(renderer)
 )
 ```

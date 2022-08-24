@@ -1,23 +1,25 @@
 <template>
     <Lunchbox background="white" :shadow="{ type: PCFSoftShadowMap }">
-        <!-- Cameras -->
-        <perspectiveCamera
-            ref="cam1"
-            :position="[2, 1, 5]"
-            v-if="cameraIndex === 0"
-            key="cam1"
-        />
-        <perspectiveCamera
-            :rotation-x="cameraRotation"
-            :position="[-2, 1, 10]"
-            v-else-if="cameraIndex === 1"
-            key="cam2"
-        />
-        <perspectiveCamera
-            :position="[2, 4, 5]"
-            v-else-if="cameraIndex === 2"
-            key="cam3"
-        />
+        <template #camera>
+            <!-- Cameras -->
+            <perspectiveCamera
+                ref="cam1"
+                :position="[2, 1, 5]"
+                v-if="cameraIndex === 0"
+                key="cam1"
+            />
+            <perspectiveCamera
+                :rotation-x="cameraRotation"
+                :position="[-2, 1, 10]"
+                v-else-if="cameraIndex === 1"
+                key="cam2"
+            />
+            <perspectiveCamera
+                :position="[2, 4, 5]"
+                v-else-if="cameraIndex === 2"
+                key="cam3"
+            />
+        </template>
 
         <!-- Light -->
         <pointLight
@@ -49,10 +51,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { PCFSoftShadowMap } from 'three'
 import type { PerspectiveCamera } from 'three'
-import { Lunch, onBeforeRender, useCamera } from '../../src'
+import { Lunch, onBeforeRender, onCameraReady } from '../../src'
 
 const cameraCount = 3
 const cameraIndex = ref(0)
@@ -63,5 +65,7 @@ onBeforeRender(() => {
     cameraRotation.value = Math.sin(Date.now() * 0.0001) * 0.1
 })
 
-useCamera(console.log, false)
+// onCameraReady(console.log)
+
+// watch(cameraIndex, console.log)
 </script>

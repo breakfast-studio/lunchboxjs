@@ -3,7 +3,6 @@ import {
     isLunchboxRootNode,
     isLunchboxStandardNode,
 } from '../utils'
-import { ensureRootNode, ensuredScene } from '../core'
 import { MiniDom } from '../core/minidom'
 import { Lunch } from '..'
 
@@ -12,9 +11,12 @@ export const insert = (
     parent: MiniDom.RendererBaseNode | null,
     anchor?: MiniDom.RendererBaseNode | null
 ) => {
+    if (!parent) {
+        throw new Error('missing parent')
+    }
     // add to parent tree node if we have one
-    let effectiveParent = parent ?? ensureRootNode()
-    effectiveParent.insertBefore(child, anchor)
+    // let effectiveParent = parent ?? ensureRootNode()
+    parent.insertBefore(child, anchor)
 
     // handle comment & text nodes
     if (child.metaType === 'commentMeta' || child.metaType === 'textMeta') {
@@ -33,54 +35,31 @@ export const insert = (
     // handle standard nodes
     if (isLunchboxStandardNode(child)) {
         // let effectiveParent = parent
-        let effectiveParentNodeType = effectiveParent.metaType
+        let effectiveParentNodeType = parent.metaType
 
         if (
             effectiveParentNodeType === 'textMeta' ||
             effectiveParentNodeType === 'commentMeta'
         ) {
-            const path = effectiveParent.getPath() as MiniDom.RendererBaseNode[]
+            const path = parent.getPath() as MiniDom.RendererBaseNode[]
             for (let i = path.length - 1; i >= 0; i--) {
                 if (
                     path[i].metaType !== 'textMeta' &&
                     path[i].metaType !== 'commentMeta'
                 ) {
-                    effectiveParent = path[i]
+                    parent = path[i]
                     break
                 }
             }
         }
 
-        // add to scene if parent is the wrapper node
         if (
-            child.metaType === 'standardMeta' &&
-            child.type !== 'scene' &&
-            isLunchboxRootNode(effectiveParent)
-        ) {
-            // ensure scene exists
-            const sceneNode = ensuredScene.value
-
-            if (sceneNode.instance && child) {
-                sceneNode.addChild(child)
-            }
-            if (
-                child.instance &&
-                child.instance.isObject3D &&
-                sceneNode.instance
-            ) {
-                if (sceneNode !== child) {
-                    sceneNode.instance.add(child.instance)
-                }
-            }
-        }
-        // add to hierarchy otherwise
-        else if (
             isLunchboxStandardNode(child) &&
             child.instance?.isObject3D &&
-            isLunchboxStandardNode(effectiveParent) &&
-            effectiveParent.instance?.isObject3D
+            isLunchboxStandardNode(parent) &&
+            parent.instance?.isObject3D
         ) {
-            effectiveParent.instance?.add?.(child.instance)
+            parent.instance?.add?.(child.instance)
         }
 
         // add attached props

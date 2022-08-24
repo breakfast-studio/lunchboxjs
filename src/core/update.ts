@@ -1,31 +1,28 @@
-import { ensureRenderer, ensuredScene, ensuredCamera } from '.'
-import { Lunch } from '..'
-import { toRaw, watch, WatchStopHandle } from 'vue'
-
-let frameID: number
-let watchStopHandle: WatchStopHandle
-
-export const beforeRender = [] as Lunch.UpdateCallback[]
-export const afterRender = [] as Lunch.UpdateCallback[]
+import type { Lunch } from '..'
+import { inject, toRaw, watch } from 'vue'
+import * as Keys from '../keys'
 
 const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {
-    cancelUpdate()
-    frameID = requestAnimationFrame(() =>
-        update({
-            app: opts.app,
-            renderer: ensureRenderer.value?.instance,
-            scene: ensuredScene.value.instance,
-            camera: ensuredCamera.value?.instance,
-            updateSource: opts.updateSource,
-        })
+    if (typeof opts.app.config.globalProperties.lunchbox.frameId === 'number') {
+        cancelAnimationFrame(opts.app.config.globalProperties.lunchbox.frameId)
+    }
+    opts.app.config.globalProperties.lunchbox.frameId = requestAnimationFrame(
+        () =>
+            update({
+                app: opts.app,
+                renderer: opts.renderer,
+                scene: opts.scene,
+                camera: opts.camera,
+                updateSource: opts.updateSource,
+            })
     )
 }
 
 export const update: Lunch.UpdateCallback = (opts) => {
     if (opts.updateSource) {
-        if (!watchStopHandle) {
+        if (!opts.app.config.globalProperties.lunchbox.watchStopHandle) {
             // request next frame only when state changes
-            watchStopHandle = watch(
+            opts.app.config.globalProperties.lunchbox.watchStopHandle = watch(
                 opts.updateSource,
                 () => {
                     requestUpdate(opts)
@@ -41,70 +38,112 @@ export const update: Lunch.UpdateCallback = (opts) => {
     }
 
     // prep options
-    const { app, renderer, scene, camera } = opts
+    const { app, renderer, scene } = opts
 
     // BEFORE RENDER
-    beforeRender.forEach((cb: Lunch.UpdateCallback | undefined) => {
-        if (cb) {
-            cb(opts)
-        }
+    app.config.globalProperties.lunchbox.beforeRender.forEach((cb) => {
+        cb?.(opts)
     })
 
     // RENDER
-    if (renderer && scene && camera) {
+    if (renderer && scene && opts.app.config.globalProperties.lunchbox.camera) {
         if (app.customRender) {
             app.customRender(opts)
         } else {
-            renderer.render(toRaw(scene), toRaw(camera))
+            renderer.render(
+                toRaw(scene),
+                opts.app.config.globalProperties.lunchbox.camera
+                // toRaw(camera)
+            )
         }
     }
 
     // AFTER RENDER
-    afterRender.forEach((cb: Lunch.UpdateCallback | undefined) => {
-        if (cb) {
-            cb(opts)
-        }
+    app.config.globalProperties.lunchbox.afterRender.forEach((cb) => {
+        cb?.(opts)
     })
 }
 
+// before render
+// ====================
+/** Obtain callback methods for `onBeforeRender` and `offBeforeRender`. Usually used internally by Lunchbox. */
+export const useBeforeRender = () => {
+    return {
+        onBeforeRender: inject<typeof onBeforeRender>(Keys.onBeforeRenderKey),
+        offBeforeRender: inject<typeof offBeforeRender>(
+            Keys.offBeforeRenderKey
+        ),
+    }
+}
+
+/** Run a function before every render.
+ *
+ * Note that if `updateSource` is set in the Lunchbox wrapper component, this will **only** run
+ * before a render triggered by that `updateSource`. Normally, the function should run every frame.
+ */
 export const onBeforeRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
-    if (index === Infinity) {
-        beforeRender.push(cb)
-    } else {
-        beforeRender.splice(index, 0, cb)
-    }
+    useBeforeRender().onBeforeRender?.(cb, index)
 }
 
+/** Remove a function from the `beforeRender` callback list. Useful for tearing down functions added
+ * by `onBeforeRender`.
+ */
 export const offBeforeRender = (cb: Lunch.UpdateCallback | number) => {
-    if (isFinite(cb as number)) {
-        beforeRender.splice(cb as number, 1)
-    } else {
-        const idx = beforeRender.findIndex((v) => v == cb)
-        beforeRender.splice(idx, 1)
+    useBeforeRender().offBeforeRender?.(cb)
+}
+
+// after render
+// ====================
+/** Obtain callback methods for `onAfterRender` and `offAfterRender`. Usually used internally by Lunchbox. */
+export const useAfterRender = () => {
+    return {
+        onAfterRender: inject<typeof onAfterRender>(Keys.onBeforeRenderKey),
+        offAfterRender: inject<typeof offAfterRender>(Keys.offBeforeRenderKey),
     }
 }
 
+/** Run a function after every render.
+ *
+ * Note that if `updateSource` is set in the Lunchbox wrapper component, this will **only** run
+ * after a render triggered by that `updateSource`. Normally, the function should run every frame.
+ */
 export const onAfterRender = (cb: Lunch.UpdateCallback, index = Infinity) => {
-    if (index === Infinity) {
-        afterRender.push(cb)
-    } else {
-        afterRender.splice(index, 0, cb)
-    }
+    useBeforeRender().onBeforeRender?.(cb, index)
 }
 
+/** Remove a function from the `afterRender` callback list. Useful for tearing down functions added
+ * by `onAfterRender`.
+ */
 export const offAfterRender = (cb: Lunch.UpdateCallback | number) => {
-    if (isFinite(cb as number)) {
-        afterRender.splice(cb as number, 1)
-    } else {
-        const idx = afterRender.findIndex((v) => v == cb)
-        afterRender.splice(idx, 1)
+    useBeforeRender().offBeforeRender?.(cb)
+}
+
+/** Obtain a function used to cancel the current update frame. Use `cancelUpdate` if you wish
+ * to immediately invoke the cancellation function. Usually used internally by Lunchbox.
+ */
+export const useCancelUpdate = () => {
+    const frameId = inject<number>(Keys.frameIdKey)
+    return () => {
+        if (frameId !== undefined) cancelAnimationFrame(frameId)
     }
 }
 
+/** Cancel the current update frame. Usually used internally by Lunchbox. */
 export const cancelUpdate = () => {
-    if (frameID) cancelAnimationFrame(frameID)
+    useCancelUpdate()?.()
 }
 
+/** Obtain a function used to cancel an update source. Use `cancelUpdateSource` if you wish to
+ * immediately invoke the cancellation function. Usually used internally by Lunchbox.
+ */
+export const useCancelUpdateSource = () => {
+    const cancel = inject<
+        Lunch.App['config']['globalProperties']['watchStopHandle']
+    >(Keys.watchStopHandleKey)
+    return () => cancel?.()
+}
+
+/** Cancel an update source. Usually used internally by Lunchbox. */
 export const cancelUpdateSource = () => {
-    if (watchStopHandle) watchStopHandle()
+    useCancelUpdateSource()?.()
 }

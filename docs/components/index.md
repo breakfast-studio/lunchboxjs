@@ -118,7 +118,7 @@ Use single values for these rather than arrays:
 
 ## Events
 
-All Lunchbox components emit an `onAdded` and `onReady` event:
+All Lunchbox components emit an `onAdded` (or `@added`) and `onReady` (or `@ready`) event:
 
 ```html
 <mesh @added="yourAddedMethod" @ready="yourReadyMethod" />
