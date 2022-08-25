@@ -1,6 +1,6 @@
 {
     "name": "lunchboxjs",
-    "version": "0.2.1011",
+    "version": "0.2.1012",
     "scripts": {
         "dev": "vite -c utils/vite.config.ts",
         "build": "vue-tsc --noEmit && vite build -c utils/vite.config.ts",
@@ -51,7 +51,7 @@
     },
     "peerDependencies": {
         "lodash": "^4.17.21",
-        "three": "0.141.0"
+        "three": "^0.133.0"
     },
     "files": [
         "dist",
