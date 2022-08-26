@@ -7,6 +7,7 @@ import {
     watch,
     reactive,
     Ref,
+    WatchStopHandle,
 } from 'vue'
 import { createNodeOps } from './nodeOps'
 import { extend, MiniDom } from './core'
@@ -29,16 +30,19 @@ export const useCamera = <T extends THREE.Camera = THREE.Camera>() =>
 export const onCameraReady = <T extends THREE.Camera = THREE.Camera>(
     cb: (camera?: T) => void
 ) => {
-    const stopWatch = watch(
-        useCamera<T>(),
-        (newVal) => {
-            if (newVal) {
-                cb(newVal)
-                stopWatch()
-            }
-        },
-        { immediate: true }
-    )
+    const existing = useCamera<T>()
+    if (existing.value) {
+        cb(existing.value)
+        return
+    }
+
+    let stopWatch: WatchStopHandle | null = null
+    stopWatch = watch(useCamera<T>(), (newVal) => {
+        if (newVal) {
+            cb(newVal)
+            stopWatch?.()
+        }
+    })
 }
 
 /** The current renderer as a computed value. */
@@ -48,12 +52,19 @@ export const useRenderer = <T extends THREE.Renderer = THREE.WebGLRenderer>() =>
 export const onRendererReady = <T extends THREE.Renderer = THREE.Renderer>(
     cb: (renderer?: T) => void
 ) => {
-    const stopWatch = watch(
+    const existing = useRenderer<T>()
+    if (existing.value) {
+        cb(existing.value)
+        return
+    }
+
+    let stopWatch: WatchStopHandle | null = null
+    stopWatch = watch(
         useRenderer<T>(),
         (newVal) => {
             if (newVal) {
                 cb(newVal)
-                stopWatch()
+                stopWatch?.()
             }
         },
         { immediate: true }
@@ -67,12 +78,19 @@ export const useScene = <T extends THREE.Scene = THREE.Scene>() =>
 export const onSceneReady = <T extends THREE.Scene = THREE.Scene>(
     cb: (scene?: T) => void
 ) => {
-    const stopWatch = watch(
+    const existing = useScene<T>()
+    if (existing.value) {
+        cb(existing.value)
+        return
+    }
+
+    let stopWatch: WatchStopHandle | null = null
+    stopWatch = watch(
         useScene<T>(),
         (newVal) => {
             if (newVal) {
                 cb(newVal)
-                stopWatch()
+                stopWatch?.()
             }
         },
         { immediate: true }
