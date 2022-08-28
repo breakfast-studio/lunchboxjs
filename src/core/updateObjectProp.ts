@@ -31,8 +31,15 @@ export function updateObjectProp({
     if (
         internalLunchboxVueKeys.includes(key) ||
         internalLunchboxVueKeys.includes(finalKey)
-    )
+    ) {
         return node
+    }
+
+    // handle and return directives early
+    if (key.toLowerCase().startsWith('v-')) {
+        // TODO: how to handle directive implementation?
+        return node
+    }
 
     // everything else should be Three-specific, so let's cancel if this isn't a standard node
     if (!isLunchboxStandardNode(node)) return node

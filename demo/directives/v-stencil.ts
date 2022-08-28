@@ -6,6 +6,8 @@ export const stencil: Directive<Lunch.Node<THREE.Mesh>> = {
     updated(el, binding) {
         if (!el.instance) return
 
+        console.log(binding.value)
+
         el.instance.renderOrder = 2
         const inverted = binding.modifiers.inverted
         const mat = el.instance.material as any
