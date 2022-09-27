@@ -8,6 +8,7 @@ import {
     reactive,
     Ref,
     WatchStopHandle,
+    toRaw,
 } from 'vue'
 import { createNodeOps } from './nodeOps'
 import { extend, MiniDom } from './core'
@@ -180,6 +181,20 @@ export const onStart = (cb: Lunch.UpdateCallback, index = Infinity) => {
 /** Obtain a list of interactable objects (registered via onClick, onHover, etc events). Usually used internally by Lunchbox. */
 export const useLunchboxInteractables = () =>
     inject<Ref<Lunch.Node[]>>(Keys.lunchboxInteractables)
+
+/** Build a computed instance-getter from a specified ref. Defaults to a `toRaw`'d result. */
+export const getInstance = <T = unknown>(
+    target: Ref<Lunch.LunchboxComponent<T> | Lunch.Node<T> | null>,
+    raw = true
+) =>
+    computed(() => {
+        const output =
+            (target.value as Lunch.LunchboxComponent<T>)?.$el?.instance ??
+            (target.value as Lunch.Node<T>)?.instance ??
+            null
+        if (output && raw) return toRaw(output)
+        return output
+    })
 
 // CREATE APP
 // ====================
