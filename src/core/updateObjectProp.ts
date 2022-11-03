@@ -1,6 +1,11 @@
-import { get, isEventKey, isLunchboxStandardNode, isNumber } from '../utils'
+import {
+    get,
+    isEventKey,
+    isLunchboxStandardNode,
+    isNumber,
+    set,
+} from '../utils'
 import { addEventListener } from './interaction'
-import { set } from 'lodash'
 import type { Lunch } from '..'
 import type { Ref } from 'vue'
 

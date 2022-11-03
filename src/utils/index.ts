@@ -1,8 +1,11 @@
 import { Lunch } from '..'
 
 export * from './find'
+
+// replacement functions from lodash & https://youmightnotneed.com/lodash
 export * from './get'
 export * from './isNumber'
+export * from './set'
 
 // MAKE SURE THESE MATCH VALUES IN types.EventKey
 /** Type check on whether target is a Lunchbox.EventKey */

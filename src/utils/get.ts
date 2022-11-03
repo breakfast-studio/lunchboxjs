@@ -1,56 +1,18 @@
-// Copied from https://dev.to/tipsy_dev/advanced-typescript-reinventing-lodash-get-4fhe
-type FieldWithPossiblyUndefined<T, Key> =
-    | GetFieldType<Exclude<T, undefined>, Key>
-    | Extract<T, undefined>
-
-type GetIndexedField<T, K> = K extends keyof T
-    ? T[K]
-    : K extends `${number}`
-    ? '0' extends keyof T // tuples have string keys, return undefined if K is not in tuple
-        ? undefined
-        : number extends keyof T
-        ? T[number]
-        : undefined
-    : undefined
-
-export type GetFieldType<T, P> = P extends `${infer Left}.${infer Right}`
-    ? Left extends keyof T
-        ? FieldWithPossiblyUndefined<T[Left], Right>
-        : Left extends `${infer FieldKey}[${infer IndexKey}]`
-        ? FieldKey extends keyof T
-            ? FieldWithPossiblyUndefined<
-                  | GetIndexedField<Exclude<T[FieldKey], undefined>, IndexKey>
-                  | Extract<T[FieldKey], undefined>,
-                  Right
-              >
-            : undefined
-        : undefined
-    : P extends keyof T
-    ? T[P]
-    : P extends `${infer FieldKey}[${infer IndexKey}]`
-    ? FieldKey extends keyof T
-        ?
-              | GetIndexedField<Exclude<T[FieldKey], undefined>, IndexKey>
-              | Extract<T[FieldKey], undefined>
-        : undefined
-    : undefined
-
-export function get<
-    TData,
-    TPath extends string,
-    TDefault = GetFieldType<TData, TPath>
->(
-    data: TData,
-    path: TPath,
-    defaultValue?: TDefault
-): GetFieldType<TData, TPath> | TDefault {
-    const value = path
-        .split(/[.[\]]/)
-        .filter(Boolean)
-        .reduce<GetFieldType<TData, TPath>>(
-            (value, key) => (value as any)?.[key],
-            data as any
-        )
-
-    return value !== undefined ? value : (defaultValue as TDefault)
+export const get = <T = unknown>(
+    obj: Record<string, any>,
+    path: string | string[],
+    defValue?: T
+) => {
+    // If path is not defined or it has false value
+    if (!path) return undefined
+    // Check if path is string or array. Regex : ensure that we do not have '.' and brackets.
+    // Regex explained: https://regexr.com/58j0k
+    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
+    // Find value
+    const result = pathArray?.reduce(
+        (prevObj: Record<string, any>, key: string) => prevObj && prevObj[key],
+        obj
+    )
+    // If found value is undefined return default value; otherwise return the value
+    return result === undefined ? defValue : result
 }
