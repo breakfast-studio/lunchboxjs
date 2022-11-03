@@ -1,6 +1,6 @@
-import { isEventKey, isLunchboxStandardNode } from '../utils'
+import { get, isEventKey, isLunchboxStandardNode } from '../utils'
 import { addEventListener } from './interaction'
-import { get, isNumber, set } from 'lodash'
+import { isNumber, set } from 'lodash'
 import type { Lunch } from '..'
 import type { Ref } from 'vue'
 
@@ -50,7 +50,7 @@ export function updateObjectProp({
     if (!target) return node
 
     // burrow down until we get property to change
-    let liveProperty
+    let liveProperty: any
     for (let i = 0; i < nestedPropertiesToCheck.length && !liveProperty; i++) {
         const nestedProperty = nestedPropertiesToCheck[i]
         const fullPath = [nestedProperty, finalKey].filter(Boolean).join('.')
@@ -59,7 +59,7 @@ export function updateObjectProp({
 
     // change property
     // first, save as array in case we need to spread it
-    if (liveProperty && isNumber(value) && liveProperty.setScalar) {
+    if (liveProperty && isNumber(value) && liveProperty?.setScalar) {
         // if value is a number and the property has a `setScalar` method, use that
         liveProperty.setScalar(value)
     } else if (liveProperty && liveProperty.set) {

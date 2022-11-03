@@ -1,6 +1,7 @@
 import { Lunch } from '..'
 
 export * from './find'
+export * from './get'
 
 // MAKE SURE THESE MATCH VALUES IN types.EventKey
 /** Type check on whether target is a Lunchbox.EventKey */
