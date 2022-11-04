@@ -1,7 +1,7 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve'
-import { babel } from '@rollup/plugin-babel'
-import { terser } from 'rollup-plugin-terser'
-import del from 'rollup-plugin-delete'
+const { nodeResolve } = require('@rollup/plugin-node-resolve')
+const { babel } = require('@rollup/plugin-babel')
+const { terser } = require('rollup-plugin-terser')
+const del = require('rollup-plugin-delete')
 
 const commonConfig = {
     plugins: [
@@ -26,7 +26,7 @@ const commonConfig = {
     external: ['lodash', 'THREE', 'three', 'vue'],
 }
 
-export default [
+module.exports.default = [
     // umd
     {
         ...commonConfig,
