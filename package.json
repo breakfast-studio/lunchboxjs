@@ -1,5 +1,5 @@
 {
-    "name": "lunchboxjs",
+    "name": "lunchboxjs-monorepo",
     "version": "1.0.0",
     "description": "monorepo for lunchboxjs",
     "main": "index.js",
