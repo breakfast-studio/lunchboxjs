@@ -17,6 +17,16 @@ export const App = defineComponent({
                         <meshBasicMaterial color="black" wireframe />
                     </mesh>
                 </mesh>
+
+                {/* loaded GLTF */}
+                <pointLight position-y={5} />
+                <ambientLight intensity={0.2} />
+                <gltf
+                    src="BoomBox.glb"
+                    position-y={0.5}
+                    position-x={2}
+                    scale={100}
+                />
             </lunchbox>
         )
     },

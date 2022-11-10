@@ -3,10 +3,12 @@
     "version": "1.0.0",
     "description": "monorepo for lunchboxjs",
     "main": "index.js",
-    "dependencies": {},
-    "devDependencies": {},
+    "devDependencies": {
+        "concurrently": "7.5.0"
+    },
     "scripts": {
-        "dev": "pnpm --filter lunchboxjs run dev"
+        "dev": "concurrently \"pnpm --filter lunchboxjs run dev\" \"pnpm --filter lunchboxjs-plugins run dev\" \"pnpm --filter demos run dev\"",
+        "build": "pnpm --filter lunchboxjs run build:lib"
     },
     "repository": {
         "type": "git",
