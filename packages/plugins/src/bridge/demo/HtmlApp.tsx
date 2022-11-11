@@ -35,6 +35,7 @@ export const HtmlApp = defineComponent({
                     appSetup={appSetup}
                     sizePolicy="container"
                     background="green"
+                    ortho
                 />
             </main>
         )
