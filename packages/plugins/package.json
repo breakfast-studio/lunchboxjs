@@ -12,9 +12,11 @@
         "build": "vite build"
     },
     "dependencies": {
+        "uuid": "8.3.2",
         "vue": "^3.2.41"
     },
     "devDependencies": {
+        "@types/uuid": "8.3.1",
         "@vitejs/plugin-vue-jsx": "2.0.0",
         "lunchboxjs": "workspace:*",
         "three": "0.141.0",

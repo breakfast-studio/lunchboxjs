@@ -6,6 +6,7 @@ const PLUGIN_ENTRY_POINTS = [
     resolve(__dirname, 'src/plugins.ts'),
     resolve(__dirname, 'src/orbit/orbit.ts'),
     resolve(__dirname, 'src/gltf/gltf.ts'),
+    resolve(__dirname, 'src/bridge/bridge.ts'),
 
     // Add new plugins here:
     // resolve(__dirname, 'src/YOUR_PLUGIN/YOUR_PLUGIN.ts'),

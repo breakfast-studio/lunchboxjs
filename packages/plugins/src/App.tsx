@@ -1,8 +1,10 @@
-import { defineComponent } from 'vue'
+import { defineComponent, inject, ref, Ref } from 'vue'
 
 export const App = defineComponent({
     name: 'App',
     setup() {
+        const color = inject<Ref<string>>('color', ref('white'))
+
         return () => (
             <lunchbox cameraPosition={[5, 5, 5]} cameraLook={[0, 0, 0]}>
                 {/* Orbit controls  */}
@@ -10,7 +12,7 @@ export const App = defineComponent({
 
                 <mesh>
                     <boxGeometry />
-                    <meshBasicMaterial color="dodgerblue" />
+                    <meshBasicMaterial color={color.value} />
 
                     <mesh scale={1.001}>
                         <boxGeometry />

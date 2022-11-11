@@ -198,9 +198,12 @@ export const getInstance = <T = unknown>(
 
 // CREATE APP
 // ====================
-export const createApp = (root: Component) => {
+export const createApp = (
+    root: Component,
+    rootProps: Record<string, any> = {}
+) => {
     const { nodeOps, interactables } = createNodeOps()
-    const app = createRenderer(nodeOps).createApp(root) as Lunch.App
+    const app = createRenderer(nodeOps).createApp(root, rootProps) as Lunch.App
 
     // provide Lunchbox interaction handlers flag (modified when user references events via
     // @click, etc)
@@ -386,6 +389,8 @@ export const createApp = (root: Component) => {
         Keys.appCameraKey,
         computed(() => app.config.globalProperties.lunchbox.camera)
     )
+
+    app._props
 
     // done
     return app
