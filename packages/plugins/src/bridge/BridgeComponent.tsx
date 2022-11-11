@@ -33,29 +33,26 @@ export const BridgeComponent = defineComponent({
         // prep container
         const container = ref<HTMLDivElement>()
         // create app
-        const initialApp = props.app ?? createApp(props.root!, ctx.attrs)
-
-        const app = props.appSetup(initialApp)
-        app._props = {
-            ...app._props,
-            ...ctx.attrs,
-        }
+        let app: Lunch.App | null = props.appSetup(
+            props.app ?? createApp(props.root!, ctx.attrs)
+        )
 
         // get all provided values - this isn't in the types or docs, so it may be unstable
         const provides = (getCurrentInstance() as any)?.provides ?? {}
         // provide values
         Object.keys(provides).forEach((key) => {
-            app.provide(key, inject(key))
+            app?.provide(key, inject(key))
         })
 
         // mount
         onMounted(() => {
-            app.mount(container.value)
+            app?.mount(container.value)
         })
 
         // unmount
         onUnmounted(() => {
             app?.unmount()
+            app = null
         })
 
         return () => <div ref={container} />
