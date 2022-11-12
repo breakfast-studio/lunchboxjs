@@ -1,0 +1,14 @@
+#app {
+    position: fixed;
+    top: 100px;
+    right: calc(50vw + 100px);
+    bottom: 100px;
+    left: 100px;
+}
+#app2 {
+    position: fixed;
+    top: 100px;
+    right: 100px;
+    bottom: 100px;
+    left: calc(50vw + 100px);
+}

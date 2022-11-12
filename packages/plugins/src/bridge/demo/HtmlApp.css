@@ -1,0 +1,15 @@
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-family: sans-serif;
+}
+h1 {
+    grid-column: span 2;
+    text-align: center;
+}
+.container {
+    min-height: 500px;
+    margin: 10px auto;
+    border: 1px solid;
+}
