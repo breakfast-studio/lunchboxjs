@@ -6,7 +6,9 @@
                 <a
                     :href="
                         item.url ??
-                        `/${item.title[0].toLowerCase()}${item.title.slice(1)}/`
+                        `/demo/${item.title[0].toLowerCase()}${item.title.slice(
+                            1
+                        )}/`
                     "
                     >{{ item.title }}</a
                 >
@@ -14,7 +16,6 @@
         </ul>
     </main>
 </template>
-
 <script lang="ts" setup>
 import demos from './demos.json'
 </script>
