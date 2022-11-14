@@ -21,6 +21,8 @@
     },
     "homepage": "https://github.com/breakfast-studio/lunchboxjs#readme",
     "workspaces": [
-        "packages/*"
+        "packages/docs",
+        "packages/lunchboxjs",
+        "packages/plugins"
     ]
 }
