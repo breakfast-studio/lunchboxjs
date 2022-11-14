@@ -8,7 +8,9 @@
     },
     "scripts": {
         "dev": "concurrently \"pnpm --filter lunchboxjs run dev\" \"pnpm --filter lunchboxjs-plugins run dev\"",
-        "build": "pnpm --filter lunchboxjs run build:lib"
+        "build": "pnpm --filter lunchboxjs run build:lib",
+        "docs:dev": "pnpm --filter docs run dev",
+        "docs:build": "pnpm --filter docs run build"
     },
     "repository": {
         "type": "git",
@@ -21,8 +23,6 @@
     },
     "homepage": "https://github.com/breakfast-studio/lunchboxjs#readme",
     "workspaces": [
-        "packages/docs",
-        "packages/lunchboxjs",
-        "packages/plugins"
+        "packages/*"
     ]
 }
