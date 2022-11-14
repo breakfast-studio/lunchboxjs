@@ -9,41 +9,6 @@
     "engines": {
         "node": ">=16.0.0"
     },
-    "zzzdependencies": {
-        "uuid": "8.3.2",
-        "vue": "^3.2.16"
-    },
-    "zzzdevDependencies": {
-        "@babel/plugin-transform-runtime": "7.18.10",
-        "@rollup/plugin-babel": "5.3.1",
-        "@rollup/plugin-node-resolve": "13.0.5",
-        "@rollup/plugin-typescript": "8.3.0",
-        "@types/node": "18.6.3",
-        "@types/three": "0.141.0",
-        "@types/uuid": "8.3.1",
-        "@vitejs/plugin-vue": "3.0.1",
-        "@vitejs/plugin-vue-jsx": "2.0.0",
-        "@vue/babel-plugin-jsx": "1.1.1",
-        "@vue/reactivity": "3.2.41",
-        "chroma-js": "2.1.2",
-        "kolorist": "1.5.1",
-        "lodash": "4.17.21",
-        "lunchboxjs-plugins": "workspace:*",
-        "nice-color-palettes": "3.0.0",
-        "prompt": "1.3.0",
-        "prompts": "2.4.2",
-        "rollup": "3.2.5",
-        "rollup-plugin-delete": "2.0.0",
-        "rollup-plugin-jsx": "1.0.3",
-        "rollup-plugin-terser": "7.0.2",
-        "three": "0.141.0",
-        "typescript": "^4.4.3",
-        "vite": "3.0.4",
-        "vite-plugin-glsl": "0.0.5",
-        "vitepress": "0.20.1",
-        "vue-jsx-factory": "0.3.0",
-        "vue-tsc": "^0.3.0"
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/breakfast-studio/lunchboxjs.git"
@@ -56,7 +21,7 @@
     },
     "homepage": "https://github.com/breakfast-studio/lunchboxjs#readme",
     "description": "",
-    "devDependencies": {
+    "dependencies": {
         "vitepress": "0.20.1"
     }
 }
