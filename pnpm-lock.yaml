@@ -5,8 +5,10 @@ importers:
   .:
     specifiers:
       concurrently: 7.5.0
+      watch: 1.0.2
     devDependencies:
       concurrently: 7.5.0
+      watch: 1.0.2
 
   packages/docs:
     specifiers:
@@ -1965,6 +1967,12 @@ packages:
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
 
+  /exec-sh/0.2.2:
+    resolution: {integrity: sha512-FIUCJz1RbuS0FKTdaAafAByGS0CPvU3R0MeHxgtl+djzCc//F8HakL8GzmVNZanasTbTAY/3DRFA0KpVqj/eAw==}
+    dependencies:
+      merge: 1.2.1
+    dev: true
+
   /eyes/0.1.8:
     resolution: {integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==}
     engines: {node: '> 0.1.90'}
@@ -2385,6 +2393,10 @@ packages:
 
   /merge-stream/2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
+    dev: true
+
+  /merge/1.2.1:
+    resolution: {integrity: sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==}
     dev: true
 
   /merge2/1.4.1:
@@ -3352,6 +3364,15 @@ packages:
       '@vue/server-renderer': 3.2.41_vue@3.2.41
       '@vue/shared': 3.2.41
     dev: false
+
+  /watch/1.0.2:
+    resolution: {integrity: sha512-1u+Z5n9Jc1E2c7qDO8SinPoZuHj7FgbgU1olSFoyaklduDvvtX7GMMtlE6OC9FTXq4KvNAOfj6Zu4vI1e9bAKA==}
+    engines: {node: '>=0.1.95'}
+    hasBin: true
+    dependencies:
+      exec-sh: 0.2.2
+      minimist: 1.2.7
+    dev: true
 
   /which/2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}

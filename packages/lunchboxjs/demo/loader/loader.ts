@@ -1,4 +1,4 @@
-import { createApp } from '../../src'
+import { createApp } from '../../'
 import App from './LoaderTest.vue'
 import { orbit } from 'lunchboxjs-plugins'
 
