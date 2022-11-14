@@ -1,4 +1,4 @@
-lockfileVersion: 5.4
+lockfileVersion: 5.3
 
 importers:
 
@@ -49,10 +49,10 @@ importers:
       vue: 3.2.41
     devDependencies:
       '@babel/plugin-transform-runtime': 7.18.10
-      '@histoire/plugin-vue': 0.11.7_5apc36nxogcazbeiepzp5pff4y
+      '@histoire/plugin-vue': 0.11.7_e81e2df9b771840c848823f2febca5e6
       '@rollup/plugin-babel': 5.3.1_rollup@3.2.5
       '@rollup/plugin-node-resolve': 13.0.5_rollup@3.2.5
-      '@rollup/plugin-typescript': 8.3.0_oa2candk7eitu7usnsurwiyuuu
+      '@rollup/plugin-typescript': 8.3.0_rollup@3.2.5+typescript@4.8.4
       '@types/node': 18.6.3
       '@types/three': 0.141.0
       '@types/uuid': 8.3.1
@@ -61,7 +61,7 @@ importers:
       '@vue/babel-plugin-jsx': 1.1.1
       '@vue/reactivity': 3.2.41
       chroma-js: 2.1.2
-      histoire: 0.11.7_b2wdgj4n3vhzko3j6rr26im344
+      histoire: 0.11.7_@types+node@18.6.3+vite@3.0.4
       kolorist: 1.5.1
       lodash: 4.17.21
       lunchboxjs-plugins: link:../plugins
@@ -709,7 +709,7 @@ packages:
       '@histoire/vendors': 0.11.7
     dev: true
 
-  /@histoire/plugin-vue/0.11.7_5apc36nxogcazbeiepzp5pff4y:
+  /@histoire/plugin-vue/0.11.7_e81e2df9b771840c848823f2febca5e6:
     resolution: {integrity: sha512-wtfBlRbqSuw5elTcjDtL/BbBuZcVC/Gr7XcUNopRe/3+aBaC7LFyaBetR3T7JuO8W2AiXcPSrMBHrZ97K7v55A==}
     peerDependencies:
       histoire: ^0.11.7
@@ -718,7 +718,7 @@ packages:
       '@histoire/controls': 0.11.7
       '@histoire/shared': 0.11.7_vite@3.0.4
       '@histoire/vendors': 0.11.7
-      histoire: 0.11.7_b2wdgj4n3vhzko3j6rr26im344
+      histoire: 0.11.7_@types+node@18.6.3+vite@3.0.4
       vue: 3.2.41
     transitivePeerDependencies:
       - vite
@@ -865,7 +865,7 @@ packages:
       rollup: 3.2.5
     dev: true
 
-  /@rollup/plugin-typescript/8.3.0_oa2candk7eitu7usnsurwiyuuu:
+  /@rollup/plugin-typescript/8.3.0_rollup@3.2.5+typescript@4.8.4:
     resolution: {integrity: sha512-I5FpSvLbtAdwJ+naznv+B4sjXZUcIvLLceYpITAn7wAP8W0wqc5noLdGIp9HGVntNhRWXctwPYrSSFQxtl0FPA==}
     engines: {node: '>=8.0.0'}
     peerDependencies:
@@ -1703,8 +1703,6 @@ packages:
       finalhandler: 1.1.2
       parseurl: 1.3.3
       utils-merge: 1.0.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /constant-case/3.0.4:
@@ -1780,11 +1778,6 @@ packages:
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
     dependencies:
       ms: 2.0.0
     dev: true
@@ -2457,8 +2450,6 @@ packages:
       parseurl: 1.3.3
       statuses: 1.5.0
       unpipe: 1.0.0
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /flexsearch/0.7.21:
@@ -2682,7 +2673,7 @@ packages:
       tslib: 2.4.1
     dev: true
 
-  /histoire/0.11.7_b2wdgj4n3vhzko3j6rr26im344:
+  /histoire/0.11.7_@types+node@18.6.3+vite@3.0.4:
     resolution: {integrity: sha512-N1W5wIKXD8p26DydduiBJHewbi4t9MVA9ZNsnmMsiCfGLFUbtLbsC4/k1GKLuDuM8DhpEh4ItOEw5SLKupM5kw==}
     hasBin: true
     peerDependencies:
@@ -2707,7 +2698,7 @@ packages:
       happy-dom: 2.55.0
       jiti: 1.16.0
       markdown-it: 12.3.2
-      markdown-it-anchor: 8.6.5_2zb4u3vubltivolgu556vv4aom
+      markdown-it-anchor: 8.6.5_d643ca6eb40ae68ab966a77bead78073
       markdown-it-attrs: 4.1.4_markdown-it@12.3.2
       markdown-it-emoji: 2.0.2
       micromatch: 4.0.5
@@ -3048,7 +3039,7 @@ packages:
       once: 1.3.3
     dev: true
 
-  /markdown-it-anchor/8.6.5_2zb4u3vubltivolgu556vv4aom:
+  /markdown-it-anchor/8.6.5_d643ca6eb40ae68ab966a77bead78073:
     resolution: {integrity: sha512-PI1qEHHkTNWT+X6Ip9w+paonfIQ+QZP9sCeMYi47oqhH+EsW8CrJ8J7CzV19QVOj6il8ATGbK2nTECj22ZHGvQ==}
     peerDependencies:
       '@types/markdown-it': '*'
