@@ -8,9 +8,7 @@
     },
     "scripts": {
         "dev": "concurrently \"pnpm --filter lunchboxjs run dev\" \"pnpm --filter lunchboxjs-plugins run dev\"",
-        "build": "pnpm --filter lunchboxjs run build:lib",
-        "docs:dev": "pnpm --filter docs run dev",
-        "docs:build": "pnpm --filter docs run build"
+        "build": "pnpm --filter lunchboxjs run build:lib"
     },
     "repository": {
         "type": "git",
