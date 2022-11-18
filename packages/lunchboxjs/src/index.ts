@@ -395,3 +395,6 @@ export const createApp = (
     // done
     return app
 }
+
+/** Use this plugin to add a <lunchbox> component in your HTML app. */
+export { bridge as lunchbox } from './plugins/bridge/bridge'

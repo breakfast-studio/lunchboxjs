@@ -28,5 +28,6 @@
         "title": "Mesh On Render Functions",
         "url": "/demo/mesh-on-render-functions/"
     },
-    { "title": "GetInstance", "url": "/demo/get-instance/" }
+    { "title": "GetInstance", "url": "/demo/get-instance/" },
+    { "title": "HTML to Lunchbox Bridge", "url": "/demo/bridge/" }
 ]

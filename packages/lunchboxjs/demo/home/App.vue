@@ -18,4 +18,6 @@
 </template>
 <script lang="ts" setup>
 import demos from './demos.json'
+
+const sortedDemos = demos.sort((a, b) => a.title.localeCompare(b.title))
 </script>
