@@ -9,7 +9,7 @@
 
 <script lang="ts" setup>
 import { onMounted, watch } from 'vue'
-import { useGlobals, useUpdateGlobals } from '../../src'
+import { useGlobals, useUpdateGlobals } from '../..'
 
 const globals = useGlobals()
 const updateGlobals = useUpdateGlobals()

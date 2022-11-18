@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeRender } from '../../src'
+import { onBeforeRender } from '../..'
 import { ref } from 'vue'
 import frag from './frag.glsl'
 import vert from './vert.glsl'

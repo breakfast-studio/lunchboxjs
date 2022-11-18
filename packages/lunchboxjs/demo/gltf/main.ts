@@ -1,8 +1,5 @@
-import { createApp } from '../../src'
+import { createApp } from '../..'
 import App from './App.vue'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import Gltf from '../../extras/Gltf.vue'
+import { gltf } from 'lunchboxjs-plugins'
 
-createApp(App)
-    .extend({ GltfLoader: GLTFLoader })
-    .mount('#app')
+createApp(App).use(gltf).mount('#app')

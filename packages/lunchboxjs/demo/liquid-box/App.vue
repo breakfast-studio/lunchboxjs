@@ -1,6 +1,6 @@
 <template>
     <Lunchbox :cameraPosition="[2, 2, 4]">
-        <OrbitControlsWrapper />
+        <orbit />
         <mesh :scale="2">
             <boxGeometry :args="[1, 1, 1, 100, 100, 100]" />
             <shaderMaterial
@@ -12,8 +12,7 @@
 
 <script lang="ts" setup>
 import { reactive } from 'vue'
-import { onBeforeRender } from '../../src'
-import OrbitControlsWrapper from '../../extras/OrbitControlsWrapper.vue'
+import { onBeforeRender } from '../../'
 import vertexShader from './vert.vs?raw'
 import fragmentShader from './frag.fs?raw'
 

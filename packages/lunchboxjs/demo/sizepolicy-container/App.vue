@@ -1,10 +1,9 @@
 <template>
-    <section id="lunchbox-app">
-    </section>
+    <section id="lunchbox-app"></section>
 </template>
 
 <script lang="ts" setup>
-import { createApp } from '../../src'
+import { createApp } from '../..'
 import { onMounted } from 'vue'
 import Basic from './Basic.vue'
 

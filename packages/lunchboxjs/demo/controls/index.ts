@@ -1,4 +1,4 @@
-import { createApp } from '../../src'
+import { createApp } from '../..'
 import App from './App.vue'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
 import TransformControlsWrapper from './TransformControlsWrapper.vue'

@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-import { useBeforeRender, useAfterRender } from '../../src/'
+import { useBeforeRender, useAfterRender } from '../..//'
 
 onMounted(() => {
     alert('Open the console to see before/after render events.')

@@ -22,9 +22,9 @@
 /*
 
 */
-// import OrbitControlsWrapper from '../../src/examples/OrbitControlsWrapper.vue'
+// import OrbitControlsWrapper from '../../examples/OrbitControlsWrapper.vue'
 import { onMounted, ref } from 'vue'
-import { Lunch } from '../../src'
+import { Lunch } from '../..'
 import * as THREE from 'three'
 //:cameraPosition="[2, 2, 5]"
 // setup

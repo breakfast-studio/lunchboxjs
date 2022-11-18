@@ -5,7 +5,7 @@
         background="white"
         r3f
     >
-        <OrbitControlsWrapper />
+        <orbit />
         <!-- lighting -->
         <directionalLight :position="[1, 2, 1.5]" :intensity="1" />
         <ambientLight :intensity="0.4" />
@@ -43,5 +43,4 @@ import SceneProp from './SceneProp.vue'
 import Car from './Car.vue'
 import PlaneMask from './PlaneMask.vue'
 import Frame from './Frame.vue'
-import OrbitControlsWrapper from '../../extras/OrbitControlsWrapper.vue'
 </script>

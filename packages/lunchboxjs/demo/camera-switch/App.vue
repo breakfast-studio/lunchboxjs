@@ -54,7 +54,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { PCFSoftShadowMap } from 'three'
 import type { PerspectiveCamera } from 'three'
-import { Lunch, onBeforeRender, onCameraReady } from '../../src'
+import { Lunch, onBeforeRender, onCameraReady } from '../..'
 
 const cameraCount = 3
 const cameraIndex = ref(0)

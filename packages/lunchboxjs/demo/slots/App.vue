@@ -15,7 +15,7 @@
 import { ref } from '@vue/reactivity'
 import { watch } from 'vue'
 import * as THREE from 'three'
-import { Lunch } from '../../src'
+import { Lunch } from '../..'
 
 const r = ref<Lunch.LunchboxComponent<THREE.Renderer>>()
 let renderer: THREE.Renderer

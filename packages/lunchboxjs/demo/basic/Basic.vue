@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeRender } from '../../src'
+import { onBeforeRender } from '../../'
 import { ref } from 'vue'
 
 const rotation = ref({ x: 0, y: 0 })

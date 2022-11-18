@@ -1,8 +1,8 @@
-import { createApp } from '../../src'
+import { createApp } from '../../'
 import App from './App.vue'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry'
+import { orbit } from 'lunchboxjs-plugins'
 
-const app = createApp(App).extend({ OrbitControls, RoundedBoxGeometry })
+const app = createApp(App).use(orbit).extend({ RoundedBoxGeometry })
 
 app.mount('#app')

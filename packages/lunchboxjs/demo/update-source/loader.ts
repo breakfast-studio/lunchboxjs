@@ -1,4 +1,4 @@
-import { createApp } from '../../src'
+import { createApp } from '../..'
 import App from './UpdateSource.vue'
 
 const app = createApp(App)

@@ -88,7 +88,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Lunch, onBeforeRender, onStart } from '../../src'
+import { Lunch, onBeforeRender, onStart } from '../../'
 import * as THREE from 'three'
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
 

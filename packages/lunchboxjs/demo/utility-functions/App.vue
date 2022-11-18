@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onCameraReady, onRendererReady, onSceneReady } from '../../src'
+import { onCameraReady, onRendererReady, onSceneReady } from '../..'
 
 onCameraReady((cam) => console.log(cam))
 onRendererReady((renderer) => console.log(renderer))

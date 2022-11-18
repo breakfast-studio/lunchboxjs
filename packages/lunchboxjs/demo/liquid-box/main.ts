@@ -1,8 +1,5 @@
-import { createApp } from '../../src'
+import { createApp } from '../../'
 import App from './App.vue'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { orbit } from 'lunchboxjs-plugins'
 
-createApp(App)
-    .extend({ OrbitControls })
-    .mount('#app')
-
+createApp(App).use(orbit).mount('#app')

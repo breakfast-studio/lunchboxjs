@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onStart } from '../../src'
+import { onStart } from '../..'
 
 onStart(({ scene }) => {
     console.log(scene?.children)

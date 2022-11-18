@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeRender } from '../../src'
+import { onBeforeRender } from '../../'
 import { onMounted, ref } from 'vue'
 import { EqualStencilFunc, NotEqualStencilFunc, KeepStencilOp } from 'three'
 

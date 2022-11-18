@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { useCamera, useRenderer } from '../../src'
+import { useCamera, useRenderer } from '../..'
 
 // props
 const props = defineProps<{

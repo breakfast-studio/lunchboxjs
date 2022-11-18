@@ -5,13 +5,12 @@
             <meshBasicMaterial color="blue" />
         </mesh>
 
-        <OrbitControlsWrapper />
+        <orbit />
     </Lunchbox>
 </template>
 
 <script lang="ts" setup>
-import { useCustomRender } from '../../src'
-import OrbitControlsWrapper from '../../extras/OrbitControlsWrapper.vue'
+import { useCustomRender } from '../..'
 import { Vector2 } from 'three'
 
 // effect composer

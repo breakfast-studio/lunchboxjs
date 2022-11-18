@@ -6,7 +6,7 @@
         </mesh>
 
         <mesh :position-x="2" v-if="showMesh2">
-            <boxGeometry ref="geo"/>
+            <boxGeometry ref="geo" />
             <meshBasicMaterial color="#ff00ff" />
         </mesh>
     </Lunchbox>
@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import { getInstance } from '../../src'
+import { getInstance } from '../..'
 
 // mesh instance
 const mesh = ref()
@@ -25,9 +25,11 @@ const geo = ref()
 const instance2 = getInstance<THREE.BoxGeometry>(geo)
 const showMesh2 = ref(false)
 onMounted(() => {
-    setTimeout(() => showMesh2.value = true, 3000)
+    setTimeout(() => (showMesh2.value = true), 3000)
 })
 
 // log instance updates
-watch([instance, instance2], (newVal) => console.log(newVal), { immediate: true })
+watch([instance, instance2], (newVal) => console.log(newVal), {
+    immediate: true,
+})
 </script>

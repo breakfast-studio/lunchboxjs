@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { onAfterRender } from '../../src'
+import { onAfterRender } from '../..'
 
 const rotation = ref({ x: 0, y: 0 })
 

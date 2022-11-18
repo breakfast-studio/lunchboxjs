@@ -7,6 +7,6 @@
 </template>
 
 <script lang="ts" setup>
-// import OrbitControlsWrapper from '../../src/examples/OrbitControlsWrapper.vue'
+// import OrbitControlsWrapper from '../../examples/OrbitControlsWrapper.vue'
 import EventComponent from './Events/EventComponent.vue'
 </script>

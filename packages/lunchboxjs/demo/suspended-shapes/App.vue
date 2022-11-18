@@ -68,7 +68,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { onBeforeRender } from '../../src'
+import { onBeforeRender } from '../..'
 import { PCFShadowMap } from 'three'
 import niceColors from 'nice-color-palettes'
 

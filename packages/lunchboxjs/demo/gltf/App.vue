@@ -3,7 +3,7 @@
         <directionalLight />
         <pointLight :position-x="2" />
 
-        <Gltf
+        <gltf
             src="/gltf/BoomBox.glb"
             @progress="log"
             @load="log"
@@ -15,7 +15,5 @@
 </template>
 
 <script lang="ts" setup>
-import Gltf from '../../extras/Gltf.vue'
-
 const log = console.log
 </script>
