@@ -1,11 +1,13 @@
 {
     "name": "lunchboxjs-plugins",
-    "private": true,
-    "version": "0.0.0",
+    "version": "0.0.1",
     "type": "module",
     "main": "dist/plugins.es.js",
+    "types": "./types.d.ts",
     "files": [
-        "dist"
+        "dist",
+        "src",
+        "types.d.ts"
     ],
     "scripts": {
         "dev": "vite",
