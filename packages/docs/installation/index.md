@@ -1,10 +1,16 @@
 # Installation
 
+In any usage of Lunchbox, the first step is to install the package and ThreeJS:
+
+`npm install lunchboxjs three`
+
+Next steps depend on your workflow:
+
+* [Lunchbox-Only](#lunchbox-only-apps)
+* [Nuxt 3](#nuxt-3)
+* [Vue Apps](#vue-apps) 
+
 ## Lunchbox-Only Apps
-
-Install the package:
-
-`npm install lunchboxjs`
 
 Then create and mount your app just like [Vue](https://v3.vuejs.org/guide/instance.html#creating-an-application-instance). The only difference is you import `createApp` from `lunchboxjs`, not `vue`:
 
@@ -18,7 +24,21 @@ app.mount('#app')
 
 From there, you can write in Vue [single file components (SFCs)](https://v3.vuejs.org/guide/single-file-component.html#single-file-components) or however else you write your Vue apps. (We'll be writing the rest of these docs in SFCs.)
 
-## HTML Apps
+## Nuxt 3
+
+To use Lunchbox with [Nuxt 3](https://nuxt.com/), create a file in your [`plugins` directory](https://nuxt.com/docs/guide/directory-structure/plugins#plugins-directory) called `lunchbox.client.ts` (or `lunchbox.client.js` if you're using JS) and paste the following:
+
+```ts
+import { lunchbox } from 'lunchboxjs'
+
+export default defineNuxtPlugin((nuxtApp) => {
+    nuxtApp.vueApp.use(lunchbox)
+})
+```
+
+This installs the Lunchbox Vue plugin. From there, follow the steps below in the [HTML Apps component section](#component).
+
+## Vue Apps
 
 ### Plugin
 
@@ -34,6 +54,8 @@ import App from './App.vue'
 
 createApp(App).use(lunchbox).mount('#app')
 ```
+
+### Component
 
 Then, in your `App.vue` component:
 
