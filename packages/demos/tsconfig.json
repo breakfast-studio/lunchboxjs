@@ -12,17 +12,14 @@
       "esnext",
       "dom"
     ],
-    "paths": {
-      "lunchboxjs": [
-        "./lunchboxjs/src"
-      ]
-    }
+    "baseUrl": "./"
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/types.ts"
+    "src/types.ts",
+    "../lunchboxjs/**/*.ts"
   ]
 }

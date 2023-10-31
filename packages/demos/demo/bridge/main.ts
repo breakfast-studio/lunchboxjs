@@ -1,5 +1,5 @@
-import { createApp } from 'vue'
-import { lunchbox } from '../../src'
-import App from './HtmlApp.vue'
+import { createApp } from "vue";
+import { lunchbox } from "../../";
+import App from "./HtmlApp.vue";
 
-createApp(App).use(lunchbox).mount('#app')
+createApp(App).use(lunchbox).mount("#app");

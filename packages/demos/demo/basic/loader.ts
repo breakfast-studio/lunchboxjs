@@ -1,4 +1,4 @@
-import { createApp } from "lunchboxjs/src";
+import { createApp } from "../../";
 import App from "./Basic.vue";
 
 const app = createApp(App);

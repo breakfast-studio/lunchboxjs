@@ -75,6 +75,7 @@
   "bugs": {
     "url": "https://github.com/breakfast-studio/lunchboxjs/issues"
   },
+  "main": "./lunchbox.ts",
   "homepage": "https://github.com/breakfast-studio/lunchboxjs#readme",
   "description": ""
 }
