@@ -8,7 +8,7 @@
     "watch": "1.0.2"
   },
   "scripts": {
-    "dev:lunchboxjs": "concurrently \"pnpm run watch:lunchboxjs-plugins\" \"pnpm --filter lunchboxjs run dev\"",
+    "dev:lunchboxjs": "concurrently \"pnpm run watch:lunchboxjs-plugins\" \"pnpm --filter demos run dev\"",
     "watch:lunchboxjs": "watch \"pnpm run build\" packages/lunchboxjs/src --ignoreDirectoryPattern=/dist/",
     "dev:lunchboxjs-plugins": "concurrently \"pnpm run watch:lunchboxjs\" \"pnpm --filter lunchboxjs-plugins run dev\"",
     "watch:lunchboxjs-plugins": "watch \"pnpm --filter lunchboxjs-plugins build\" packages/plugins/src --ignoreDirectoryPattern=/dist/",

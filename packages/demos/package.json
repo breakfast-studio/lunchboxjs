@@ -1,5 +1,5 @@
 {
-  "name": "lunchboxjs",
+  "name": "demos",
   "version": "0.2.1020",
   "scripts": {
     "dev": "vite -c utils/vite.config.ts",
@@ -8,14 +8,18 @@
     "build:rollup": "rollup -c ./utils/lib-rollup.js",
     "build:dts": "node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.es.d.ts && node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.umd.d.ts",
     "build:lib": "node utils/rm js && npm run build:tsc && npm run build:rollup && npm run build:dts",
-    "prepare": "npm run build:lib"
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs",
+    "demo:create": "node utils/createExample"
   },
   "engines": {
     "node": ">=16.0.0"
   },
   "dependencies": {
     "uuid": "8.3.2",
-    "vue": "^3.2.16"
+    "vue": "^3.2.16",
+    "lunchboxjs": "workspace:*"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "7.18.10",
@@ -58,9 +62,6 @@
     "src",
     "types.d.ts"
   ],
-  "main": "./dist/lunchboxjs.js",
-  "module": "./dist/lunchboxjs.module.js",
-  "types": "dist/lunchboxjs.es.d.ts",
   "directories": {
     "doc": "docs"
   },
