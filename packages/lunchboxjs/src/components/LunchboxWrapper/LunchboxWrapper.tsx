@@ -69,7 +69,7 @@ export const LunchboxWrapper = defineComponent({
 
         // https://threejs.org/docs/index.html#manual/en/introduction/Color-management
         if (props.r3f && (THREE as any)?.ColorManagement) {
-            ;(THREE as any).ColorManagement.legacyMode = false
+            ; (THREE as any).ColorManagement.legacyMode = false
         }
 
         const interactables = useLunchboxInteractables()
@@ -155,7 +155,11 @@ export const LunchboxWrapper = defineComponent({
                 )
 
                 if (props.r3f) {
-                    normalizedRenderer.outputEncoding = THREE.sRGBEncoding
+                    if ((normalizedRenderer as any).outputEncoding && (THREE as any).sRGBEncoding) {
+                        (normalizedRenderer as any).outputEncoding = (THREE as any).sRGBEncoding
+                    } else if (normalizedRenderer.outputColorSpace) {
+                        normalizedRenderer.outputColorSpace = THREE.SRGBColorSpace
+                    }
                     normalizedRenderer.toneMapping = THREE.ACESFilmicToneMapping
                 }
 

@@ -14,6 +14,7 @@ import { createNodeOps } from './nodeOps'
 import { extend, MiniDom } from './core'
 import { components } from './components'
 import { Lunch } from './types'
+import * as THREE from 'three'
 
 export * from './core'
 export * from './types'

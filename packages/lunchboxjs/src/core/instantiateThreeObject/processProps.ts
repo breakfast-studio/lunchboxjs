@@ -1,4 +1,5 @@
 import type { Lunch } from '../..'
+import * as THREE from 'three'
 
 /** Process props into either themselves or the $attached value */
 export function processProp<T, U = THREE.Object3D>({

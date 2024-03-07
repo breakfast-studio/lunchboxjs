@@ -46,8 +46,8 @@ importers:
         specifier: 18.6.3
         version: 18.6.3
       '@types/three':
-        specifier: 0.141.0
-        version: 0.141.0
+        specifier: 0.162.0
+        version: 0.162.0
       '@types/uuid':
         specifier: 8.3.1
         version: 8.3.1
@@ -97,8 +97,8 @@ importers:
         specifier: 7.0.2
         version: 7.0.2(rollup@3.2.5)
       three:
-        specifier: 0.141.0
-        version: 0.141.0
+        specifier: 0.162.0
+        version: 0.162.0
       typescript:
         specifier: ^4.4.3
         version: 4.8.4
@@ -124,6 +124,9 @@ importers:
         specifier: ^3.2.41
         version: 3.2.41
     devDependencies:
+      '@types/three':
+        specifier: ^0.162.0
+        version: 0.162.0
       '@types/uuid':
         specifier: 8.3.1
         version: 8.3.1
@@ -134,8 +137,8 @@ importers:
         specifier: workspace:*
         version: link:../lunchboxjs
       three:
-        specifier: 0.141.0
-        version: 0.141.0
+        specifier: 0.162.0
+        version: 0.162.0
       typescript:
         specifier: ^4.6.4
         version: 4.8.4
@@ -796,6 +799,10 @@ packages:
       defer-to-connect: 1.1.3
     dev: true
 
+  /@tweenjs/tween.js@23.1.1:
+    resolution: {integrity: sha512-ZpboH7pCPPeyBWKf8c7TJswtCEQObFo3bOBYalm99NzZarATALYCo5OhbCa/n4RQyJyHfhkdx+hNrdL5ByFYDw==}
+    dev: true
+
   /@types/estree@0.0.39:
     resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==}
     dev: true
@@ -833,10 +840,18 @@ packages:
       '@types/node': 18.6.3
     dev: true
 
-  /@types/three@0.141.0:
-    resolution: {integrity: sha512-OJdKDgTPVBUgc+s74DYoy4aLznbFFC38Xm4ElmU1YwGNgR7GGFVvFCX7lpVgOsT6S1zSJtGdajTsOYE8/xY9nA==}
+  /@types/stats.js@0.17.3:
+    resolution: {integrity: sha512-pXNfAD3KHOdif9EQXZ9deK82HVNaXP5ZIF5RP2QG6OQFNTaY2YIetfrE9t528vEreGQvEPRDDc8muaoYeK0SxQ==}
+    dev: true
+
+  /@types/three@0.162.0:
+    resolution: {integrity: sha512-0j5yZcVukVIhrhSIC7+LmBPkkMoMuEJ1AfYBZfgNytdYqYREMuiyXWhYOMeZLBElTEAlJIZn7r2W3vqTIgjWlg==}
     dependencies:
+      '@tweenjs/tween.js': 23.1.1
+      '@types/stats.js': 0.17.3
       '@types/webxr': 0.5.0
+      fflate: 0.6.10
+      meshoptimizer: 0.18.1
     dev: true
 
   /@types/uuid@8.3.1:
@@ -2058,6 +2073,10 @@ packages:
       reusify: 1.0.4
     dev: true
 
+  /fflate@0.6.10:
+    resolution: {integrity: sha512-IQrh3lEPM93wVCEczc9SaAOvkmcoQn/G8Bo1e8ZPlY3X3bnAxWaBdvTdvM1hP62iZp0BXWDy4vTAy4fF0+Dlpg==}
+    dev: true
+
   /fill-range@7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
     engines: {node: '>=8'}
@@ -2474,6 +2493,10 @@ packages:
 
   /merge@1.2.1:
     resolution: {integrity: sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==}
+    dev: true
+
+  /meshoptimizer@0.18.1:
+    resolution: {integrity: sha512-ZhoIoL7TNV4s5B6+rx5mC//fw8/POGyNxS/DZyCJeiZ12ScLfVwRE/GfsxwiTkMYYD5DmK2/JXnEVXqL4rF+Sw==}
     dev: true
 
   /micromatch@4.0.5:
@@ -3116,8 +3139,8 @@ packages:
       source-map-support: 0.5.21
     dev: true
 
-  /three@0.141.0:
-    resolution: {integrity: sha512-JaSDAPWuk4RTzG5BYRQm8YZbERUxTfTDVouWgHMisS2to4E5fotMS9F2zPFNOIJyEFTTQDDKPpsgZVThKU3pXA==}
+  /three@0.162.0:
+    resolution: {integrity: sha512-xfCYj4RnlozReCmUd+XQzj6/5OjDNHBy5nT6rVwrOKGENAvpXe2z1jL+DZYaMu4/9pNsjH/4Os/VvS9IrH7IOQ==}
     dev: true
 
   /through2@2.0.5:
