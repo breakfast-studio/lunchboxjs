@@ -269,12 +269,10 @@ export const LunchboxWrapper = defineComponent({
                         <div
                             class="lunchbox-container"
                             style={fillStyle(containerFillStyle) as any}
-                            ref={container as any}
+                            ref={container}
                             data-lunchbox="true"
                         >
-                            {/* @ts-ignore */}
                             <canvas
-                                // @ts-ignore
                                 ref={canvas}
                                 class="lunchbox-canvas"
                                 style={fillStyle(canvasFillStyle) as any}
@@ -309,7 +307,6 @@ export const LunchboxWrapper = defineComponent({
                 ) : (
                     // ...otherwise, add default scene
                     // TODO: why does this need to be a separate component? <scene> throws an error
-                    // @ts-ignore
                     <LunchboxScene ref={scene}>
                         {context.slots?.default?.()}
                     </LunchboxScene>
@@ -341,7 +338,6 @@ export const LunchboxWrapper = defineComponent({
                 )}
 
                 {/* Lunchbox interaction handlers */}
-                {/* @ts-ignore */}
                 {interactables?.value.length && <LunchboxEventHandlers />}
             </>
         )
