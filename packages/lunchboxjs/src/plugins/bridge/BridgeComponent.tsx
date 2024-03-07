@@ -55,6 +55,6 @@ export const BridgeComponent = defineComponent({
             app = null
         })
 
-        return () => <div ref={container as any} />
+        return () => <div ref={container} />
     },
 })
