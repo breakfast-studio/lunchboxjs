@@ -18,6 +18,7 @@
         "vue": "^3.2.41"
     },
     "devDependencies": {
+        "@types/react": "^18.2.64",
         "@types/three": "^0.162.0",
         "@types/uuid": "8.3.1",
         "@vitejs/plugin-vue-jsx": "2.0.0",
