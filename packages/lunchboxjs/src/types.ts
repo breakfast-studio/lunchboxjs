@@ -1,4 +1,7 @@
-type RendererStandardNode<T = THREE.Object3D> =
+type ThreeObject3D = import('three').Object3D
+type ThreeIntersection<T extends ThreeObject3D> = import('three').Intersection<T>
+type ThreeShadowMapType = import('three').ShadowMapType
+type RendererStandardNode<T = ThreeObject3D> =
     import('./core').MiniDom.RendererStandardNode<T>
 type RootNode = import('./core/minidom').MiniDom.RendererRootNode
 type VNodeProps = import('vue').VNodeProps
@@ -8,6 +11,7 @@ type WatchStopHandle = import('vue').WatchStopHandle
 type ThreeCamera = import('three').Camera
 type ThreeRenderer = import('three').Renderer
 type ThreeScene = import('three').Scene
+type ThreeWebGLRenderer = import('three').WebGLRenderer
 
 export declare namespace Lunch {
     /** Lunchbox app. */
@@ -48,7 +52,7 @@ export declare namespace Lunch {
     /** Lunchbox component catalogue. */
     interface Catalogue {
         [key: string]: {
-            new (...args: any): { [key: string]: any }
+            new(...args: any): { [key: string]: any }
         }
     }
 
@@ -65,7 +69,7 @@ export declare namespace Lunch {
     }
 
     type EventCallback = (options: {
-        intersection: THREE.Intersection<any>
+        intersection: ThreeIntersection<any>
     }) => void
 
     // MAKE SURE THESE MATCH VALUES IN lib.isEventKey
@@ -94,7 +98,7 @@ export declare namespace Lunch {
     }
 
     /** Meta info needed on a standard Lunchbox node. */
-    interface StandardMeta<T = THREE.Object3D> extends MetaBase {
+    interface StandardMeta<T = ThreeObject3D> extends MetaBase {
         attached: { [key: string]: any }
         attachedArray: { [key: string]: Array<any> }
         instance: T | null
@@ -125,8 +129,8 @@ export declare namespace Lunch {
     type ShadowSugar =
         | boolean
         | {
-              type: THREE.ShadowMapType
-          }
+            type: ThreeShadowMapType
+        }
 
     interface TextMeta extends MetaBase {
         text: string
@@ -141,19 +145,19 @@ export declare namespace Lunch {
         [key: string]: any
     }
 
-    type LunchboxComponent<T = THREE.Object3D> = {
+    type LunchboxComponent<T = ThreeObject3D> = {
         $el: Node<T>
     }
 
-    type Node<T = THREE.Object3D> = RendererStandardNode<T>
+    type Node<T = ThreeObject3D> = RendererStandardNode<T>
 
     type UpdateCallback = (properties: UpdateCallbackProperties) => void
 
     interface UpdateCallbackProperties {
         app: App
-        scene?: THREE.Scene | null
-        renderer?: THREE.Renderer | null
-        camera?: THREE.Camera | null
+        scene?: ThreeScene | null
+        renderer?: ThreeRenderer | null
+        camera?: ThreeCamera | null
         updateSource?: WatchSource | null
     }
 
@@ -176,7 +180,7 @@ export declare namespace Lunch {
         r3f?: boolean
         // TODO: Why doesn't ConstructorParameters<THREE.WebGLRenderer> work here?
         rendererArguments?: object
-        rendererProperties?: Partial<THREE.WebGLRenderer>
+        rendererProperties?: Partial<ThreeWebGLRenderer>
         sizePolicy?: SizePolicy
         shadow?: ShadowSugar
         transparent?: boolean

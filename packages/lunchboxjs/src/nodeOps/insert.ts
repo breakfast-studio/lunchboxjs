@@ -5,6 +5,7 @@ import {
 } from '../utils'
 import { MiniDom } from '../core/minidom'
 import { Lunch } from '..'
+import * as THREE from 'three'
 
 export const insert = (
     child: MiniDom.RendererBaseNode,

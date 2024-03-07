@@ -1,4 +1,5 @@
 import { toRaw } from 'vue'
+import * as THREE from 'three'
 
 export const resizeCanvas = (
     camera: THREE.Camera,

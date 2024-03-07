@@ -1,6 +1,7 @@
 import { isLunchboxRootNode } from '../utils'
 import { instantiateThreeObject, MiniDom } from '.'
 import type { Lunch } from '..'
+import * as THREE from 'three'
 
 /** Create a new Lunchbox comment node. */
 export function createCommentNode(options: Partial<Lunch.CommentMeta> = {}) {

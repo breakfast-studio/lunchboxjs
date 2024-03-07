@@ -1,5 +1,6 @@
 import { v4 as createUuid } from 'uuid'
 import type { Lunch } from '..'
+import * as THREE from 'three'
 
 // MiniDom recreates DOM node properties and methods.
 // Since Vue 3 is a DOM-first framework, many of its nodeOps depend on
@@ -129,8 +130,7 @@ export namespace MiniDom {
 
     export class RendererBaseNode
         extends MiniDom.BaseNode
-        implements Lunch.MetaBase
-    {
+        implements Lunch.MetaBase {
         constructor(
             options: Partial<Lunch.MetaBase> = {},
             parent?: MiniDom.BaseNode
@@ -168,8 +168,7 @@ export namespace MiniDom {
 
     export class RendererRootNode
         extends MiniDom.RendererBaseNode
-        implements Lunch.RootMeta
-    {
+        implements Lunch.RootMeta {
         constructor(
             options: Partial<Lunch.RootMeta> = {},
             parent?: MiniDom.BaseNode
@@ -185,8 +184,7 @@ export namespace MiniDom {
 
     export class RendererCommentNode
         extends MiniDom.RendererBaseNode
-        implements Lunch.CommentMeta
-    {
+        implements Lunch.CommentMeta {
         constructor(
             options: Partial<Lunch.CommentMeta> = {},
             parent?: MiniDom.BaseNode
@@ -200,8 +198,7 @@ export namespace MiniDom {
 
     export class RendererDomNode
         extends MiniDom.RendererBaseNode
-        implements Lunch.DomMeta
-    {
+        implements Lunch.DomMeta {
         constructor(
             options: Partial<Lunch.DomMeta> = {},
             parent?: MiniDom.BaseNode
@@ -216,8 +213,7 @@ export namespace MiniDom {
 
     export class RendererTextNode
         extends MiniDom.RendererBaseNode
-        implements Lunch.TextMeta
-    {
+        implements Lunch.TextMeta {
         constructor(
             options: Partial<Lunch.TextMeta> = {},
             parent?: MiniDom.BaseNode

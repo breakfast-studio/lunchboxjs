@@ -2,6 +2,7 @@ import { MiniDom } from '../../core'
 import { Lunch } from '../../types'
 import { Ref } from 'vue'
 import { resizeCanvas } from './resizeCanvas'
+import * as THREE from 'three'
 
 const getInnerDimensions = (node: Element) => {
     const computedStyle = getComputedStyle(node)
