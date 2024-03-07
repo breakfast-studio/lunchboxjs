@@ -7,7 +7,7 @@
     "build:tsc": "tsc --project ./utils/tsconfig.lib.json",
     "build:rollup": "rollup -c ./utils/lib-rollup.js",
     "build:dts": "node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.es.d.ts && node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.umd.d.ts",
-    "build:lib": "node utils/rm js && npm run build:rollup && npm run build:dts",
+    "build:lib": "node utils/rm js && npm run build:tsc && npm run build:rollup && npm run build:dts",
     "prepare": "npm run build:lib",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
