@@ -9,6 +9,7 @@
     "dts": "echo \"export * from '../src/lunchboxjs/types'\" > ./dist/lunchboxjs.d.ts"
   },
   "files": [
+    "src",
     "dist"
   ],
   "main": "./dist/lunchboxjs.umd.cjs",
