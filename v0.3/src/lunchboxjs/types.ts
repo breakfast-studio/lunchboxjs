@@ -165,20 +165,17 @@ export declare namespace Lunch {
 
     type SizePolicy = 'full' | 'container'
 
-    type Vector3AsArray = [number, number, number]
-
     interface WrapperProps {
-        background?: string
+        background?: THREE.ColorRepresentation,
         cameraArgs?: any[]
-        cameraLook?: Vector3AsArray
-        cameraLookAt?: Vector3AsArray
-        cameraPosition?: Vector3AsArray
+        cameraLook?: THREE.Vector3Tuple
+        cameraLookAt?: THREE.Vector3Tuple
+        cameraPosition?: THREE.Vector3Tuple
         dpr?: number
         ortho?: boolean
         orthographic?: boolean
         r3f?: boolean
-        // TODO: Why doesn't ConstructorParameters<THREE.WebGLRenderer> work here?
-        rendererArguments?: object
+        rendererArguments?: ConstructorParameters<typeof THREE.WebGLRenderer>
         rendererProperties?: Partial<THREE.WebGLRenderer>
         sizePolicy?: SizePolicy
         shadow?: ShadowSugar
@@ -188,6 +185,8 @@ export declare namespace Lunch {
     }
 }
 
+// Global components
+// ==================
 import LunchboxWrapper from "./components/LunchboxWrapper/LunchboxWrapper.vue";
 
 declare module '@vue/runtime-core' {
