@@ -6,7 +6,7 @@ import type { Lunch } from '../types'
 export const catalogue: Lunch.Catalogue = {}
 
 // component creation utility
-const createComponent = (tag: string) =>
+export const createComponent = (tag: string) =>
     defineComponent({
         inheritAttrs: false,
         name: tag,

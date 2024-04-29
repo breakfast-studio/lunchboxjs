@@ -8,6 +8,7 @@ import {
 import { addEventListener } from './interaction'
 import type { Lunch } from '..'
 import type { Ref } from 'vue'
+import * as THREE from 'three'
 
 /** Update a single prop on a given node. */
 export function updateObjectProp({
@@ -70,14 +71,14 @@ export function updateObjectProp({
     } else if (liveProperty && liveProperty.set) {
         // if property has `set` method, use that (https://github.com/pmndrs/react-three-fiber/blob/master/markdown/api.md#shortcuts)
         const nextValueAsArray = Array.isArray(value) ? value : [value]
-        ;(target as any)[finalKey].set(...nextValueAsArray)
+            ; (target as any)[finalKey].set(...nextValueAsArray)
     } else if (typeof liveProperty === 'function') {
         // some function properties are set rather than called, so let's handle them
         if (
             finalKey.toLowerCase() === 'onbeforerender' ||
             finalKey.toLowerCase() === 'onafterrender'
         ) {
-            ;(target as any)[finalKey] = value
+            ; (target as any)[finalKey] = value
         } else {
             if (!Array.isArray(value)) {
                 throw new Error(
@@ -114,14 +115,14 @@ export function updateObjectProp({
 
         switch (true) {
             case targetType.includes('material'):
-                ;(target as unknown as THREE.Material).needsUpdate = true
+                ; (target as unknown as THREE.Material).needsUpdate = true
                 break
             case targetType.includes('camera') &&
                 (target as any).updateProjectionMatrix:
-                ;(
+                ; (
                     target as unknown as
-                        | THREE.PerspectiveCamera
-                        | THREE.OrthographicCamera
+                    | THREE.PerspectiveCamera
+                    | THREE.OrthographicCamera
                 ).updateProjectionMatrix()
                 break
         }

@@ -107,7 +107,7 @@ export declare namespace Lunch {
     interface MetaBase {
         name: string | null | undefined
         metaType: MetaType
-        props: LunchboxMetaProps
+        props: LunchboxMetaProps<any>
         type: string | null
         uuid: Uuid
     }
@@ -136,10 +136,10 @@ export declare namespace Lunch {
     }
 
     /** Props that can be passed to any Lunchbox meta. */
-    type LunchboxMetaProps = VNodeProps & {
-        args?: Array<any>
+    type LunchboxMetaProps<T extends abstract new (...args: any) => any> = VNodeProps & {
+        args?: ConstructorParameters<T>
         attach?: string
-        onAdded?<T>(opts: { instance: T | null }): void
+        onAdded?(opts: { instance: T | null }): void
 
         [key: string]: any
     }
@@ -188,6 +188,7 @@ export declare namespace Lunch {
 // Global components
 // ==================
 import LunchboxWrapper from "./components/LunchboxWrapper/LunchboxWrapper.vue";
+import { createComponent } from './components'
 
 declare module '@vue/runtime-core' {
     export interface GlobalComponents {
