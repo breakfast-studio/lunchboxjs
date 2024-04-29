@@ -1,5 +1,5 @@
 {
-  "name": "v0.3",
+  "name": "lunchboxjs-alpha",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,6 +11,17 @@
     "build:rollup": "rollup -c ./config/lib-rollup.js",
     "build:dts": "node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.es.d.ts && node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.umd.d.ts",
     "build:lib": "node utils/rm js && npm run build:tsc && npm run build:rollup && npm run build:dts"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/my-lib.umd.cjs",
+  "module": "./dist/my-lib.js",
+  "exports": {
+    ".": {
+      "import": "./dist/my-lib.js",
+      "require": "./dist/my-lib.umd.cjs"
+    }
   },
   "dependencies": {
     "three": "^0.164.1",
