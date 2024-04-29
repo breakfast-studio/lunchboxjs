@@ -27,13 +27,14 @@
     <!-- Camera slot -->
     <slot name="camera">
         <orthographicCamera key="ortho" v-if="props.ortho || props.orthographic" ref="camera"
-            :args="props.cameraArgs ?? []" v-bind="toRaw(consolidatedCameraProperties)" />
+            :args="props.cameraArgs ?? []" v-bind="toRaw(consolidatedCameraProperties)"
+            :position="props.cameraPosition ?? []" />
         <perspectiveCamera key="perspective" v-else ref="camera" :args="[
             props.r3f ? 75 : 45,
             1.2,
             0.1,
             1000,
-        ]" />
+        ]" :position="props.cameraPosition ?? []" />
     </slot>
 
 </template>
@@ -165,7 +166,6 @@ watch([scene, camera, renderer, hasOnMountedRun, container], newVals => {
     const rendererInstance = getInstance(newRenderer);
 
     if (!sceneInstance || !rendererInstance || !cameraInstance || !app || !hasOnMountedRun || !container.value) return;
-
 
     // Prep canvas
     prepCanvas(

@@ -187,3 +187,11 @@ export declare namespace Lunch {
         updateSource?: WatchSource | null
     }
 }
+
+import LunchboxWrapper from "./components/LunchboxWrapper/LunchboxWrapper.vue";
+
+declare module '@vue/runtime-core' {
+    export interface GlobalComponents {
+        Lunchbox: typeof LunchboxWrapper,
+    }
+}
