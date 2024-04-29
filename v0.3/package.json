@@ -5,12 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
-    "build:tsc": "tsc --project ./config/tsconfig.lib.json",
-    "build:rollup": "rollup -c ./config/lib-rollup.js",
-    "build:dts": "node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.es.d.ts && node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.umd.d.ts",
-    "build:lib": "node utils/rm js && npm run build:tsc && npm run build:rollup && npm run build:dts"
+    "build": "vue-tsc && vite build && npm run dts",
+    "dts": "echo \"export * from '../src/lunchboxjs/types'\" > ./dist/lunchboxjs.d.ts"
   },
   "files": [
     "dist"

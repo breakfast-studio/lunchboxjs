@@ -165,6 +165,7 @@ export namespace Lunch {
     export type SizePolicy = 'full' | 'container'
 
     export interface WrapperProps {
+        /** The background color of the renderer. */
         background?: THREE.ColorRepresentation,
         cameraArgs?: any[]
         cameraLook?: THREE.Vector3Tuple
