@@ -6,9 +6,9 @@ const autoAttach = ['geometry', 'material']
 
 export const createElement = (
     type: string,
-    isSVG?: boolean,
-    isCustomizedBuiltin?: string,
-    vnodeProps?: Lunch.LunchboxMetaProps
+    _isSVG?: boolean | string,
+    _isCustomizedBuiltin?: string,
+    vnodeProps?: Lunch.LunchboxMetaProps<any>,
 ) => {
     const options: Partial<Lunch.MetaBase> = { type, props: vnodeProps }
 

@@ -188,7 +188,6 @@ export declare namespace Lunch {
 // Global components
 // ==================
 import LunchboxWrapper from "./components/LunchboxWrapper/LunchboxWrapper.vue";
-import { createComponent } from './components'
 
 declare module '@vue/runtime-core' {
     export interface GlobalComponents {

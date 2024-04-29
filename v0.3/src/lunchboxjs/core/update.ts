@@ -1,5 +1,5 @@
 import type { Lunch } from '..'
-import { inject, toRaw, watch } from 'vue'
+import { inject, watch } from 'vue'
 import * as Keys from '../keys'
 
 const requestUpdate = (opts: Lunch.UpdateCallbackProperties) => {

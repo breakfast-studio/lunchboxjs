@@ -43,13 +43,13 @@ export const createNodeOps = () => {
             if (!result) return null
             return result as MiniDom.RendererBaseNode
         },
-        patchProp(node, key, prevValue, nextValue) {
+        patchProp(node, key, _prevValue, nextValue) {
             if (isLunchboxDomComponent(node)) {
                 // handle DOM node
                 if (key === 'style') {
                     // special handling for style
                     Object.keys(nextValue).forEach((k) => {
-                        ;(node.domElement.style as any)[k] = nextValue[k]
+                        ; (node.domElement.style as any)[k] = nextValue[k]
                     })
                 } else {
                     node.domElement.setAttribute(key, nextValue)

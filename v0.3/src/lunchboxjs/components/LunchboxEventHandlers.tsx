@@ -27,6 +27,8 @@ export const LunchboxEventHandlers = defineComponent({
             new THREE.Vector3(0, 0, -1)
         )
 
+        const scratchV2 = new THREE.Vector2()
+
         const fireEventsFromIntersections = ({
             element,
             eventKeys,
@@ -74,8 +76,9 @@ export const LunchboxEventHandlers = defineComponent({
             if (!c) return
 
             // console.log(camera.value)
+            const mousePosAsVector2 = scratchV2.clone().set(mousePos.value.x, mousePos.value.y)
 
-            raycaster.setFromCamera(mousePos.value, c)
+            raycaster.setFromCamera(mousePosAsVector2, c)
             const intersections = raycaster.intersectObjects(
                 interactables?.value.map(
                     (v) => v.instance as any as THREE.Object3D
