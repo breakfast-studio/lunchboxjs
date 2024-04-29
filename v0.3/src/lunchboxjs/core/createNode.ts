@@ -45,7 +45,7 @@ export function createTextNode(options: Partial<Lunch.TextMeta> = {}) {
 /** Create a new Lunchbox standard node. */
 export function createNode<T extends object = THREE.Object3D>(
     options: Partial<Lunch.StandardMeta<T>> = {},
-    props: Lunch.LunchboxMetaProps = {}
+    props: Lunch.LunchboxMetaProps<any> = {}
 ) {
     const defaults: Omit<Lunch.StandardMeta<T>, keyof Lunch.MetaBase> = {
         attached: options.attached ?? [],

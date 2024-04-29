@@ -1,8 +1,7 @@
 <template>
-  <Lunchbox transparent :camera-position="[0, 0, 5]">
-    <mesh>
-      <boxGeometry />
-      <meshBasicMaterial color="green" />
-    </mesh>
-  </Lunchbox>
+  <Dev />
 </template>
+
+<script lang="ts" setup>
+import Dev from './Dev.vue'
+</script>
