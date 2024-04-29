@@ -15,12 +15,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/lunchbox-js.umd.cjs",
-  "module": "./dist/lunchbox-js.js",
+  "main": "./dist/lunchboxjs.umd.cjs",
+  "module": "./dist/lunchboxjs.js",
   "exports": {
     ".": {
-      "import": "./dist/lunchbox-js.js",
-      "require": "./dist/lunchbox-js.umd.cjs"
+      "import": "./dist/lunchboxjs.js",
+      "require": "./dist/lunchboxjs.umd.cjs"
     }
   },
   "dependencies": {
@@ -42,6 +42,7 @@
     "tslib": "^2.6.2",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
+    "vite-plugin-dts": "^3.9.0",
     "vue-tsc": "^2.0.6"
   }
 }

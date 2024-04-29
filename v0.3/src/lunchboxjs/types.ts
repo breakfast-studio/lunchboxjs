@@ -11,10 +11,9 @@ type ThreeRenderer = import('three').Renderer
 type ThreeScene = import('three').Scene
 import * as THREE from 'three';
 
-export declare namespace Lunch {
-
+export namespace Lunch {
     /** Lunchbox app. */
-    type App = Omit<VueApp<any>, 'config'> & {
+    export type App = Omit<VueApp<any>, 'config'> & {
         clearCustomRender: () => void
         config: Omit<VueApp<any>['config'], 'globalProperties'> & {
             globalProperties: {
@@ -39,40 +38,40 @@ export declare namespace Lunch {
         update: UpdateCallback
     }
 
-    type AppGlobals = App['config']['globalProperties']['lunchbox']
+    export type AppGlobals = App['config']['globalProperties']['lunchbox']
 
-    type AppGlobalsUpdate = (newValue: Partial<AppGlobals>) => void
+    export type AppGlobalsUpdate = (newValue: Partial<AppGlobals>) => void
 
-    interface CanvasProps {
+    export interface CanvasProps {
         dpr?: number
         wrapperProps?: WrapperProps
     }
 
     /** Lunchbox component catalogue. */
-    interface Catalogue {
+    export interface Catalogue {
         [key: string]: {
             new(...args: any): { [key: string]: any }
         }
     }
 
-    interface CommentMeta extends MetaBase {
+    export interface CommentMeta extends MetaBase {
         text: string
     }
 
-    type CustomRenderFunctionSetter = (
+    export type CustomRenderFunctionSetter = (
         render: (opts: Lunch.UpdateCallbackProperties) => void
     ) => void
 
-    interface DomMeta extends MetaBase {
+    export interface DomMeta extends MetaBase {
         domElement: HTMLElement
     }
 
-    type EventCallback = (options: {
+    export type EventCallback = (options: {
         intersection: THREE.Intersection<any>
     }) => void
 
     // MAKE SURE THESE MATCH VALUES IN lib.isEventKey
-    type EventKey =
+    export type EventKey =
         | 'onClick'
         | 'onContextMenu'
         | 'onDoubleClick'
@@ -87,7 +86,7 @@ export declare namespace Lunch {
         // 'onUpdate' |
         | 'onWheel'
 
-    interface GenericThreeLoader<T = any> {
+    export interface GenericThreeLoader<T = any> {
         load(
             src: string,
             onLoad: (data: T) => void,
@@ -97,14 +96,14 @@ export declare namespace Lunch {
     }
 
     /** Meta info needed on a standard Lunchbox node. */
-    interface StandardMeta<T = THREE.Object3D> extends MetaBase {
+    export interface StandardMeta<T = THREE.Object3D> extends MetaBase {
         attached: { [key: string]: any }
         attachedArray: { [key: string]: Array<any> }
         instance: T | null
     }
 
     /** Meta info that every node needs. */
-    interface MetaBase {
+    export interface MetaBase {
         name: string | null | undefined
         metaType: MetaType
         props: LunchboxMetaProps<any>
@@ -112,7 +111,7 @@ export declare namespace Lunch {
         uuid: Uuid
     }
 
-    type MetaType =
+    export type MetaType =
         | 'commentMeta'
         | 'domMeta'
         | 'standardMeta'
@@ -120,23 +119,23 @@ export declare namespace Lunch {
         | 'rootMeta'
         | 'textMeta'
 
-    interface RootMeta extends MetaBase {
+    export interface RootMeta extends MetaBase {
         domElement: HTMLElement
         isLunchboxRootNode: boolean
     }
 
-    type ShadowSugar =
+    export type ShadowSugar =
         | boolean
         | {
             type: THREE.ShadowMapType
         }
 
-    interface TextMeta extends MetaBase {
+    export interface TextMeta extends MetaBase {
         text: string
     }
 
     /** Props that can be passed to any Lunchbox meta. */
-    type LunchboxMetaProps<T extends abstract new (...args: any) => any> = VNodeProps & {
+    export type LunchboxMetaProps<T extends abstract new (...args: any) => any> = VNodeProps & {
         args?: ConstructorParameters<T>
         attach?: string
         onAdded?(opts: { instance: T | null }): void
@@ -144,15 +143,15 @@ export declare namespace Lunch {
         [key: string]: any
     }
 
-    type LunchboxComponent<T = THREE.Object3D> = {
+    export type LunchboxComponent<T = THREE.Object3D> = {
         $el: Node<T>
     }
 
-    type Node<T = THREE.Object3D> = RendererStandardNode<T>
+    export type Node<T = THREE.Object3D> = RendererStandardNode<T>
 
-    type UpdateCallback = (properties: UpdateCallbackProperties) => void
+    export type UpdateCallback = (properties: UpdateCallbackProperties) => void
 
-    interface UpdateCallbackProperties {
+    export interface UpdateCallbackProperties {
         app: App
         scene?: THREE.Scene | null
         renderer?: THREE.Renderer | null
@@ -161,11 +160,11 @@ export declare namespace Lunch {
     }
 
     /** Universally unique identifier. */
-    type Uuid = string
+    export type Uuid = string
 
-    type SizePolicy = 'full' | 'container'
+    export type SizePolicy = 'full' | 'container'
 
-    interface WrapperProps {
+    export interface WrapperProps {
         background?: THREE.ColorRepresentation,
         cameraArgs?: any[]
         cameraLook?: THREE.Vector3Tuple
@@ -187,7 +186,7 @@ export declare namespace Lunch {
 
 // Global components
 // ==================
-import LunchboxWrapper from "./components/LunchboxWrapper/LunchboxWrapper.vue";
+import type LunchboxWrapper from "./components/LunchboxWrapper/LunchboxWrapper.vue";
 
 declare module '@vue/runtime-core' {
     export interface GlobalComponents {
