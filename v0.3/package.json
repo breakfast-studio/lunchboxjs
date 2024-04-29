@@ -15,15 +15,16 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/my-lib.umd.cjs",
-  "module": "./dist/my-lib.js",
+  "main": "./dist/lunchbox-js.umd.cjs",
+  "module": "./dist/lunchbox-js.js",
   "exports": {
     ".": {
-      "import": "./dist/my-lib.js",
-      "require": "./dist/my-lib.umd.cjs"
+      "import": "./dist/lunchbox-js.js",
+      "require": "./dist/lunchbox-js.umd.cjs"
     }
   },
   "dependencies": {
+    "nodemon": "^3.1.0",
     "three": "^0.164.1",
     "uuid": "^9.0.1",
     "vue": "^3.4.21"

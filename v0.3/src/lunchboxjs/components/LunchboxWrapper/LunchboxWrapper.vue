@@ -33,14 +33,13 @@
     <!-- Camera slot -->
     <slot name="camera">
         <orthographicCamera key="ortho" v-if="props.ortho || props.orthographic" ref="camera"
-            :args="props.cameraArgs ?? []" v-bind="toRaw(consolidatedCameraProperties)"
-            :position="props.cameraPosition ?? []" />
+            :args="props.cameraArgs ?? []" :position="props.cameraPosition ?? [0, 0, 0]" />
         <perspectiveCamera key="perspective" v-else ref="camera" :args="[
             props.r3f ? 75 : 45,
             1.2,
             0.1,
             1000,
-        ]" :position="props.cameraPosition ?? []" />
+        ]" :position="props.cameraPosition ?? [0, 0, 0]" />
     </slot>
 
 </template>
@@ -54,10 +53,10 @@ import {
     // onBeforeUnmount,
     // onMounted,
     // PropType,
-    reactive,
+    // reactive,
     ref,
     StyleValue,
-    toRaw,
+    // toRaw,
     useSlots,
     watch,
     // watch,
@@ -104,10 +103,10 @@ const updateGlobals = useUpdateGlobals();
 
 // Options
 // ==================
-const consolidatedCameraProperties: Record<string, any> = reactive({
-    position: props.cameraPosition ?? [0, 0, 0],
-    zoom: props.zoom,
-})
+// const consolidatedCameraProperties: Record<string, any> = reactive({
+//     position: props.cameraPosition ?? [0, 0, 0],
+//     zoom: props.zoom,
+// })
 
 // Container styling
 // ==================
