@@ -78,6 +78,7 @@ import { useUpdateGlobals, useStartCallbacks } from '../..'
 import { MiniDom } from '../../core';
 import { prepCanvas } from './prepCanvas';
 // import { LunchboxScene } from './LunchboxScene'
+// TODO: event handlers
 // import { LunchboxEventHandlers } from '../LunchboxEventHandlers'
 // import * as Keys from '../../keys'
 // import { waitFor } from '../../utils'
