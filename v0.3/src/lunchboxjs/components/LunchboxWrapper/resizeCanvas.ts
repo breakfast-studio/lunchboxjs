@@ -1,4 +1,4 @@
-import { toRaw } from 'vue'
+import * as THREE from 'three';
 
 export const resizeCanvas = (
     camera: THREE.Camera,
@@ -14,7 +14,7 @@ export const resizeCanvas = (
     height = height ?? window.innerHeight
 
     // update camera
-    const aspect = width / height
+    const aspect = width / height;
     if (camera.type?.toLowerCase() === 'perspectivecamera') {
         const perspectiveCamera = camera as THREE.PerspectiveCamera
         perspectiveCamera.aspect = aspect
@@ -36,6 +36,6 @@ export const resizeCanvas = (
     renderer.setSize(width, height)
     // render immediately so there's no flicker
     if (scene && camera) {
-        renderer.render(toRaw(scene), toRaw(camera))
+        renderer.render(scene, camera)
     }
 }

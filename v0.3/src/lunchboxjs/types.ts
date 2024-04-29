@@ -1,4 +1,5 @@
-type RendererStandardNode<T = THREE.Object3D> =
+type Object3D = import('three').Object3D
+type RendererStandardNode<T = Object3D> =
     import('./core').MiniDom.RendererStandardNode<T>
 type RootNode = import('./core/minidom').MiniDom.RendererRootNode
 type VNodeProps = import('vue').VNodeProps
@@ -8,8 +9,10 @@ type WatchStopHandle = import('vue').WatchStopHandle
 type ThreeCamera = import('three').Camera
 type ThreeRenderer = import('three').Renderer
 type ThreeScene = import('three').Scene
+import * as THREE from 'three';
 
 export declare namespace Lunch {
+
     /** Lunchbox app. */
     type App = Omit<VueApp<any>, 'config'> & {
         clearCustomRender: () => void
@@ -48,7 +51,7 @@ export declare namespace Lunch {
     /** Lunchbox component catalogue. */
     interface Catalogue {
         [key: string]: {
-            new (...args: any): { [key: string]: any }
+            new(...args: any): { [key: string]: any }
         }
     }
 
@@ -125,8 +128,8 @@ export declare namespace Lunch {
     type ShadowSugar =
         | boolean
         | {
-              type: THREE.ShadowMapType
-          }
+            type: THREE.ShadowMapType
+        }
 
     interface TextMeta extends MetaBase {
         text: string

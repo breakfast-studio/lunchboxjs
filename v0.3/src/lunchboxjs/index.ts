@@ -162,7 +162,7 @@ export const updateGlobals = (newValue: Partial<Lunch.AppGlobals>) => {
 }
 
 /** Use the current Lunchbox app. Usually used internally by Lunchbox. */
-export const useApp = () => inject<Lunch.App>(Keys.appKey)
+export const useApp = () => inject<Lunch.App>(Keys.appKey)!
 
 /** Obtain a list of the start callback functions. Usually used internally by Lunchbox. */
 export const useStartCallbacks = () =>

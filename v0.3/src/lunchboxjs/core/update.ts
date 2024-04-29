@@ -38,7 +38,7 @@ export const update: Lunch.UpdateCallback = (opts) => {
     }
 
     // prep options
-    const { app, renderer, scene } = opts
+    const { app, renderer, scene, camera } = opts
 
     // BEFORE RENDER
     app.config.globalProperties.lunchbox.beforeRender.forEach((cb) => {
@@ -46,13 +46,13 @@ export const update: Lunch.UpdateCallback = (opts) => {
     })
 
     // RENDER
-    if (renderer && scene && opts.app.config.globalProperties.lunchbox.camera) {
+    if (renderer && scene && camera) {
         if (app.customRender) {
             app.customRender(opts)
         } else {
             renderer.render(
-                toRaw(scene),
-                opts.app.config.globalProperties.lunchbox.camera
+                scene,
+                camera,
                 // toRaw(camera)
             )
         }

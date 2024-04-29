@@ -8,7 +8,10 @@
                 data-lunchbox="true"></canvas>
 
             <!-- Default renderer -->
-            <webGLRenderer ref="renderer" />
+            <webGLRenderer ref="renderer" v-if="canvas?.domElement" :args="[{
+            canvas: canvas.domElement
+        }]" />
+
         </div>
 
 
@@ -24,13 +27,13 @@
     <!-- Camera slot -->
     <slot name="camera">
         <orthographicCamera key="ortho" v-if="props.ortho || props.orthographic" ref="camera"
-            :args="props.cameraArgs ?? []" v-bind="consolidatedCameraProperties" />
-        <perspectiveCamera key="perspective" v-else ref="camera" :args="props.cameraArgs ?? [
+            :args="props.cameraArgs ?? []" v-bind="toRaw(consolidatedCameraProperties)" />
+        <perspectiveCamera key="perspective" v-else ref="camera" :args="[
             props.r3f ? 75 : 45,
-            0.5625,
-            1,
-            1000
-        ]" v-bind="consolidatedCameraProperties" />
+            1.2,
+            0.1,
+            1000,
+        ]" />
     </slot>
 
 </template>
@@ -39,6 +42,7 @@
 import {
     // computed,
     CSSProperties,
+    onMounted,
     // defineComponent,
     // onBeforeUnmount,
     // onMounted,
@@ -46,19 +50,26 @@ import {
     reactive,
     ref,
     StyleValue,
+    toRaw,
+    useSlots,
     watch,
     // watch,
     // WatchSource,
 } from 'vue'
 // import { cancelUpdate, cancelUpdateSource, MiniDom, update } from '../../core'
 import {
+    // getInstance,
     Lunch,
+    update,
+    useApp,
     // useApp, useGlobals, useLunchboxInteractables 
 } from '../..'
 import * as THREE from 'three'
 import LunchboxScene from './LunchboxScene.vue';
 // import { prepCanvas } from './prepCanvas'
-// import { useUpdateGlobals, useStartCallbacks } from '../..'
+import { useUpdateGlobals, useStartCallbacks } from '../..'
+import { MiniDom } from '../../core';
+import { prepCanvas } from './prepCanvas';
 // import { LunchboxScene } from './LunchboxScene'
 // import { LunchboxEventHandlers } from '../LunchboxEventHandlers'
 // import * as Keys from '../../keys'
@@ -72,18 +83,23 @@ const props = withDefaults(defineProps<Lunch.WrapperProps>(), {
 })
 
 
-// Refs
+// Refs, slots, etc
 // ==================
-const container = ref<HTMLDivElement>();
-const canvas = ref<HTMLCanvasElement>();
+const app = useApp();
+const container = ref<MiniDom.RendererDomNode>();
+const canvas = ref<MiniDom.RendererDomNode>();
 const renderer = ref<Lunch.LunchboxComponent<THREE.WebGLRenderer>>();
 const camera = ref<Lunch.LunchboxComponent<THREE.Camera>>();
 const scene = ref<Lunch.LunchboxComponent<THREE.Scene>>();
-watch([scene], console.log)
+const slots = useSlots();
+const updateGlobals = useUpdateGlobals();
 
 // Options
 // ==================
-const consolidatedCameraProperties: Record<string, any> = reactive({})
+const consolidatedCameraProperties: Record<string, any> = reactive({
+    position: props.cameraPosition ?? [0, 0, 0],
+    zoom: props.zoom,
+})
 
 // Container styling
 // ==================
@@ -103,6 +119,88 @@ const fillStyle = (position: CSSProperties['position']): StyleValue => {
         display: 'block',
     }
 }
+
+// Mounted
+// ==================
+const startCallbacks = useStartCallbacks();
+const hasOnMountedRun = ref(false);
+onMounted(() => {
+    // canvas needs to exist (or user needs to handle it on their own)
+    if (!canvas.value?.domElement && !slots.renderer?.().length)
+        throw new Error('missing canvas')
+
+    // SCENE
+    // ====================
+    // set background color
+    if (scene.value?.$el?.instance && props.background) {
+        scene.value.$el.instance.background = new THREE.Color(
+            props.background
+        )
+    }
+
+    // MISC PROPERTIES
+    // ====================
+    updateGlobals?.({
+        dpr: props.dpr === -1 ? window.devicePixelRatio : props.dpr,
+    })
+
+    // TODO: props.r3f, sugar, save app properties
+
+    // Done initializing
+    hasOnMountedRun.value = true
+})
+
+const getInstance = <T>(input?: Lunch.LunchboxComponent<T>) => {
+    return input?.$el.instance;
+}
+
+// Start when ready
+const hasStartRun = ref(false);
+watch([scene, camera, renderer, hasOnMountedRun, container], newVals => {
+    if (hasStartRun.value) return;
+
+    const [newScene, newCamera, newRenderer] = newVals;
+    const sceneInstance = getInstance(newScene);
+    const cameraInstance = getInstance(newCamera);
+    const rendererInstance = getInstance(newRenderer);
+
+    if (!sceneInstance || !rendererInstance || !cameraInstance || !app || !hasOnMountedRun || !container.value) return;
+
+
+    // Prep canvas
+    prepCanvas(
+        container,
+        cameraInstance,
+        rendererInstance,
+        sceneInstance,
+        props.sizePolicy,
+    )
+
+    // Start & update
+    const updateParams = {
+        app,
+        camera: cameraInstance,
+        renderer: rendererInstance,
+        scene: sceneInstance,
+        updateSource: props.updateSource,
+    }
+
+    for (let startCallback of startCallbacks ?? []) {
+        startCallback(updateParams)
+    }
+
+    update(updateParams);
+
+
+    // ensure this doesn't run again
+    hasStartRun.value = true;
+}, {
+    immediate: true
+})
+
+// UNMOUNT
+// ==================
+// TODO
 
 </script>
 
