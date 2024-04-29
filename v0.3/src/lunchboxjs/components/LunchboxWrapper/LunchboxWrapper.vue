@@ -9,7 +9,13 @@
 
             <!-- Default renderer -->
             <webGLRenderer ref="renderer" v-if="canvas?.domElement" :args="[{
-            canvas: canvas.domElement
+            canvas: canvas.domElement,
+            alpha: !!props.transparent,
+            antialias: true,
+            powerPreference: !!props.r3f
+                ? 'high-performance'
+                : 'default',
+            ...(props.rendererArguments ?? {}),
         }]" />
 
         </div>
