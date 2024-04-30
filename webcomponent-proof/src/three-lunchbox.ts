@@ -1,10 +1,18 @@
-import { LitElement, css, html } from 'lit'
+import { LitElement, css, html } from 'lit';
+import * as THREE from 'three';
 
+/** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
-
+  // TODO: Customizable scene, camera, renderer args
+  // TODO: Fully customizable scene, camera, renderer
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75);
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({
+    antialias: true,
+  });
+
+  /** ResizeObserver to handle container sizing */
+  resizeObserver: ResizeObserver;
 
   constructor() {
     super();
@@ -18,11 +26,9 @@ export class ThreeLunchbox extends LitElement {
         }
       })
     })
-    this.camera.position.set(0, 0, 5)
   }
 
-  resizeObserver: ResizeObserver;
-
+  /** To run on start. */
   connectedCallback(): void {
     super.connectedCallback();
     this.resizeObserver.observe(this);
@@ -40,6 +46,8 @@ export class ThreeLunchbox extends LitElement {
     this.renderThree();
   }
 
+  /** Container styles */
+  // TODO: fill window, fit-to-container
   static styles = css`
     :host {
       position: fixed;
@@ -52,54 +60,23 @@ export class ThreeLunchbox extends LitElement {
     }
   `
 
+  /** Render loop */
+  // TODO: Only kick if required
   updateLoop() {
     this.renderThree();
     requestAnimationFrame(this.updateLoop.bind(this));
   }
+
+  /** Render the 3D scene */
   renderThree() {
     this.renderer.render(this.scene, this.camera);
   }
 
-
   render() {
+    // TODO: more robust slot changes
     return html`
       <slot @slotchange=${this.handleDefaultSlotChange}></slot>
       ${this.renderer.domElement}
     `
   }
-}
-
-
-
-// Programmatically-generated elements
-import * as THREE from 'three';
-import { buildClass } from './three-base';
-
-const autoComponents: Partial<keyof typeof THREE>[] = [
-  'WebGLRenderer',
-  'PerspectiveCamera',
-  'Scene',
-  'Mesh',
-  'BoxGeometry',
-  'MeshBasicMaterial',
-  'IcosahedronGeometry',
-  'SphereGeometry',
-]
-
-export const init = () => {
-  customElements.define('three-lunchbox', ThreeLunchbox)
-
-  autoComponents.forEach(className => {
-    // convert name to kebab-case; prepend `three-` if needed
-    let kebabCase = className.split(/\.?(?=[A-Z])/).join('-').toLowerCase().replace(/-g-l-/, '-gl-');
-    if (!kebabCase.includes('-')) {
-      kebabCase = `three-${kebabCase}`
-    }
-
-
-    const result = buildClass(className)
-    if (result) {
-      customElements.define(kebabCase, result)
-    }
-  })
 }

@@ -3,7 +3,9 @@ import * as THREE from 'three';
 declare global {
     interface HTMLElementTagNameMap {
         'three-lunchbox': ThreeLunchbox,
-        'three-mesh': Lunchbox<THREE.Mesh>
+
+        // TODO: these need to provide type hinting for `args` property
+        'three-mesh': Lunchbox<THREE.Mesh>,
     }
 
     interface Lunchbox<T> {
