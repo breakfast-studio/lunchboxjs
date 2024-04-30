@@ -1,5 +1,16 @@
 {
   "name": "webcomponent-proof",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/lunchboxjs.umd.cjs",
+  "module": "./dist/lunchboxjs.js",
+  "exports": {
+    ".": {
+      "import": "./dist/lunchboxjs.js",
+      "require": "./dist/lunchboxjs.umd.cjs"
+    }
+  },
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,6 +24,7 @@
     "three": "^0.164.1"
   },
   "devDependencies": {
+    "@types/node": "^20.12.7",
     "@types/three": "^0.164.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
