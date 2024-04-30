@@ -28,6 +28,7 @@ export class ThreeLunchbox extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.resizeObserver.observe(this);
+    this.updateLoop();
   }
 
   handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
@@ -53,8 +54,12 @@ export class ThreeLunchbox extends LitElement {
     }
   `
 
+  updateLoop() {
+    this.renderThree();
+    requestAnimationFrame(this.updateLoop.bind(this));
+  }
   renderThree() {
-    this.renderer.render(this.scene, this.camera)
+    this.renderer.render(this.scene, this.camera);
   }
 
 

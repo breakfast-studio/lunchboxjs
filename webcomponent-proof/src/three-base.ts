@@ -16,24 +16,27 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
             @property()
             instance: T | null = null;
 
+
             connectedCallback(): void {
+                super.connectedCallback();
+
+
+                const m = new MutationObserver(mutations => {
+                    mutations.forEach(mutation => {
+                        if (!mutation.attributeName) return;
+                        const attr = this.attributes.getNamedItem(mutation.attributeName)
+                        if (attr) {
+                            this.updateProperty(attr)
+                        }
+                    })
+                })
+                m.observe(this, {
+                    attributes: true,
+                })
+
                 this.instance = new (threeClass as T)(...this.args) as unknown as T;
 
-                Array.from(this.attributes).forEach(att => {
-                    const { name, value } = att
-                    const parsedValue = JSON.parse(value === '' ? 'true' : value);
-
-                    const split = name.split('-');
-
-                    const property: any = get(this.instance as any, split)
-
-                    if (property?.set) {
-                        const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
-                        property.set(...parsedValueAsArray);
-                    } else {
-                        set(this.instance as any, split, parsedValue)
-                    }
-                })
+                Array.from(this.attributes).forEach(this.updateProperty.bind(this))
 
                 const parent = this.parentElement as ThreeBase;
                 if (parent.instance) {
@@ -45,6 +48,23 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
                         parent.instance.material = this.instance
                     }
                 }
+            }
+
+            updateProperty(att: Attr) {
+                const { name, value } = att
+                const parsedValue = JSON.parse(value === '' ? 'true' : value);
+
+                const split = name.split('-');
+
+                const property: any = get(this.instance as any, split)
+
+                if (property?.set) {
+                    const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
+                    property.set(...parsedValueAsArray);
+                } else {
+                    set(this.instance as any, split, parsedValue)
+                }
+
             }
 
             /** Render */
