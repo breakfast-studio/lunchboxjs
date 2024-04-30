@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { property, queryAssignedElements } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import * as THREE from 'three';
 
 type IsClass<T = unknown> = {
@@ -32,7 +32,6 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
             @property()
             instance: T | null = null;
 
-
             connectedCallback(): void {
                 this.instance = new (threeClass as T)(...this.args) as unknown as T;
 
@@ -45,26 +44,13 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
                     if (this.instance instanceof THREE.Material && parent.instance instanceof THREE.Mesh) {
                         parent.instance.material = this.instance
                     }
-
-                    if (this.instance instanceof THREE.Object3D && parent.instance instanceof THREE.Scene) {
-                        parent.instance.add(this.instance)
-                    }
                 }
-
-                if (this.instance instanceof THREE.Scene) {
-                    console.dir(this)
-                }
-
-                // console.dir(this)
             }
 
 
             /** Render */
             render() {
-                return html`
-          <h1>${className}!</h1>
-          <slot></slot>
-          `
+                return html`<slot></slot>`
             }
         }
 

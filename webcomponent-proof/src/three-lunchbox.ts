@@ -17,7 +17,7 @@ export class ThreeLunchbox extends LitElement {
   }
 
 
-  handleSceneChange(evt: { target: HTMLSlotElement }) {
+  handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
     evt.target.assignedElements().forEach(el => {
       const elAsThree = el as unknown as ThreeComponent<any>
       if (elAsThree.instance instanceof THREE.Object3D) {
@@ -32,11 +32,7 @@ export class ThreeLunchbox extends LitElement {
   render() {
     return html`
       
-      <slot name="scene" @slotchange=${this.handleSceneChange}>
-        <three-scene>
-          <slot></slot>
-        </three-scene>
-      </slot>
+      <slot @slotchange=${this.handleDefaultSlotChange}></slot>
 
       ${this.renderer.domElement}
     `
