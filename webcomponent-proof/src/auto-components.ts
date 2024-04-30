@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 
 export const autoComponents: Partial<keyof typeof THREE>[] = [
-    'WebGLRenderer',
-    'PerspectiveCamera',
-    'Scene',
-    'Mesh',
     'BoxGeometry',
-    'MeshBasicMaterial',
+    'Group',
     'IcosahedronGeometry',
+    'Mesh',
+    'MeshBasicMaterial',
+    'PerspectiveCamera',
+    'PlaneGeometry',
+    'Scene',
     'SphereGeometry',
+    'WebGLRenderer',
 ]

@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
 import * as THREE from 'three';
-import { IsClass, get, isClass, set } from "./utils";
+import { IsClass, get, isClass, isNumber, set } from "./utils";
 
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
 
@@ -59,6 +59,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             }
         }
 
+        /** Update an instance's property. When creating a `<mesh position-y="0.5">`, for example, this sets `mesh.position.y = 0.5`. */
         updateProperty(att: Attr) {
             const { name, value } = att
 
@@ -76,7 +77,9 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             const property: any = get(this.instance as any, split)
 
-            if (property?.set) {
+            if (isNumber(parsedValue) && property?.setScalar) {
+                property.setScalar(parsedValue);
+            } else if (property?.set) {
                 const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
                 property.set(...parsedValueAsArray);
             } else {
