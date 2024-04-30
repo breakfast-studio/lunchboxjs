@@ -3,9 +3,9 @@ import { property } from "lit/decorators.js";
 import * as THREE from 'three';
 import { IsClass, get, isClass, set } from "./utils";
 
-export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => {
+export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
 
-    const threeClass = THREE[className];
+    const threeClass = typeof targetClass === 'string' ? THREE[targetClass as keyof typeof THREE] : targetClass;
 
     if (isClass(threeClass)) {
 

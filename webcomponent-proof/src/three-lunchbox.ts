@@ -1,11 +1,9 @@
 import { LitElement, css, html } from 'lit'
-import { customElement } from 'lit/decorators.js'
 
-@customElement('three-lunchbox')
-export class ThreeLunchbox extends LitElement {
+class ThreeLunchbox extends LitElement {
 
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera();
+  camera = new THREE.PerspectiveCamera(75);
   renderer = new THREE.WebGLRenderer();
 
   constructor() {
@@ -85,18 +83,24 @@ const autoComponents: Partial<keyof typeof THREE>[] = [
   'BoxGeometry',
   'MeshBasicMaterial',
   'IcosahedronGeometry',
+  'SphereGeometry',
 ]
 
-autoComponents.forEach(className => {
-  // convert name to kebab-case; prepend `three-` if needed
-  let kebabCase = className.split(/\.?(?=[A-Z])/).join('-').toLowerCase().replace(/-g-l-/, '-gl-');
-  if (!kebabCase.includes('-')) {
-    kebabCase = `three-${kebabCase}`
-  }
+export const init = () => {
+  customElements.define('three-lunchbox', ThreeLunchbox)
+
+  autoComponents.forEach(className => {
+    // convert name to kebab-case; prepend `three-` if needed
+    let kebabCase = className.split(/\.?(?=[A-Z])/).join('-').toLowerCase().replace(/-g-l-/, '-gl-');
+    if (!kebabCase.includes('-')) {
+      kebabCase = `three-${kebabCase}`
+    }
 
 
-  const result = buildClass(className)
-  if (result) {
-    customElements.define(kebabCase, result)
-  }
-})
+    const result = buildClass(className)
+    console.log(result)
+    if (result) {
+      customElements.define(kebabCase, result)
+    }
+  })
+}

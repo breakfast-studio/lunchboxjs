@@ -11,3 +11,5 @@ declare global {
         instance: T
     }
 }
+
+export * from './index'

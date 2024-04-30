@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [],
     build: {
         lib: {
-            entry: resolve(__dirname, 'src/three-lunchbox.ts'),
+            entry: resolve(__dirname, 'src/index.ts'),
             name: 'LunchboxJS',
             formats: ['cjs', 'umd', 'es'],
             fileName: "lunchboxjs"
