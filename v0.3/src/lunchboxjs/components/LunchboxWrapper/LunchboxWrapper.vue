@@ -182,6 +182,11 @@ watch([scene, camera, renderer, hasOnMountedRun, container], newVals => {
         props.sizePolicy,
     )
 
+    // Camera look
+    if (props.cameraLook || props.cameraLookAt) {
+        cameraInstance.lookAt(...(props.cameraLook ?? props.cameraLookAt)!)
+    }
+
     // Start & update
     const updateParams = {
         app,
