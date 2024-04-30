@@ -1,30 +1,34 @@
-import { LitElement, html } from 'lit'
+import { LitElement, css, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 @customElement('three-lunchbox')
 export class ThreeLunchbox extends LitElement {
 
   scene = new THREE.Scene();
-
   camera = new THREE.PerspectiveCamera();
-
   renderer = new THREE.WebGLRenderer();
 
   constructor() {
     super();
+    this.resizeObserver = new ResizeObserver(entries => {
+      entries.forEach(({ target, contentRect }) => {
+        if (target === this) {
+          this.renderer.setSize(contentRect.width, contentRect.height)
+          this.camera.aspect = contentRect.width / contentRect.height;
+          this.camera.updateProjectionMatrix();
+          this.renderThree();
+        }
+      })
+    })
     this.camera.position.set(0, 0, 5)
   }
 
-  connectedCallback(): void {
-    super.connectedCallback()
-    const observer = new MutationObserver(mutations => {
-      console.log('zzz', mutations)
-    })
-    observer.observe(this, {
-      attributes: true,
-    })
-  }
+  resizeObserver: ResizeObserver;
 
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.resizeObserver.observe(this);
+  }
 
   handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
     evt.target.assignedElements().forEach(el => {
@@ -34,6 +38,22 @@ export class ThreeLunchbox extends LitElement {
       }
     })
 
+    this.renderThree();
+  }
+
+  static styles = css`
+    :host {
+      position: fixed;
+      inset: 0;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  `
+
+  renderThree() {
     this.renderer.render(this.scene, this.camera)
   }
 
