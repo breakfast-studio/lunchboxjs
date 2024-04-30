@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
 import * as THREE from 'three';
+import { get, set } from "./utils";
 
 type IsClass<T = unknown> = {
     new(...args: any): T
@@ -39,11 +40,15 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
                     const { name, value } = att
                     const parsedValue = JSON.parse(value === '' ? 'true' : value);
 
-                    if ((this.instance as any)[name]?.set) {
+                    const split = name.split('-');
+
+                    const property: any = get(this.instance as any, split)
+
+                    if (property?.set) {
                         const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
-                        (this.instance as any)[name].set(...parsedValueAsArray);
-                    } else if ((this.instance as any).hasOwnProperty(name)) {
-                        (this.instance as any)[name] = parsedValue
+                        property.set(...parsedValueAsArray);
+                    } else {
+                        set(this.instance as any, split, parsedValue)
                     }
                 })
 
