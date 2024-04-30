@@ -1,3 +1,4 @@
+/** Get potentially nested property in object */
 export const get = <T = unknown>(
     obj: Record<string, any>,
     path: string | string[],
@@ -17,6 +18,7 @@ export const get = <T = unknown>(
     return result === undefined ? defValue : result
 }
 
+/** Check if `obj` contains a constructor */
 export function isClass(obj: any): obj is IsClass {
     const isCtorClass = obj.constructor
         && obj.constructor.toString().substring(0, 5) === 'class'
@@ -33,6 +35,7 @@ export type IsClass<T = unknown> = {
     new(...args: any): T
 }
 
+/** `isNumber` from lodash */
 const buildIsNumber = () => {
     /**
      * lodash (Custom Build) <https://lodash.com/>
@@ -119,8 +122,10 @@ const buildIsNumber = () => {
     return output
 }
 
+/** Check if a given value is a number */
 export const isNumber = buildIsNumber()
 
+/** Set a potentially-nested property to a given value */
 export const set = (
     obj: Record<string, any>,
     path: string | string[],
