@@ -37,10 +37,11 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
 
                 Array.from(this.attributes).forEach(att => {
                     const { name, value } = att
-                    const parsedValue = value === '' ? true : value;
+                    const parsedValue = JSON.parse(value === '' ? 'true' : value);
 
                     if ((this.instance as any)[name]?.set) {
                         const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
+                        console.log(parsedValueAsArray);
                         (this.instance as any)[name].set(...parsedValueAsArray);
                     } else if ((this.instance as any).hasOwnProperty(name)) {
                         (this.instance as any)[name] = parsedValue
