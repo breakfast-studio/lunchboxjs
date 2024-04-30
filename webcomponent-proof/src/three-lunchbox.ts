@@ -1,10 +1,9 @@
 import { LitElement, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from 'lit/decorators.js'
 
 @customElement('three-lunchbox')
 export class ThreeLunchbox extends LitElement {
 
-  @property()
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera();
@@ -14,6 +13,16 @@ export class ThreeLunchbox extends LitElement {
   constructor() {
     super();
     this.camera.position.set(0, 0, 5)
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback()
+    const observer = new MutationObserver(mutations => {
+      console.log('zzz', mutations)
+    })
+    observer.observe(this, {
+      attributes: true,
+    })
   }
 
 
@@ -31,9 +40,7 @@ export class ThreeLunchbox extends LitElement {
 
   render() {
     return html`
-      
       <slot @slotchange=${this.handleDefaultSlotChange}></slot>
-
       ${this.renderer.domElement}
     `
   }

@@ -35,6 +35,18 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
             connectedCallback(): void {
                 this.instance = new (threeClass as T)(...this.args) as unknown as T;
 
+                Array.from(this.attributes).forEach(att => {
+                    const { name, value } = att
+                    const parsedValue = value === '' ? true : value;
+
+                    if ((this.instance as any)[name]?.set) {
+                        const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
+                        (this.instance as any)[name].set(...parsedValueAsArray);
+                    } else if ((this.instance as any).hasOwnProperty(name)) {
+                        (this.instance as any)[name] = parsedValue
+                    }
+                })
+
                 const parent = this.parentElement as ThreeBase;
                 if (parent.instance) {
                     // if we're a geometry or material, attach to parent
