@@ -33,7 +33,7 @@ export class ThreeLunchbox extends LitElement {
 
   handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
     evt.target.assignedElements().forEach(el => {
-      const elAsThree = el as unknown as ThreeComponent<any>
+      const elAsThree = el as unknown as Lunchbox<any>
       if (elAsThree.instance instanceof THREE.Object3D) {
         this.scene.add(elAsThree.instance)
       }
@@ -76,7 +76,6 @@ export class ThreeLunchbox extends LitElement {
 // Programmatically-generated elements
 import * as THREE from 'three';
 import { buildClass } from './three-base';
-import { ThreeComponent } from './three-lunchbox-types';
 
 const autoComponents: Partial<keyof typeof THREE>[] = [
   'WebGLRenderer',

@@ -16,7 +16,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && npm run dts",
+    "dts": "echo \"export * from '../src/three-lunchbox-types'\" > ./dist/lunchboxjs.d.ts",
     "preview": "vite preview"
   },
   "dependencies": {
