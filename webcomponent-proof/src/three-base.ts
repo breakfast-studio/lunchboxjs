@@ -1,24 +1,7 @@
 import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
 import * as THREE from 'three';
-import { get, set } from "./utils";
-
-type IsClass<T = unknown> = {
-    new(...args: any): T
-}
-
-function isClass(obj: any): obj is IsClass {
-    const isCtorClass = obj.constructor
-        && obj.constructor.toString().substring(0, 5) === 'class'
-    if (obj.prototype === undefined) {
-        return isCtorClass
-    }
-    const isPrototypeCtorClass = obj.prototype.constructor
-        && obj.prototype.constructor.toString
-        && obj.prototype.constructor.toString().substring(0, 5) === 'class'
-    return isCtorClass || isPrototypeCtorClass
-}
-
+import { IsClass, get, isClass, set } from "./utils";
 
 export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => {
 
@@ -64,18 +47,13 @@ export const buildClass = <T extends IsClass>(className: keyof typeof THREE) => 
                 }
             }
 
-
             /** Render */
             render() {
                 return html`<slot></slot>`
             }
         }
-
         return ThreeBase
-
     }
-
-
 }
 
 export type ThreeBase = ReturnType<typeof buildClass>

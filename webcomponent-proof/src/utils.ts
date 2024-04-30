@@ -17,6 +17,22 @@ export const get = <T = unknown>(
     return result === undefined ? defValue : result
 }
 
+export function isClass(obj: any): obj is IsClass {
+    const isCtorClass = obj.constructor
+        && obj.constructor.toString().substring(0, 5) === 'class'
+    if (obj.prototype === undefined) {
+        return isCtorClass
+    }
+    const isPrototypeCtorClass = obj.prototype.constructor
+        && obj.prototype.constructor.toString
+        && obj.prototype.constructor.toString().substring(0, 5) === 'class'
+    return isCtorClass || isPrototypeCtorClass
+}
+
+export type IsClass<T = unknown> = {
+    new(...args: any): T
+}
+
 export const set = (
     obj: Record<string, any>,
     path: string | string[],
