@@ -1,23 +1,44 @@
 import { LitElement, html } from 'lit'
-import { customElement } from 'lit/decorators.js'
+import { customElement, property } from 'lit/decorators.js'
 
 @customElement('three-lunchbox')
 export class ThreeLunchbox extends LitElement {
 
+  @property()
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera();
+
+  renderer = new THREE.WebGLRenderer();
+
+  constructor() {
+    super();
+    this.camera.position.set(0, 0, 5)
+  }
+
+
+  handleSceneChange(evt: { target: HTMLSlotElement }) {
+    evt.target.assignedElements().forEach(el => {
+      const elAsThree = el as unknown as ThreeComponent<any>
+      if (elAsThree.instance instanceof THREE.Object3D) {
+        this.scene.add(elAsThree.instance)
+      }
+    })
+
+    this.renderer.render(this.scene, this.camera)
+  }
+
 
   render() {
     return html`
-      <slot name="renderer">
-        <web-gl-renderer/>
-      </slot>
-      <slot name="camera">
-        <perspective-camera/>
-      </slot>
-      <slot name="scene">
+      
+      <slot name="scene" @slotchange=${this.handleSceneChange}>
         <three-scene>
           <slot></slot>
         </three-scene>
       </slot>
+
+      ${this.renderer.domElement}
     `
   }
 }
@@ -26,11 +47,17 @@ export class ThreeLunchbox extends LitElement {
 
 // Programmatically-generated elements
 import * as THREE from 'three';
+import { buildClass } from './three-base';
+import { ThreeComponent } from './three-lunchbox-types';
 
 const autoComponents: Partial<keyof typeof THREE>[] = [
   'WebGLRenderer',
   'PerspectiveCamera',
   'Scene',
+  'Mesh',
+  'BoxGeometry',
+  'MeshBasicMaterial',
+  'IcosahedronGeometry',
 ]
 
 autoComponents.forEach(className => {
@@ -40,12 +67,9 @@ autoComponents.forEach(className => {
     kebabCase = `three-${kebabCase}`
   }
 
-  customElements.define(kebabCase, class extends LitElement {
-    render() {
-      return html`
-      <h1>${className}!</h1>
-      <slot></slot>
-      `
-    }
-  })
+
+  const result = buildClass(className)
+  if (result) {
+    customElements.define(kebabCase, result)
+  }
 })
