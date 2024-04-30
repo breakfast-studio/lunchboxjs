@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit'
 
-class ThreeLunchbox extends LitElement {
+export class ThreeLunchbox extends LitElement {
 
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(75);
@@ -98,7 +98,6 @@ export const init = () => {
 
 
     const result = buildClass(className)
-    console.log(result)
     if (result) {
       customElements.define(kebabCase, result)
     }

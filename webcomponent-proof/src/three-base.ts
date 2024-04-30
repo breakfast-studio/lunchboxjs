@@ -16,7 +16,6 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             @property()
             instance: T | null = null;
 
-
             connectedCallback(): void {
                 super.connectedCallback();
 
@@ -36,6 +35,13 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
                 this.instance = new (threeClass as T)(...this.args) as unknown as T;
 
+                // Populate initial attributes
+                this.getAttributeNames().forEach(attName => {
+                    const attr = this.attributes.getNamedItem(attName);
+                    if (attr) {
+                        this.updateProperty(attr);
+                    }
+                })
                 Array.from(this.attributes).forEach(this.updateProperty.bind(this))
 
                 const parent = this.parentElement as ThreeBase;
@@ -52,9 +58,18 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             updateProperty(att: Attr) {
                 const { name, value } = att
+
+                // find name with correct case, since attribute names are converted to all-lowercase by default
+                let targetCase = name
+                Object.keys(this.instance ?? {}).forEach(key => {
+                    if (key.toLowerCase() === targetCase) {
+                        targetCase = key
+                    }
+                })
+
                 const parsedValue = JSON.parse(value === '' ? 'true' : value);
 
-                const split = name.split('-');
+                const split = targetCase.split('-');
 
                 const property: any = get(this.instance as any, split)
 
