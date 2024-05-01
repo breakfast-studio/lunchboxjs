@@ -5,10 +5,17 @@ import { IsClass } from './utils'
 
 export * from './three-lunchbox'
 
-export const initLunchbox = () => {
-    customElements.define('three-lunchbox', ThreeLunchbox)
+interface LunchboxOptions {
+    /** Add THREE class names that should be registered first here. */
+    prependList?: string[];
+}
 
-    autoComponents.forEach(className => {
+export const initLunchbox = ({
+    prependList = [],
+}: LunchboxOptions = {}) => {
+    customElements.define('three-lunchbox', ThreeLunchbox);
+
+    [...prependList, ...autoComponents].forEach(className => {
         // convert name to kebab-case; prepend `three-` if needed
         let kebabCase = className.split(/\.?(?=[A-Z])/).join('-').toLowerCase().replace(/-g-l-/, '-gl-');
         if (!kebabCase.includes('-')) {
@@ -16,7 +23,7 @@ export const initLunchbox = () => {
         }
 
 
-        const result = buildClass(className)
+        const result = buildClass(className as any)
         if (result) {
             customElements.define(kebabCase, result)
         }
