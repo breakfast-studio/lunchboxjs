@@ -71,18 +71,28 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 }
             })
 
-            const parsedValue = JSON.parse(value === '' ? 'true' : value);
+            let parsedValue = value
+            try {
+                parsedValue = JSON.parse(value === '' ? 'true' : value);
+            } catch (_err) {
+                // noop, since allowed values can fail JSON parsing
+            }
 
+            // nested properties
             const split = targetCase.split('-');
 
+            // current value
             const property: any = get(this.instance as any, split)
 
             if (isNumber(parsedValue) && property?.setScalar) {
+                // Set scalar
                 property.setScalar(parsedValue);
             } else if (property?.set) {
+                // Set as values in an array
                 const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
                 property.set(...parsedValueAsArray);
             } else {
+                // Manually set
                 set(this.instance as any, split, parsedValue)
             }
         }
