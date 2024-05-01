@@ -12,17 +12,19 @@
 <body>
   <!-- Vanilla HTML -->
   <three-lunchbox>
-    <!-- icosahedron -->
-    <three-mesh>
-      <box-geometry></box-geometry>
-      <mesh-basic-material wireframe></mesh-basic-material>
-    </three-mesh>
+
 
     <!-- box -->
-    <!-- <three-mesh position-x="-0.5" position-y="0.5" onmouseover="evt => console.log('yyy', evt)">
+    <three-mesh position-x="-0.5" position-y="0.5" onmouseover="evt => console.log('yyy', evt)">
       <box-geometry args="[2, 2, 2]"></box-geometry>
       <mesh-basic-material wireframe color="&quot;teal&quot;"></mesh-basic-material>
-    </three-mesh> -->
+
+      <!-- icosahedron -->
+      <three-mesh>
+        <box-geometry></box-geometry>
+        <mesh-basic-material wireframe></mesh-basic-material>
+      </three-mesh>
+    </three-mesh>
   </three-lunchbox>
 </body>
 

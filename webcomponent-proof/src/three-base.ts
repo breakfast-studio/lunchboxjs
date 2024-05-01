@@ -56,6 +56,14 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 if (this.instance instanceof THREE.Material && parent.instance instanceof THREE.Mesh) {
                     parent.instance.material = this.instance
                 }
+                if (this.instance instanceof THREE.Object3D) {
+                    if (parent.instance instanceof THREE.Object3D) {
+                        parent.instance.add(this.instance)
+                    }
+                    if (parent.instance instanceof THREE.Scene) {
+                        parent.instance.add(this.instance)
+                    }
+                }
             }
         }
 
