@@ -6,6 +6,8 @@ import * as THREE from 'three'
 
 export * from './three-lunchbox'
 
+export const THREE_POINTER_MOVE_EVENT_NAME = 'threepointermove';
+
 interface LunchboxOptions {
     /** Add THREE class names that should be registered first here. */
     prependList?: string[];
