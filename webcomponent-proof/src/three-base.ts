@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
 import * as THREE from 'three';
-import { IsClass, get, isClass, isNumber, set } from "./utils";
+import { IsClass, THREE_UUID_ATTRIBUTE_NAME, get, isClass, isNumber, set } from "./utils";
 
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
 
@@ -37,6 +37,10 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             })
 
             this.instance = new (threeClass as T)(...this.args) as unknown as T;
+
+            if ((this.instance as any)?.uuid) {
+                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, (this.instance as any).uuid)
+            }
 
             // Populate initial attributes
             this.getAttributeNames().forEach(attName => {
@@ -80,6 +84,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             })
 
             // handle events
+            // ==================
             if (name.startsWith('on')) {
                 console.log(name, value)
 
@@ -87,7 +92,8 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             }
 
             // handle non-events
-
+            // ==================
+            // TODO: parse objects as non-JSON (`{&quot;test&quot;: 1}` is annoying to write)
             let parsedValue = value
             try {
                 parsedValue = JSON.parse(value === '' ? 'true' : value);

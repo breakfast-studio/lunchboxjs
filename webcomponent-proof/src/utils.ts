@@ -140,3 +140,5 @@ export const set = (
         return acc[key]
     }, obj)
 }
+
+export const THREE_UUID_ATTRIBUTE_NAME = 'data-three-uuid';

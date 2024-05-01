@@ -1,8 +1,14 @@
 import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
+import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
 
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
+  // Utils
+  // ==================
+  private scratchV2 = new THREE.Vector2();
+  private scratchV3 = new THREE.Vector3();
+
   // TODO: Customizable scene, camera, renderer args
   // TODO: Fully customizable scene, camera, renderer
   scene = new THREE.Scene();
@@ -10,6 +16,7 @@ export class ThreeLunchbox extends LitElement {
   renderer = new THREE.WebGLRenderer({
     antialias: true,
   });
+
 
   /** ResizeObserver to handle container sizing */
   resizeObserver: ResizeObserver;
@@ -32,18 +39,61 @@ export class ThreeLunchbox extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.resizeObserver.observe(this);
+
+    // Prep mouse info
+    this.renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
+
+    // Kick update loop
     this.updateLoop();
+  }
+
+  disconnectedCallback(): void {
+    this.renderer.domElement.removeEventListener('pointermove', this.onPointerMove.bind(this));
+    this.renderer.dispose();
+
+    cancelAnimationFrame(this.frame);
   }
 
   handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
     evt.target.assignedElements().forEach(el => {
       const elAsThree = el as unknown as Lunchbox<any>
       if (elAsThree.instance instanceof THREE.Object3D) {
-        this.scene.add(elAsThree.instance)
+        this.scene.add(elAsThree.instance);
+      }
+
+      // Naive add-to-raycast-pool
+      if (el.getAttributeNames().includes('onpointermove')) {
+        this.raycastPool.push(elAsThree.instance)
       }
     })
 
     this.renderThree();
+  }
+
+  // Raycast/pointer information
+  // ==================
+  raycaster = new THREE.Raycaster();
+  raycastPool: THREE.Object3D[] = [];
+  onPointerMove(evt: PointerEvent) {
+    if (!this.raycastPool.length) return;
+
+    const ndc = this.scratchV2.clone().set(
+      (evt.clientX / this.renderer.domElement.width) * 2 - 1,
+      -(evt.clientY / this.renderer.domElement.height) * 2 + 1
+    );
+
+    this.raycaster.setFromCamera(ndc, this.camera)
+    const intersects = this.raycaster.intersectObjects(this.raycastPool);
+    const matches = intersects.map(intersect => {
+      return {
+        intersect,
+        // TODO: cache result of this query selector somewhere?
+        element: this.querySelector(`[${THREE_UUID_ATTRIBUTE_NAME}="${intersect.object.uuid}"]`)
+      }
+    });
+    matches.forEach(match => {
+      match.element?.dispatchEvent(new Event('pointermove'))
+    })
   }
 
   /** Container styles */
@@ -61,10 +111,11 @@ export class ThreeLunchbox extends LitElement {
   `
 
   /** Render loop */
+  frame: number = Infinity;
   // TODO: Only kick if required
   updateLoop() {
     this.renderThree();
-    requestAnimationFrame(this.updateLoop.bind(this));
+    this.frame = requestAnimationFrame(this.updateLoop.bind(this));
   }
 
   /** Render the 3D scene */
