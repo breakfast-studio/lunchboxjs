@@ -9,7 +9,7 @@ export class ThreeLunchbox extends LitElement {
   // Utils
   // ==================
   private scratchV2 = new THREE.Vector2();
-  private scratchV3 = new THREE.Vector3();
+  // private scratchV3 = new THREE.Vector3();
 
   // TODO: Customizable scene, camera, renderer args
   // TODO: Fully customizable scene, camera, renderer
