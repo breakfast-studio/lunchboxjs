@@ -1,6 +1,8 @@
 import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
 import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
+import { Lunchbox, RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
+import { ThreePointerMoveEvent } from '.';
 
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
@@ -62,7 +64,7 @@ export class ThreeLunchbox extends LitElement {
       }
 
       // Naive add-to-raycast-pool
-      if (el.getAttributeNames().includes('onpointermove')) {
+      if (!!el.getAttributeNames().includes(RAYCASTABLE_ATTRIBUTE_NAME)) {
         this.raycastPool.push(elAsThree.instance)
       }
     })
@@ -92,7 +94,8 @@ export class ThreeLunchbox extends LitElement {
       }
     });
     matches.forEach(match => {
-      match.element?.dispatchEvent(new Event('pointermove'))
+      match.element?.dispatchEvent(new PointerEvent('pointermove'));
+      match.element?.dispatchEvent(new CustomEvent<ThreePointerMoveEvent>('threepointermove', { detail: match }))
     })
   }
 

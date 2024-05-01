@@ -2,6 +2,7 @@ import { autoComponents } from './auto-components'
 import { buildClass } from './three-base'
 import { ThreeLunchbox } from './three-lunchbox'
 import { IsClass } from './utils'
+import * as THREE from 'three'
 
 export * from './three-lunchbox'
 
@@ -35,4 +36,9 @@ export const extend = (name: string, classDefinition: IsClass) => {
     if (result) {
         customElements.define(name, result)
     }
+}
+
+export type ThreePointerMoveEvent = {
+    intersect: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>;
+    element: Element | null;
 }

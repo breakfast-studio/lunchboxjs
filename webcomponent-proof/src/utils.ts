@@ -31,7 +31,7 @@ export function isClass(obj: any): obj is IsClass {
     return isCtorClass || isPrototypeCtorClass
 }
 
-export type IsClass<T = unknown> = {
+export type IsClass<T = any> = {
     new(...args: any): T
 }
 

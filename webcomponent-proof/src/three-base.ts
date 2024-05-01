@@ -3,6 +3,11 @@ import { property } from "lit/decorators.js";
 import * as THREE from 'three';
 import { IsClass, THREE_UUID_ATTRIBUTE_NAME, get, isClass, isNumber, set } from "./utils";
 
+export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
+const BUILT_IN_ATTRIBUTES = [
+    RAYCASTABLE_ATTRIBUTE_NAME,
+]
+
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
 
     const threeClass = typeof targetClass === 'string' ? THREE[targetClass as keyof typeof THREE] : targetClass;
@@ -11,12 +16,14 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         return null;
     }
 
-    class ThreeBase extends LitElement {
+    class ThreeBase<U extends IsClass = T> extends LitElement {
         @property({ type: Array })
-        args: ConstructorParameters<T> = [] as any;
+        args: ConstructorParameters<U> = [] as any;
 
         @property()
-        instance: T | null = null;
+        instance: U | null = null;
+
+        dispose: (() => void)[] = [];
 
         mutationObserver: MutationObserver | null = null;
 
@@ -36,7 +43,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 attributes: true,
             })
 
-            this.instance = new (threeClass as T)(...this.args) as unknown as T;
+            this.instance = new (threeClass as U)(...this.args) as unknown as U;
 
             if ((this.instance as any)?.uuid) {
                 this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, (this.instance as any).uuid)
@@ -83,11 +90,8 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 }
             })
 
-            // handle events
-            // ==================
-            if (name.startsWith('on')) {
-                console.log(name, value)
-
+            // ignore Lunchbox-specific attributes
+            if (BUILT_IN_ATTRIBUTES.includes(targetCase)) {
                 return;
             }
 
@@ -128,4 +132,6 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
     return ThreeBase
 }
 
-export type ThreeBase = ReturnType<typeof buildClass>
+export type Lunchbox<T> = Element & {
+    instance: T
+};
