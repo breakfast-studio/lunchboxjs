@@ -12,18 +12,22 @@
 <body>
   <!-- Vanilla HTML -->
   <three-lunchbox>
-
-
     <!-- box -->
-    <three-mesh position-x="-0.5" position-y="0.5" onmouseover="evt => console.log('yyy', evt)">
+    <three-mesh position-x="-0.5" position-y="0.5">
       <box-geometry args="[2, 2, 2]"></box-geometry>
       <mesh-basic-material wireframe color="&quot;teal&quot;"></mesh-basic-material>
 
       <!-- icosahedron -->
       <three-mesh>
-        <box-geometry></box-geometry>
+        <icosahedron-geometry args="[1, 2]"></icosahedron-geometry>
         <mesh-basic-material wireframe></mesh-basic-material>
       </three-mesh>
+    </three-mesh>
+
+    <!-- ground plane -->
+    <three-mesh rotation-x="-1.57" position-y="-10" scale="200">
+      <plane-geometry args="[1, 1, 20, 20]"></plane-geometry>
+      <mesh-basic-material wireframe></mesh-basic-material>
     </three-mesh>
   </three-lunchbox>
 </body>

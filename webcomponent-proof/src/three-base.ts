@@ -79,6 +79,15 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 }
             })
 
+            // handle events
+            if (name.startsWith('on')) {
+                console.log(name, value)
+
+                return;
+            }
+
+            // handle non-events
+
             let parsedValue = value
             try {
                 parsedValue = JSON.parse(value === '' ? 'true' : value);
