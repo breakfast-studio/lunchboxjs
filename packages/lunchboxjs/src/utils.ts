@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /** Get potentially nested property in object */
 export const get = <T = unknown>(
-    obj: Record<string, unknown>,
+    obj: any,
     path: string | string[],
     defValue?: T
 ) => {
