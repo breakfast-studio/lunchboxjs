@@ -8,6 +8,6 @@ const t = document.querySelector<ThreeLunchbox>('three-lunchbox')!;
 t.camera.position.z = 5;
 
 const ground = document.querySelector<Lunchbox<THREE.Mesh>>('*[data-name="ground"]');
-(ground as any)?.addEventListener('threepointermove', (evt: CustomEvent<ThreePointerMoveEvent>) => {
+ground?.addEventListener('threepointermove', (evt: CustomEvent<ThreePointerMoveEvent>) => {
     console.log(evt)
 })
