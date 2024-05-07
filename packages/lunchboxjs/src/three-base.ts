@@ -28,6 +28,8 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         connectedCallback(): void {
             super.connectedCallback();
 
+            // Attribute mutation observation
+            // ==================
             this.mutationObserver = new MutationObserver(mutations => {
                 mutations.forEach(mutation => {
                     if (!mutation.attributeName) return;
@@ -41,12 +43,9 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 attributes: true,
             });
 
+            // Instance creation
+            // ==================
             this.instance = new (threeClass as U)(...this.args) as unknown as U;
-
-            if ((this.instance as unknown as THREE.Object3D)?.uuid) {
-                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, (this.instance as unknown as THREE.Object3D).uuid);
-            }
-
             // Populate initial attributes
             this.getAttributeNames().forEach(attName => {
                 const attr = this.attributes.getNamedItem(attName);
@@ -56,6 +55,14 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             });
             Array.from(this.attributes).forEach(this.updateProperty.bind(this));
 
+            // Instance bookkeeping
+            // ==================
+            if (this.instance instanceof THREE.Object3D) {
+                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, this.instance.uuid);
+            }
+
+            // Do some attaching based on common use cases
+            // ==================
             const parent = this.parentElement as ThreeBase;
             if (parent.instance) {
                 // if we're a geometry or material, attach to parent

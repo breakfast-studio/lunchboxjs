@@ -2,7 +2,7 @@ import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
 import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
 import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
-import { Lunchbox, THREE_POINTER_MOVE_EVENT_NAME, ThreePointerMoveEvent } from '.';
+import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
 
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
@@ -44,6 +44,9 @@ export class ThreeLunchbox extends LitElement {
 
     // Prep mouse info
     this.renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
+    this.renderer.domElement.addEventListener('click', this.onClick.bind(this));
+    // this.renderer.domElement.addEventListener('touchstart', this.onClick.bind(this));
+
 
     // Kick update loop
     this.updateLoop();
@@ -51,6 +54,8 @@ export class ThreeLunchbox extends LitElement {
 
   disconnectedCallback(): void {
     this.renderer.domElement.removeEventListener('pointermove', this.onPointerMove.bind(this));
+    this.renderer.domElement.removeEventListener('click', this.onClick.bind(this));
+    // this.renderer.domElement.removeEventListener('touchstart', this.onClick.bind(this));
     this.renderer.dispose();
 
     cancelAnimationFrame(this.frame);
@@ -65,7 +70,6 @@ export class ThreeLunchbox extends LitElement {
         // Naive add-to-raycast-pool
         const autoAdd = [
           RAYCASTABLE_ATTRIBUTE_NAME,
-          `on${THREE_POINTER_MOVE_EVENT_NAME}`
         ];
         if (el.getAttributeNames().find(n => autoAdd.includes(n))) {
           this.raycastPool.push(elAsThree.instance);
@@ -80,8 +84,11 @@ export class ThreeLunchbox extends LitElement {
   // ==================
   raycaster = new THREE.Raycaster();
   raycastPool: THREE.Object3D[] = [];
-  onPointerMove(evt: PointerEvent) {
-    if (!this.raycastPool.length) return;
+  runRaycast(evt: {
+    clientX: number,
+    clientY: number,
+  }) {
+    if (!this.raycastPool.length) return [];
 
     const ndc = this.scratchV2.clone().set(
       (evt.clientX / this.renderer.domElement.width) * 2 - 1,
@@ -97,9 +104,40 @@ export class ThreeLunchbox extends LitElement {
         element: this.querySelector(`[${THREE_UUID_ATTRIBUTE_NAME}="${intersect.object.uuid}"]`)
       };
     });
+    return matches;
+  }
+
+  // Pointer movement
+  // ==================
+  onPointerMove(evt: PointerEvent) {
+    const matches = this.runRaycast.bind(this)(evt);
+
     matches.forEach(match => {
       match.element?.dispatchEvent(new PointerEvent('pointermove'));
-      match.element?.dispatchEvent(new CustomEvent<ThreePointerMoveEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));
+      match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));
+    });
+  }
+
+  // Click handling
+  // ==================
+  onClick(evt: TouchEvent | MouseEvent) {
+    let matches = [] as ReturnType<typeof this.runRaycast>;
+    if (evt instanceof TouchEvent) {
+      const touch = evt.touches[0];
+      matches = this.runRaycast.bind(this)(touch);
+      matches.forEach(match => {
+        match.element?.dispatchEvent(new TouchEvent('touchstart'));
+      });
+
+    } else {
+      matches = this.runRaycast.bind(this)(evt);
+      matches.forEach(match => {
+        match.element?.dispatchEvent(new MouseEvent('click'));
+      });
+    }
+
+    matches.forEach(match => {
+      match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_CLICK_EVENT_NAME, { detail: match }));
     });
   }
 
