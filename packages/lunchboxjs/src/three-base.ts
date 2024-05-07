@@ -117,9 +117,16 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                     // Set scalar
                     property.setScalar(+parsedValue);
                 } else if (property?.set) {
-                    // Set as values in an array
-                    const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
-                    property.set(...parsedValueAsArray);
+                    // try converting to an array of numbers
+                    const asNumbers = parsedValue.match(/[^,]+/g)?.map(n => +n);
+                    if (asNumbers?.length && asNumbers.every(isNumber)) {
+                        property.set(...asNumbers);
+                    } else {
+                        // Set as values in an array
+                        const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
+                        property.set(...parsedValueAsArray);
+                    }
+
                 } else {
                     // Manually set
                     set(this.instance, split, parsedValue);
