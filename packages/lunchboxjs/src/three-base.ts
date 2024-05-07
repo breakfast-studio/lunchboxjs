@@ -125,9 +125,10 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                     property.setScalar(+parsedValue);
                 } else if (property?.set) {
                     // try converting to an array of numbers
-                    const asNumbers = parsedValue.match(/[^,]+/g)?.map(n => +n);
-                    if (asNumbers?.length && asNumbers.every(isNumber)) {
-                        property.set(...asNumbers);
+                    const asNumbers = parsedValue.split(',');
+                    const isAllNumbers = asNumbers.every(n => n.match(/\d+/));
+                    if (asNumbers?.length && isAllNumbers) {
+                        property.set(...asNumbers.map(n => +n));
                     } else {
                         // Set as values in an array
                         const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
