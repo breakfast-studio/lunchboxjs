@@ -6,6 +6,10 @@ import * as THREE from '../node_modules/@types/three';
 
 export * from './three-lunchbox';
 
+export type Lunchbox<T> = Element & {
+    instance: T
+};
+
 export const THREE_POINTER_MOVE_EVENT_NAME = 'threepointermove';
 
 interface LunchboxOptions {

@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { property } from "lit/decorators.js";
+// import { property } from "lit/decorators.js";
 import * as THREE from 'three';
 import { IsClass, THREE_UUID_ATTRIBUTE_NAME, get, isClass, isNumber, set } from "./utils";
 
@@ -17,10 +17,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
     }
 
     class ThreeBase<U extends IsClass = T> extends LitElement {
-        @property({ type: Array })
         args: ConstructorParameters<U> = [] as unknown as ConstructorParameters<U>;
-
-        @property()
         instance: U | null = null;
 
         dispose: (() => void)[] = [];
@@ -136,8 +133,4 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         }
     }
     return ThreeBase;
-};
-
-export type Lunchbox<T> = Element & {
-    instance: T
 };

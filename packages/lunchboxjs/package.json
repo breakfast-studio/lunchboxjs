@@ -14,10 +14,11 @@
   "private": true,
   "version": "0.3.0-alpha.1",
   "type": "module",
+  "types": "./dist/lunchboxjs.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && npm run dts",
-    "dts": "echo \"export * from '../src/three-lunchbox-types'\" > ./dist/lunchboxjs.d.ts",
+    "dts": "echo \"export * from '../src/';\" > ./dist/lunchboxjs.d.ts",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -1,8 +1,8 @@
 import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
 import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
-import { Lunchbox, RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
-import { THREE_POINTER_MOVE_EVENT_NAME, ThreePointerMoveEvent } from '.';
+import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
+import { Lunchbox, THREE_POINTER_MOVE_EVENT_NAME, ThreePointerMoveEvent } from '.';
 
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
