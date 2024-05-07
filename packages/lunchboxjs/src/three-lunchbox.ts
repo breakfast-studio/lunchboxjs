@@ -28,13 +28,13 @@ export class ThreeLunchbox extends LitElement {
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(({ target, contentRect }) => {
         if (target === this) {
-          this.renderer.setSize(contentRect.width, contentRect.height)
+          this.renderer.setSize(contentRect.width, contentRect.height);
           this.camera.aspect = contentRect.width / contentRect.height;
           this.camera.updateProjectionMatrix();
           this.renderThree();
         }
-      })
-    })
+      });
+    });
   }
 
   /** To run on start. */
@@ -58,7 +58,7 @@ export class ThreeLunchbox extends LitElement {
 
   handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
     evt.target.assignedElements().forEach(el => {
-      const elAsThree = el as unknown as Lunchbox<any>
+      const elAsThree = el as unknown as Lunchbox<any>;
       if (elAsThree.instance instanceof THREE.Object3D) {
         this.scene.add(elAsThree.instance);
       }
@@ -68,10 +68,10 @@ export class ThreeLunchbox extends LitElement {
         RAYCASTABLE_ATTRIBUTE_NAME,
         `on${THREE_POINTER_MOVE_EVENT_NAME}`
       ];
-      if (!!el.getAttributeNames().find(n => autoAdd.includes(n))) {
-        this.raycastPool.push(elAsThree.instance)
+      if (el.getAttributeNames().find(n => autoAdd.includes(n))) {
+        this.raycastPool.push(elAsThree.instance);
       }
-    })
+    });
 
     this.renderThree();
   }
@@ -88,19 +88,19 @@ export class ThreeLunchbox extends LitElement {
       -(evt.clientY / this.renderer.domElement.height) * 2 + 1
     );
 
-    this.raycaster.setFromCamera(ndc, this.camera)
+    this.raycaster.setFromCamera(ndc, this.camera);
     const intersects = this.raycaster.intersectObjects(this.raycastPool);
     const matches = intersects.map(intersect => {
       return {
         intersect,
         // TODO: cache result of this query selector somewhere?
         element: this.querySelector(`[${THREE_UUID_ATTRIBUTE_NAME}="${intersect.object.uuid}"]`)
-      }
+      };
     });
     matches.forEach(match => {
       match.element?.dispatchEvent(new PointerEvent('pointermove'));
-      match.element?.dispatchEvent(new CustomEvent<ThreePointerMoveEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }))
-    })
+      match.element?.dispatchEvent(new CustomEvent<ThreePointerMoveEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));
+    });
   }
 
   /** Container styles */
@@ -115,7 +115,7 @@ export class ThreeLunchbox extends LitElement {
       width: 100%;
       height: 100%;
     }
-  `
+  `;
 
   /** Render loop */
   frame: number = Infinity;
@@ -135,6 +135,6 @@ export class ThreeLunchbox extends LitElement {
     return html`
       <slot @slotchange=${this.handleDefaultSlotChange}></slot>
       ${this.renderer.domElement}
-    `
+    `;
   }
 }

@@ -5,30 +5,30 @@ export const get = <T = unknown>(
     defValue?: T
 ) => {
     // If path is not defined or it has false value
-    if (!path) return undefined
+    if (!path) return undefined;
     // Check if path is string or array. Regex : ensure that we do not have '.' and brackets.
     // Regex explained: https://regexr.com/58j0k
-    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
+    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g);
     // Find value
     const result = pathArray?.reduce(
         (prevObj: Record<string, any>, key: string) => prevObj && prevObj[key],
         obj
-    )
+    );
     // If found value is undefined return default value; otherwise return the value
-    return result === undefined ? defValue : result
-}
+    return result === undefined ? defValue : result;
+};
 
 /** Check if `obj` contains a constructor */
 export function isClass(obj: any): obj is IsClass {
     const isCtorClass = obj.constructor
-        && obj.constructor.toString().substring(0, 5) === 'class'
+        && obj.constructor.toString().substring(0, 5) === 'class';
     if (obj.prototype === undefined) {
-        return isCtorClass
+        return isCtorClass;
     }
     const isPrototypeCtorClass = obj.prototype.constructor
         && obj.prototype.constructor.toString
-        && obj.prototype.constructor.toString().substring(0, 5) === 'class'
-    return isCtorClass || isPrototypeCtorClass
+        && obj.prototype.constructor.toString().substring(0, 5) === 'class';
+    return isCtorClass || isPrototypeCtorClass;
 }
 
 export type IsClass<T = any> = {
@@ -47,17 +47,17 @@ const buildIsNumber = () => {
      */
 
     /** `Object#toString` result references. */
-    const numberTag = '[object Number]'
+    const numberTag = '[object Number]';
 
     /** Used for built-in method references. */
-    const objectProto = Object.prototype
+    const objectProto = Object.prototype;
 
     /**
      * Used to resolve the
      * [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
      * of values.
      */
-    const objectToString = objectProto.toString
+    const objectToString = objectProto.toString;
 
     /**
      * Checks if `value` is object-like. A value is object-like if it's not `null`
@@ -84,7 +84,7 @@ const buildIsNumber = () => {
      * // => false
      */
     function isObjectLike(value: any) {
-        return !!value && typeof value == 'object'
+        return !!value && typeof value == 'object';
     }
 
     /**
@@ -117,13 +117,13 @@ const buildIsNumber = () => {
         return (
             typeof value == 'number' ||
             (isObjectLike(value) && objectToString.call(value) == numberTag)
-        )
-    }
-    return output
-}
+        );
+    };
+    return output;
+};
 
 /** Check if a given value is a number */
-export const isNumber = buildIsNumber()
+export const isNumber = buildIsNumber();
 
 /** Set a potentially-nested property to a given value */
 export const set = (
@@ -132,13 +132,13 @@ export const set = (
     value: any
 ) => {
     // Regex explained: https://regexr.com/58j0k
-    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
+    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g);
 
     pathArray?.reduce((acc: Record<string, any>, key: string, i: number) => {
-        if (acc[key] === undefined) acc[key] = {}
-        if (i === pathArray.length - 1) acc[key] = value
-        return acc[key]
-    }, obj)
-}
+        if (acc[key] === undefined) acc[key] = {};
+        if (i === pathArray.length - 1) acc[key] = value;
+        return acc[key];
+    }, obj);
+};
 
 export const THREE_UUID_ATTRIBUTE_NAME = 'data-three-uuid';

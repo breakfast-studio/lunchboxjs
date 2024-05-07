@@ -14,4 +14,4 @@ export const autoComponents: Partial<keyof typeof THREE>[] = [
     'PerspectiveCamera',
     'PlaneGeometry',
     'SphereGeometry',
-]
+];

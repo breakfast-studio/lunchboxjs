@@ -6,7 +6,7 @@ import { IsClass, THREE_UUID_ATTRIBUTE_NAME, get, isClass, isNumber, set } from 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 const BUILT_IN_ATTRIBUTES = [
     RAYCASTABLE_ATTRIBUTE_NAME,
-]
+];
 
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
 
@@ -33,20 +33,20 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             this.mutationObserver = new MutationObserver(mutations => {
                 mutations.forEach(mutation => {
                     if (!mutation.attributeName) return;
-                    const attr = this.attributes.getNamedItem(mutation.attributeName)
+                    const attr = this.attributes.getNamedItem(mutation.attributeName);
                     if (attr) {
-                        this.updateProperty(attr)
+                        this.updateProperty(attr);
                     }
-                })
-            })
+                });
+            });
             this.mutationObserver.observe(this, {
                 attributes: true,
-            })
+            });
 
             this.instance = new (threeClass as U)(...this.args) as unknown as U;
 
             if ((this.instance as any)?.uuid) {
-                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, (this.instance as any).uuid)
+                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, (this.instance as any).uuid);
             }
 
             // Populate initial attributes
@@ -55,24 +55,24 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 if (attr) {
                     this.updateProperty(attr);
                 }
-            })
-            Array.from(this.attributes).forEach(this.updateProperty.bind(this))
+            });
+            Array.from(this.attributes).forEach(this.updateProperty.bind(this));
 
             const parent = this.parentElement as ThreeBase;
             if (parent.instance) {
                 // if we're a geometry or material, attach to parent
                 if (this.instance instanceof THREE.BufferGeometry && parent.instance instanceof THREE.Mesh) {
-                    parent.instance.geometry = this.instance
+                    parent.instance.geometry = this.instance;
                 }
                 if (this.instance instanceof THREE.Material && parent.instance instanceof THREE.Mesh) {
-                    parent.instance.material = this.instance
+                    parent.instance.material = this.instance;
                 }
                 if (this.instance instanceof THREE.Object3D) {
                     if (parent.instance instanceof THREE.Object3D) {
-                        parent.instance.add(this.instance)
+                        parent.instance.add(this.instance);
                     }
                     if (parent.instance instanceof THREE.Scene) {
-                        parent.instance.add(this.instance)
+                        parent.instance.add(this.instance);
                     }
                 }
             }
@@ -80,15 +80,15 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
         /** Update an instance's property. When creating a `<mesh position-y="0.5">`, for example, this sets `mesh.position.y = 0.5`. */
         updateProperty(att: Attr) {
-            const { name, value } = att
+            const { name, value } = att;
 
             // find name with correct case, since attribute names are converted to all-lowercase by default
-            let targetCase = name
+            let targetCase = name;
             Object.keys(this.instance ?? {}).forEach(key => {
                 if (key.toLowerCase() === targetCase) {
-                    targetCase = key
+                    targetCase = key;
                 }
-            })
+            });
 
             // ignore Lunchbox-specific attributes
             if (BUILT_IN_ATTRIBUTES.includes(targetCase)) {
@@ -98,7 +98,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             // handle non-events
             // ==================
             // TODO: parse objects as non-JSON (`{&quot;test&quot;: 1}` is annoying to write)
-            let parsedValue = value
+            let parsedValue = value;
             try {
                 parsedValue = JSON.parse(value === '' ? 'true' : value);
             } catch (_err) {
@@ -109,7 +109,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             const split = targetCase.split('-');
 
             // current value
-            const property: any = get(this.instance as any, split)
+            const property: any = get(this.instance as any, split);
 
             if (isNumber(parsedValue) && property?.setScalar) {
                 // Set scalar
@@ -120,17 +120,17 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 property.set(...parsedValueAsArray);
             } else {
                 // Manually set
-                set(this.instance as any, split, parsedValue)
+                set(this.instance as any, split, parsedValue);
             }
         }
 
         /** Render */
         render() {
-            return html`<slot></slot>`
+            return html`<slot></slot>`;
         }
     }
-    return ThreeBase
-}
+    return ThreeBase;
+};
 
 export type Lunchbox<T> = Element & {
     instance: T

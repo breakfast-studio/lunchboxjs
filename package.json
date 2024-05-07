@@ -13,7 +13,8 @@
   },
   "scripts": {
     "dev": "npm -w lunchboxjs run dev",
-    "build": "npm -w lunchboxjs run build"
+    "build": "npm -w lunchboxjs run build",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
