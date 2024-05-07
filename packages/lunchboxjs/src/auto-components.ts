@@ -1,5 +1,6 @@
-import * as THREE from '../node_modules/@types/three';
+import * as THREE from 'three';
 
+/** All components that will automatically be registered when Lunchbox is initialized. */
 export const autoComponents: Partial<keyof typeof THREE>[] = [
     // ORDER MATTERS HERE!
     // Place the objects most likely to wrap other objects at the beginning of the list.
