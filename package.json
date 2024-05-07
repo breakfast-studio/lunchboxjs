@@ -12,7 +12,7 @@
     "watch:lunchboxjs": "watch \"pnpm run build\" packages/lunchboxjs/src --ignoreDirectoryPattern=/dist/",
     "dev:lunchboxjs-plugins": "concurrently \"pnpm run watch:lunchboxjs\" \"pnpm --filter lunchboxjs-plugins run dev\"",
     "watch:lunchboxjs-plugins": "watch \"pnpm --filter lunchboxjs-plugins build\" packages/plugins/src --ignoreDirectoryPattern=/dist/",
-    "dev": "pnpm run dev:lunchboxjs",
+    "dev": "cd webcomponent-proof && npm run dev",
     "build": "pnpm --filter lunchboxjs run build:lib",
     "docs:dev": "pnpm --filter docs run dev",
     "docs:build": "pnpm --filter docs run build"
