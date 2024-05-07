@@ -65,13 +65,22 @@ export class ThreeLunchbox extends LitElement {
     evt.target.assignedElements().forEach(el => {
       const elAsThree = el as unknown as Lunchbox<unknown>;
       if (elAsThree.instance instanceof THREE.Object3D) {
+        // TODO: optimize so we're not searching through whole scene graph
+        let alreadyExists = false;
+        this.scene.traverse(child => {
+          if (alreadyExists) return;
+
+          if (child.uuid === (elAsThree.instance as THREE.Object3D).uuid) {
+            alreadyExists = true;
+          }
+        });
+        if (alreadyExists) return;
+
+        // add to scene
         this.scene.add(elAsThree.instance);
 
-        // Naive add-to-raycast-pool
-        const autoAdd = [
-          RAYCASTABLE_ATTRIBUTE_NAME,
-        ];
-        if (el.getAttributeNames().find(n => autoAdd.includes(n))) {
+        // Add to raycast pool
+        if (el.getAttributeNames().includes(RAYCASTABLE_ATTRIBUTE_NAME)) {
           this.raycastPool.push(elAsThree.instance);
         }
       }
