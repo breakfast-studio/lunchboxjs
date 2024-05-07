@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /** Get potentially nested property in object */
 export const get = <T = unknown>(
-    obj: Record<string, any>,
+    obj: Record<string, unknown>,
     path: string | string[],
     defValue?: T
 ) => {
@@ -17,8 +18,10 @@ export const get = <T = unknown>(
     // If found value is undefined return default value; otherwise return the value
     return result === undefined ? defValue : result;
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /** Check if `obj` contains a constructor */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function isClass(obj: any): obj is IsClass {
     const isCtorClass = obj.constructor
         && obj.constructor.toString().substring(0, 5) === 'class';
@@ -31,9 +34,10 @@ export function isClass(obj: any): obj is IsClass {
     return isCtorClass || isPrototypeCtorClass;
 }
 
-export type IsClass<T = any> = {
-    new(...args: any): T
+export type IsClass<T = unknown> = {
+    new(...args: any[]): T
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /** `isNumber` from lodash */
 const buildIsNumber = () => {
@@ -83,6 +87,7 @@ const buildIsNumber = () => {
      * _.isObjectLike(null);
      * // => false
      */
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     function isObjectLike(value: any) {
         return !!value && typeof value == 'object';
     }
@@ -119,6 +124,8 @@ const buildIsNumber = () => {
             (isObjectLike(value) && objectToString.call(value) == numberTag)
         );
     };
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+
     return output;
 };
 
@@ -126,19 +133,21 @@ const buildIsNumber = () => {
 export const isNumber = buildIsNumber();
 
 /** Set a potentially-nested property to a given value */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const set = (
     obj: Record<string, any>,
     path: string | string[],
-    value: any
+    value: unknown
 ) => {
     // Regex explained: https://regexr.com/58j0k
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g);
 
-    pathArray?.reduce((acc: Record<string, any>, key: string, i: number) => {
+    pathArray?.reduce((acc, key: string, i: number) => {
         if (acc[key] === undefined) acc[key] = {};
         if (i === pathArray.length - 1) acc[key] = value;
         return acc[key];
     }, obj);
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export const THREE_UUID_ATTRIBUTE_NAME = 'data-three-uuid';

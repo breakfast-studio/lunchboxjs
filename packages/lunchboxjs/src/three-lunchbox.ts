@@ -58,18 +58,18 @@ export class ThreeLunchbox extends LitElement {
 
   handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
     evt.target.assignedElements().forEach(el => {
-      const elAsThree = el as unknown as Lunchbox<any>;
+      const elAsThree = el as unknown as Lunchbox<unknown>;
       if (elAsThree.instance instanceof THREE.Object3D) {
         this.scene.add(elAsThree.instance);
-      }
 
-      // Naive add-to-raycast-pool
-      const autoAdd = [
-        RAYCASTABLE_ATTRIBUTE_NAME,
-        `on${THREE_POINTER_MOVE_EVENT_NAME}`
-      ];
-      if (el.getAttributeNames().find(n => autoAdd.includes(n))) {
-        this.raycastPool.push(elAsThree.instance);
+        // Naive add-to-raycast-pool
+        const autoAdd = [
+          RAYCASTABLE_ATTRIBUTE_NAME,
+          `on${THREE_POINTER_MOVE_EVENT_NAME}`
+        ];
+        if (el.getAttributeNames().find(n => autoAdd.includes(n))) {
+          this.raycastPool.push(elAsThree.instance);
+        }
       }
     });
 

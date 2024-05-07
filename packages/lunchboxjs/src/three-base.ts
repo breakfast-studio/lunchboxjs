@@ -18,7 +18,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
     class ThreeBase<U extends IsClass = T> extends LitElement {
         @property({ type: Array })
-        args: ConstructorParameters<U> = [] as any;
+        args: ConstructorParameters<U> = [] as unknown as ConstructorParameters<U>;
 
         @property()
         instance: U | null = null;
@@ -45,8 +45,8 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             this.instance = new (threeClass as U)(...this.args) as unknown as U;
 
-            if ((this.instance as any)?.uuid) {
-                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, (this.instance as any).uuid);
+            if ((this.instance as unknown as THREE.Object3D)?.uuid) {
+                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, (this.instance as unknown as THREE.Object3D).uuid);
             }
 
             // Populate initial attributes
@@ -109,18 +109,24 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             const split = targetCase.split('-');
 
             // current value
-            const property: any = get(this.instance as any, split);
+            if (this.instance) {
+                const property: {
+                    setScalar?: (n: number) => unknown,
+                    set?: (...args: unknown[]) => unknown,
+                } | undefined = get(this.instance, split);
 
-            if (isNumber(parsedValue) && property?.setScalar) {
-                // Set scalar
-                property.setScalar(parsedValue);
-            } else if (property?.set) {
-                // Set as values in an array
-                const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
-                property.set(...parsedValueAsArray);
-            } else {
-                // Manually set
-                set(this.instance as any, split, parsedValue);
+                if (isNumber(parsedValue) && property?.setScalar) {
+                    // Set scalar
+                    property.setScalar(+parsedValue);
+                } else if (property?.set) {
+                    // Set as values in an array
+                    const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
+                    property.set(...parsedValueAsArray);
+                } else {
+                    // Manually set
+                    set(this.instance, split, parsedValue);
+                }
+
             }
         }
 
