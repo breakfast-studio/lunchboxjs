@@ -1,7 +1,8 @@
 import { LitElement, html } from "lit";
 import { property } from "lit/decorators.js";
 import * as THREE from 'three';
-import { IsClass, THREE_UUID_ATTRIBUTE_NAME, get, isClass, isNumber, set } from "./utils";
+import { IsClass, THREE_UUID_ATTRIBUTE_NAME, isClass } from "./utils";
+import { setThreeProperty } from "./setThreeProperty";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 const BUILT_IN_ATTRIBUTES = [
@@ -115,31 +116,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // current value
             if (this.instance) {
-                const property: {
-                    setScalar?: (n: number) => unknown,
-                    set?: (...args: unknown[]) => unknown,
-                } | undefined = get(this.instance, split);
-
-                if (isNumber(parsedValue) && property?.setScalar) {
-                    // Set scalar
-                    property.setScalar(+parsedValue);
-                } else if (property?.set) {
-                    // try converting to an array of numbers
-                    const asNumbers = parsedValue.split(',');
-                    const isAllNumbers = asNumbers.every(n => n.match(/\d+/));
-                    if (asNumbers?.length && isAllNumbers) {
-                        property.set(...asNumbers.map(n => +n));
-                    } else {
-                        // Set as values in an array
-                        const parsedValueAsArray = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
-                        property.set(...parsedValueAsArray);
-                    }
-
-                } else {
-                    // Manually set
-                    set(this.instance, split, parsedValue);
-                }
-
+                setThreeProperty(this.instance, split, parsedValue);
             }
         }
 
