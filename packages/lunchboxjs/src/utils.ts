@@ -23,6 +23,8 @@ export const get = <T = unknown>(
 /** Check if `obj` contains a constructor */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function isClass(obj: any): obj is IsClass {
+    if (!obj) return false;
+
     const isCtorClass = obj.constructor
         && obj.constructor.toString().substring(0, 5) === 'class';
     if (obj.prototype === undefined) {
