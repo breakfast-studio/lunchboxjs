@@ -85,6 +85,7 @@ export class ThreeLunchbox extends LitElement {
     this.three.renderer.domElement.removeEventListener('click', this.onClick.bind(this));
     // this.renderer.domElement.removeEventListener('touchstart', this.onClick.bind(this));
     this.three.renderer.dispose();
+    this.resizeObserver.unobserve(this);
 
     cancelAnimationFrame(this.frame);
   }
