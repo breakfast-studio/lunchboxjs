@@ -118,7 +118,7 @@ const buildIsNumber = () => {
      * _.isNumber('3');
      * // => false
      */
-    const output = function isNumber(value: any) {
+    const output = function isNumber(value: any): value is number {
         return (
             typeof value == 'number' ||
             (isObjectLike(value) && objectToString.call(value) == numberTag)

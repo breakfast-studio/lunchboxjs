@@ -4,6 +4,7 @@ import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
 import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
 import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
 import json5 from 'json5';
+import { setThreeProperty } from './setThreeProperty';
 
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
@@ -32,7 +33,7 @@ export class ThreeLunchbox extends LitElement {
     // Camera information
     const cameraOptions = json5.parse(this.getAttribute('camera') ?? '{}');
     Object.entries(cameraOptions).forEach(([k, v]) => {
-      console.log(k, v);
+      setThreeProperty(this.camera, k.split('-'), v);
     });
 
     // Resize observer
