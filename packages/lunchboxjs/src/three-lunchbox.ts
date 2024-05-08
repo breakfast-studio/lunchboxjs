@@ -21,18 +21,20 @@ export class ThreeLunchbox extends LitElement {
     antialias: true,
   });
 
-
   /** ResizeObserver to handle container sizing */
   resizeObserver: ResizeObserver;
 
   constructor() {
     super();
-    console.log(1);
 
-    // Camera information
-    const cameraOptions = parse(this.getAttribute('camera') ?? '{}');
-    Object.entries(cameraOptions).forEach(([k, v]) => {
-      setThreeProperty(this.camera, k.split('-'), v);
+    // Camera, scene, renderer information
+    (['scene', 'camera', 'renderer'] as const).forEach(key => {
+      const options = parse(this.getAttribute(key) ?? '{}');
+      // properties
+      Object.entries(options).forEach(([k, v]) => {
+        // set property
+        setThreeProperty(this[key], k.split('-'), v);
+      });
     });
 
     // Resize observer
