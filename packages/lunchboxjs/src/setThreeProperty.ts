@@ -10,13 +10,16 @@ export const setThreeProperty = <T extends object>(target: T, split: string[], p
         // Set scalar
         property.setScalar(+parsedValue);
     } else if (property?.set) {
-        // assume this is a string like `1,2,3`
-        // and try converting to an array of numbers
         if (typeof parsedValue === 'string') {
             const asNumbers = parsedValue.split(',');
             const isAllNumbers = asNumbers.every(n => n.match(/\d+/));
             if (asNumbers?.length && isAllNumbers) {
+                // assume this is a string like `1,2,3`
+                // and try converting to an array of numbers
+                // (we get arrays as strings like this from Vue, for example)
                 property.set(...asNumbers.map(n => +n));
+            } else {
+                property.set(parsedValue);
             }
         }
         else {
