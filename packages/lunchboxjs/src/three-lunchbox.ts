@@ -5,6 +5,7 @@ import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
 import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
 import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
+import { property } from 'lit/decorators.js';
 
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
@@ -20,9 +21,15 @@ export class ThreeLunchbox extends LitElement {
     camera: new THREE.PerspectiveCamera(75),
     renderer: new THREE.WebGLRenderer({
       antialias: true,
+      alpha: true,
     }),
   };
 
+  @property()
+  background: THREE.ColorRepresentation | null = null;
+
+  @property()
+  sizePolicy: 'container' | 'full' = 'full';
 
   /** ResizeObserver to handle container sizing */
   resizeObserver: ResizeObserver;
@@ -57,6 +64,11 @@ export class ThreeLunchbox extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.resizeObserver.observe(this);
+
+    // Background color
+    if (this.background !== null) {
+      this.three.scene.background = new THREE.Color(this.background);
+    }
 
     // Prep mouse info
     this.three.renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
@@ -170,8 +182,9 @@ export class ThreeLunchbox extends LitElement {
   // TODO: fill window, fit-to-container
   static styles = css`
     :host {
-      position: fixed;
-      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     canvas {

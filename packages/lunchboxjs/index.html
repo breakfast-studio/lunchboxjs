@@ -7,11 +7,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vite + Lit + TS</title>
   <script type="module" src="/demo.ts"></script>
+  <style>
+    three-lunchbox {
+      position: fixed;
+      inset: 0;
+    }
+  </style>
 </head>
 
 <body>
   <!-- Vanilla HTML -->
-  <three-lunchbox camera="{ position: [1, -1, 5] }">
+  <three-lunchbox camera="{ position: [1, -1, 5] }" background="black">
     <!-- box -->
     <three-mesh data-id="test" position-x="-0.5" position-y="0.5">
       <box-geometry args="[2, 2, 2]"></box-geometry>

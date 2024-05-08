@@ -1,0 +1,61 @@
+{
+  "hash": "8f1076d4",
+  "configHash": "884a2af5",
+  "lockfileHash": "203aee85",
+  "browserHash": "72e031c3",
+  "optimized": {
+    "vue": {
+      "src": "../../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
+      "file": "vue.js",
+      "fileHash": "8490e269",
+      "needsInterop": false
+    },
+    "vitepress > @vue/devtools-api": {
+      "src": "../../../../../node_modules/@vue/devtools-api/dist/index.js",
+      "file": "vitepress___@vue_devtools-api.js",
+      "fileHash": "d3a17a5a",
+      "needsInterop": false
+    },
+    "vitepress > @vueuse/core": {
+      "src": "../../../../../node_modules/@vueuse/core/index.mjs",
+      "file": "vitepress___@vueuse_core.js",
+      "fileHash": "42a449df",
+      "needsInterop": false
+    },
+    "lit": {
+      "src": "../../../../lunchboxjs/node_modules/lit/index.js",
+      "file": "lit.js",
+      "fileHash": "1e3b0f98",
+      "needsInterop": false
+    },
+    "three": {
+      "src": "../../../../lunchboxjs/node_modules/three/build/three.module.js",
+      "file": "three.js",
+      "fileHash": "9550d1e6",
+      "needsInterop": false
+    },
+    "json5/lib/parse": {
+      "src": "../../../../../node_modules/json5/lib/parse.js",
+      "file": "json5_lib_parse.js",
+      "fileHash": "5bb897cb",
+      "needsInterop": true
+    },
+    "lit/decorators.js": {
+      "src": "../../../../lunchboxjs/node_modules/lit/decorators.js",
+      "file": "lit_decorators__js.js",
+      "fileHash": "63a45249",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-CN74Y7NI": {
+      "file": "chunk-CN74Y7NI.js"
+    },
+    "chunk-HP7J5F2K": {
+      "file": "chunk-HP7J5F2K.js"
+    },
+    "chunk-Y2F7D3TJ": {
+      "file": "chunk-Y2F7D3TJ.js"
+    }
+  }
+}

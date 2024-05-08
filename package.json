@@ -14,7 +14,8 @@
   "scripts": {
     "dev": "npm -w lunchboxjs run dev",
     "build": "npm -w lunchboxjs run build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "docs:dev": "npm -w docs run docs:dev"
   },
   "repository": {
     "type": "git",
