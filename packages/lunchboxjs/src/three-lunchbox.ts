@@ -15,11 +15,14 @@ export class ThreeLunchbox extends LitElement {
 
   // TODO: Customizable scene, camera, renderer args
   // TODO: Fully customizable scene, camera, renderer
-  scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(75);
-  renderer = new THREE.WebGLRenderer({
-    antialias: true,
-  });
+  three = {
+    scene: new THREE.Scene(),
+    camera: new THREE.PerspectiveCamera(75),
+    renderer: new THREE.WebGLRenderer({
+      antialias: true,
+    }),
+  };
+
 
   /** ResizeObserver to handle container sizing */
   resizeObserver: ResizeObserver;
@@ -33,7 +36,7 @@ export class ThreeLunchbox extends LitElement {
       // properties
       Object.entries(options).forEach(([k, v]) => {
         // set property
-        setThreeProperty(this[key], k.split('-'), v);
+        setThreeProperty(this.three[key], k.split('-'), v);
       });
     });
 
@@ -41,9 +44,9 @@ export class ThreeLunchbox extends LitElement {
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(({ target, contentRect }) => {
         if (target === this) {
-          this.renderer.setSize(contentRect.width, contentRect.height);
-          this.camera.aspect = contentRect.width / contentRect.height;
-          this.camera.updateProjectionMatrix();
+          this.three.renderer.setSize(contentRect.width, contentRect.height);
+          this.three.camera.aspect = contentRect.width / contentRect.height;
+          this.three.camera.updateProjectionMatrix();
           this.renderThree();
         }
       });
@@ -56,8 +59,8 @@ export class ThreeLunchbox extends LitElement {
     this.resizeObserver.observe(this);
 
     // Prep mouse info
-    this.renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
-    this.renderer.domElement.addEventListener('click', this.onClick.bind(this));
+    this.three.renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
+    this.three.renderer.domElement.addEventListener('click', this.onClick.bind(this));
     // this.renderer.domElement.addEventListener('touchstart', this.onClick.bind(this));
 
 
@@ -66,10 +69,10 @@ export class ThreeLunchbox extends LitElement {
   }
 
   disconnectedCallback(): void {
-    this.renderer.domElement.removeEventListener('pointermove', this.onPointerMove.bind(this));
-    this.renderer.domElement.removeEventListener('click', this.onClick.bind(this));
+    this.three.renderer.domElement.removeEventListener('pointermove', this.onPointerMove.bind(this));
+    this.three.renderer.domElement.removeEventListener('click', this.onClick.bind(this));
     // this.renderer.domElement.removeEventListener('touchstart', this.onClick.bind(this));
-    this.renderer.dispose();
+    this.three.renderer.dispose();
 
     cancelAnimationFrame(this.frame);
   }
@@ -80,7 +83,7 @@ export class ThreeLunchbox extends LitElement {
       if (elAsThree.instance instanceof THREE.Object3D) {
         // TODO: optimize so we're not searching through whole scene graph
         let alreadyExists = false;
-        this.scene.traverse(child => {
+        this.three.scene.traverse(child => {
           if (alreadyExists) return;
 
           if (child.uuid === (elAsThree.instance as THREE.Object3D).uuid) {
@@ -90,7 +93,7 @@ export class ThreeLunchbox extends LitElement {
         if (alreadyExists) return;
 
         // add to scene
-        this.scene.add(elAsThree.instance);
+        this.three.scene.add(elAsThree.instance);
 
         // Add to raycast pool
         if (el.getAttributeNames().includes(RAYCASTABLE_ATTRIBUTE_NAME)) {
@@ -113,11 +116,11 @@ export class ThreeLunchbox extends LitElement {
     if (!this.raycastPool.length) return [];
 
     const ndc = this.scratchV2.clone().set(
-      (evt.clientX / this.renderer.domElement.width) * 2 - 1,
-      -(evt.clientY / this.renderer.domElement.height) * 2 + 1
+      (evt.clientX / this.three.renderer.domElement.width) * 2 - 1,
+      -(evt.clientY / this.three.renderer.domElement.height) * 2 + 1
     );
 
-    this.raycaster.setFromCamera(ndc, this.camera);
+    this.raycaster.setFromCamera(ndc, this.three.camera);
     const intersects = this.raycaster.intersectObjects(this.raycastPool);
     const matches = intersects.map(intersect => {
       return {
@@ -187,14 +190,14 @@ export class ThreeLunchbox extends LitElement {
 
   /** Render the 3D scene */
   renderThree() {
-    this.renderer.render(this.scene, this.camera);
+    this.three.renderer.render(this.three.scene, this.three.camera);
   }
 
   render() {
     // TODO: more robust slot changes
     return html`
       <slot @slotchange=${this.handleDefaultSlotChange}></slot>
-      ${this.renderer.domElement}
+      ${this.three.renderer.domElement}
     `;
   }
 }
