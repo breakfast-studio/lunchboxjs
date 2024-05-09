@@ -1,50 +1,50 @@
 {
-  "hash": "8f1076d4",
+  "hash": "b22379aa",
   "configHash": "884a2af5",
-  "lockfileHash": "203aee85",
-  "browserHash": "72e031c3",
+  "lockfileHash": "2ca18595",
+  "browserHash": "823677c6",
   "optimized": {
     "vue": {
       "src": "../../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "8490e269",
+      "fileHash": "052fd7c1",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "d3a17a5a",
+      "fileHash": "1259b64e",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "42a449df",
+      "fileHash": "bd77c943",
       "needsInterop": false
     },
     "lit": {
       "src": "../../../../lunchboxjs/node_modules/lit/index.js",
       "file": "lit.js",
-      "fileHash": "1e3b0f98",
+      "fileHash": "c65fb1a0",
+      "needsInterop": false
+    },
+    "lit/decorators.js": {
+      "src": "../../../../lunchboxjs/node_modules/lit/decorators.js",
+      "file": "lit_decorators__js.js",
+      "fileHash": "4d1b8487",
       "needsInterop": false
     },
     "three": {
       "src": "../../../../lunchboxjs/node_modules/three/build/three.module.js",
       "file": "three.js",
-      "fileHash": "9550d1e6",
+      "fileHash": "48ff0273",
       "needsInterop": false
     },
     "json5/lib/parse": {
       "src": "../../../../../node_modules/json5/lib/parse.js",
       "file": "json5_lib_parse.js",
-      "fileHash": "5bb897cb",
+      "fileHash": "06a0df00",
       "needsInterop": true
-    },
-    "lit/decorators.js": {
-      "src": "../../../../lunchboxjs/node_modules/lit/decorators.js",
-      "file": "lit_decorators__js.js",
-      "fileHash": "63a45249",
-      "needsInterop": false
     }
   },
   "chunks": {

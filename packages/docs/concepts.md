@@ -110,7 +110,7 @@ mesh.position.z = 5
 would map to this in Lunchbox:
 
 ```html
-<three-mesh   position-z="5" />
+<three-mesh position-z="5" />
 ```
 
 ## Components
