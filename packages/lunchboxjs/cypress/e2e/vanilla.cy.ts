@@ -1,5 +1,6 @@
 import { Lunchbox, ThreeLunchbox } from "../../src";
 import type * as THREE from 'three';
+import { Vector3 } from "three";
 
 describe('template spec', () => {
   beforeEach(() => {
@@ -78,6 +79,7 @@ describe('template spec', () => {
   });
 
   it('handles adding and removing nested children correctly', () => {
+    // add a child
     cy.get('three-mesh').then(c => {
       expect(c.length).to.eq(1);
       const html = `<three-mesh data-name="child">
@@ -86,22 +88,39 @@ describe('template spec', () => {
       </three-mesh>`;
       (c.get(0) as Lunchbox<THREE.Mesh>).innerHTML = html;
     });
+    // get basic child position
     cy.get('three-mesh[data-name="child"]').then((c) => {
       const child = c.get(0) as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       expect(child.instance.position.toArray()).to.deep.eq([0, 0, 0]);
     });
+    // move parent
     cy.get('three-mesh[data-name="base"').then(c => {
       expect(c.length).to.eq(1);
       const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
       // update mesh property
       mesh.setAttribute('position-x', '1');
     });
+    // ensure child local/world positions are correct, update local position
+    cy.get('three-mesh[data-name="child"]').then((c) => {
+      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      expect(c.length).to.eq(1);
+      // local position should be origin
+      expect(child.instance.position.toArray()).to.deep.eq([0, 0, 0]);
+      // world position should match parent
+      const worldArray = child.instance.getWorldPosition(new Vector3()).toArray();
+      expect(worldArray).to.deep.eq([1, 0, -5]);
+      child.setAttribute('position-x', '-1');
+    });
+    // ensure child local/world positions are correct after update
+    cy.get('three-mesh[data-name="child"]').then((c) => {
+      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      expect(c.length).to.eq(1);
+      expect(child.instance.position.toArray()).to.deep.eq([-1, 0, 0]);
+      const worldArray = child.instance.getWorldPosition(new Vector3()).toArray();
+      expect(worldArray).to.deep.eq([0, 0, -5]);
+    });
 
-
-    // cy.get('three-lunchbox').then(() => {
-    //   expect(parent.instance.children.length).to.eq(1);
-    // });
 
   });
 });
