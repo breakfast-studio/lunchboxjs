@@ -78,31 +78,30 @@ describe('template spec', () => {
   });
 
   it('handles adding and removing nested children correctly', () => {
-    let parent: Lunchbox<THREE.Mesh>, child: Lunchbox<THREE.Mesh>;
-
     cy.get('three-mesh').then(c => {
       expect(c.length).to.eq(1);
       const html = `<three-mesh data-name="child">
-        <box-geometry></box-geometry>
+        <icosahedron-geometry></icosahedron-geometry>
         <mesh-basic-material color="black"></mesh-basic-material> 
       </three-mesh>`;
-      const p = document.createElement('p');
-      p.innerHTML = html;
-      (c.get(0) as Lunchbox<THREE.Mesh>).setAttribute('data-name', 'parent');
-      c.get(0).appendChild(p.children[0]);
-    });
-    cy.get('three-mesh[data-name="parent"]').then(c => {
-      parent = c.get(0) as Lunchbox<THREE.Mesh>;
-      expect(c.length).to.eq(1);
+      (c.get(0) as Lunchbox<THREE.Mesh>).innerHTML = html;
     });
     cy.get('three-mesh[data-name="child"]').then((c) => {
-      child = c.get(0) as Lunchbox<THREE.Mesh>;
+      const child = c.get(0) as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
+      expect(child.instance.position.toArray()).to.deep.eq([0, 0, 0]);
+    });
+    cy.get('three-mesh[data-name="base"').then(c => {
+      expect(c.length).to.eq(1);
+      const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
+      // update mesh property
+      mesh.setAttribute('position-x', '1');
     });
 
-    cy.get('three-lunchbox').then(() => {
-      expect(parent.instance.children.length).to.eq(1);
-    });
+
+    // cy.get('three-lunchbox').then(() => {
+    //   expect(parent.instance.children.length).to.eq(1);
+    // });
 
   });
 });

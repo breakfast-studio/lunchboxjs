@@ -41,7 +41,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                     }
                 });
             });
-            this.mutationObserver.observe(this, {
+            this.mutationObserver.observe((this as unknown as Node), {
                 attributes: true,
             });
 
@@ -67,20 +67,22 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             // ==================
             const parent = this.parentElement as ThreeBase;
             if (parent.instance) {
+                const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
+                const thisAsMaterial = this.instance as unknown as THREE.Material;
+                const thisAsObject3d = this.instance as unknown as THREE.Object3D;
+                const parentAsMesh = parent.instance as unknown as THREE.Mesh;
+                const parentAsAddTarget = parent.instance as unknown as { add?: (item: THREE.Object3D) => void };
+
                 // if we're a geometry or material, attach to parent
-                if (this.instance instanceof THREE.BufferGeometry && parent.instance instanceof THREE.Mesh) {
-                    parent.instance.geometry = this.instance;
+                if (thisAsGeometry.type.toLowerCase().includes('geometry') && parentAsMesh.geometry) {
+                    parentAsMesh.geometry = thisAsGeometry;
                 }
-                if (this.instance instanceof THREE.Material && parent.instance instanceof THREE.Mesh) {
-                    parent.instance.material = this.instance;
+                else if (thisAsMaterial.type.toLowerCase().includes('material') && parentAsMesh.material) {
+                    parentAsMesh.material = thisAsMaterial;
                 }
-                if (this.instance instanceof THREE.Object3D) {
-                    if (parent.instance instanceof THREE.Object3D) {
-                        parent.instance.add(this.instance);
-                    }
-                    if (parent.instance instanceof THREE.Scene) {
-                        parent.instance.add(this.instance);
-                    }
+                else if (this.instance instanceof THREE.Object3D && parentAsAddTarget.add) {
+                    // If parent is an add target, add to parent
+                    parentAsAddTarget.add(thisAsObject3d);
                 }
             }
         }
