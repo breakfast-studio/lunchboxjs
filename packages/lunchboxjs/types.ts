@@ -1,7 +1,7 @@
-import { ThreePointerMoveEvent } from './src/index';
+import { ThreeIntersectEvent } from './src/index';
 
 interface ElementEventMap {
-    'threepointermove': CustomEvent<ThreePointerMoveEvent>
+    'threepointermove': CustomEvent<ThreeIntersectEvent>
 }
 declare global {
     interface HTMLElement {

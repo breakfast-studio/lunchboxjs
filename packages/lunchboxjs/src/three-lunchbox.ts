@@ -50,7 +50,7 @@ export class ThreeLunchbox extends LitElement {
     // Resize observer
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(({ target, contentRect }) => {
-        if (target === this) {
+        if (target === this as unknown as Element) {
           this.three.renderer.setSize(contentRect.width, contentRect.height);
           this.three.camera.aspect = contentRect.width / contentRect.height;
           this.three.camera.updateProjectionMatrix();
@@ -63,7 +63,7 @@ export class ThreeLunchbox extends LitElement {
   /** To run on start. */
   connectedCallback(): void {
     super.connectedCallback();
-    this.resizeObserver.observe(this);
+    this.resizeObserver.observe(this as unknown as Element);
 
     // Background color
     if (this.background !== null) {
@@ -85,7 +85,7 @@ export class ThreeLunchbox extends LitElement {
     this.three.renderer.domElement.removeEventListener('click', this.onClick.bind(this));
     // this.renderer.domElement.removeEventListener('touchstart', this.onClick.bind(this));
     this.three.renderer.dispose();
-    this.resizeObserver.unobserve(this);
+    this.resizeObserver.unobserve(this as unknown as Element);
 
     cancelAnimationFrame(this.frame);
   }

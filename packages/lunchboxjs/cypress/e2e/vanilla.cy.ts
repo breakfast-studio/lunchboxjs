@@ -36,43 +36,43 @@ describe('vanilla HTML spec', () => {
     // NOTE: After setting attributes, values are tested in Cypress assertions so the DOM
     // has a chance to respond to the attribute update.
 
-    cy.get('three-mesh').then(c => {
+    cy.get('three-mesh').then(async c => {
       expect(c.length).to.eq(1);
       const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
       // update mesh property
       mesh.setAttribute('position-x', '1');
     });
-    cy.get('three-mesh').then(c => {
+    cy.get('three-mesh').then(async c => {
       const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
       expect(mesh.instance.position.x).to.eq(1);
     });
-    cy.get('mesh-basic-material').then(c => {
+    cy.get('mesh-basic-material').then(async c => {
       expect(c.length).to.eq(1);
       const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
       // update material property
       mat.setAttribute('color', 'red');
     });
-    cy.get('mesh-basic-material').then(c => {
+    cy.get('mesh-basic-material').then(async c => {
       const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([1, 0, 0]);
       // update material color to hex
       mat.setAttribute('color', '0x0000ff');
 
     });
-    cy.get('mesh-basic-material').then(c => {
+    cy.get('mesh-basic-material').then(async c => {
       const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([0, 0, 1]);
       // update material color to hash hex
       mat.setAttribute('color', '#00ff00');
 
     });
-    cy.get('mesh-basic-material').then(c => {
+    cy.get('mesh-basic-material').then(async c => {
       const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([0, 1, 0]);
       // update material color to shortened hash hex
       mat.setAttribute('color', '#f0f');
     });
-    cy.get('mesh-basic-material').then(c => {
+    cy.get('mesh-basic-material').then(async c => {
       const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([1, 0, 1]);
     });
@@ -80,7 +80,7 @@ describe('vanilla HTML spec', () => {
 
   it('handles adding and removing nested children correctly', () => {
     // add a child
-    cy.get('three-mesh').then(c => {
+    cy.get('three-mesh').then(async c => {
       expect(c.length).to.eq(1);
       const html = `<three-mesh data-name="child">
         <icosahedron-geometry></icosahedron-geometry>
@@ -89,20 +89,20 @@ describe('vanilla HTML spec', () => {
       (c.get(0) as Lunchbox<THREE.Mesh>).innerHTML = html;
     });
     // get basic child position
-    cy.get('three-mesh[data-name="child"]').then((c) => {
+    cy.get('three-mesh[data-name="child"]').then(async (c) => {
       const child = c.get(0) as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       expect(child.instance.position.toArray()).to.deep.eq([0, 0, 0]);
     });
     // move parent
-    cy.get('three-mesh[data-name="base"').then(c => {
+    cy.get('three-mesh[data-name="base"').then(async c => {
       expect(c.length).to.eq(1);
       const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
       // update mesh property
       mesh.setAttribute('position-x', '1');
     });
     // ensure child local/world positions are correct, update local position
-    cy.get('three-mesh[data-name="child"]').then((c) => {
+    cy.get('three-mesh[data-name="child"]').then(async (c) => {
       const child = c.get(0) as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       // local position should be origin
@@ -113,7 +113,7 @@ describe('vanilla HTML spec', () => {
       child.setAttribute('position-x', '-1');
     });
     // ensure child local/world positions are correct after update
-    cy.get('three-mesh[data-name="child"]').then((c) => {
+    cy.get('three-mesh[data-name="child"]').then(async (c) => {
       const child = c.get(0) as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       expect(child.instance.position.toArray()).to.deep.eq([-1, 0, 0]);

@@ -20,7 +20,8 @@
     "build": "tsc && vite build && npm run dts",
     "dts": "echo \"export * from '../src/';\" > ./dist/lunchboxjs.d.ts",
     "preview": "vite preview",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "test": "cypress run"
   },
   "dependencies": {
     "json5": "^2.2.3",
