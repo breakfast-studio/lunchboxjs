@@ -2,7 +2,7 @@ import { Lunchbox, ThreeLunchbox } from "../../src";
 import type * as THREE from 'three';
 import { Vector3 } from "three";
 
-describe('template spec', () => {
+describe('vanilla HTML spec', () => {
   beforeEach(() => {
     cy.visit('http://localhost:5173/cypress/pages/core.html');
   });
