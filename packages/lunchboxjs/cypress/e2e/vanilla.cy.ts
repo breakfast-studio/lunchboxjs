@@ -68,6 +68,13 @@ describe('template spec', () => {
     cy.get('mesh-basic-material').then(c => {
       const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([0, 1, 0]);
+      // update material color to shortened hash hex
+      mat.setAttribute('color', '#f0f');
     });
+    cy.get('mesh-basic-material').then(c => {
+      const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
+      expect(mat.instance.color.toArray()).to.deep.eq([1, 0, 1]);
+    });
+
   });
 });

@@ -12,8 +12,17 @@ export const setThreeProperty = <T extends object>(target: T, split: string[], p
     } else if (property?.set) {
         if (typeof parsedValue === 'string') {
             const asNumbers = parsedValue.split(',');
-            const isAllNumbers = asNumbers.every(n => n.match(/\d+/));
-            if (asNumbers?.length && isAllNumbers) {
+            const isAllNumbers = asNumbers.every(n => !n.match(/^[^\d,]+$/));
+
+            // handle hash hex numbers
+            if (parsedValue.toLowerCase().trim().match(/^#[\dabcdef]{3,6}$/)?.length) {
+                if (parsedValue.length === 4) {
+                    const str = [parsedValue[1], parsedValue[1], parsedValue[2], parsedValue[2], parsedValue[3], parsedValue[3]].join('');
+                    property.set(+`0x${str}`);
+                } else {
+                    property.set(+`0x${parsedValue.slice(1)}`);
+                }
+            } else if (asNumbers?.length && isAllNumbers) {
                 // assume this is a string like `1,2,3`
                 // and try converting to an array of numbers
                 // (we get arrays as strings like this from Vue, for example)
