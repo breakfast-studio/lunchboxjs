@@ -120,7 +120,5 @@ describe('template spec', () => {
       const worldArray = child.instance.getWorldPosition(new Vector3()).toArray();
       expect(worldArray).to.deep.eq([0, 0, -5]);
     });
-
-
   });
 });
