@@ -7,6 +7,7 @@ import { setThreeProperty } from "./setThreeProperty";
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 const BUILT_IN_ATTRIBUTES = [
     RAYCASTABLE_ATTRIBUTE_NAME,
+    'args',
 ];
 
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {

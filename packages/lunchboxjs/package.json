@@ -28,6 +28,7 @@
     "three": "^0.164.1"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20.12.7",
     "@types/three": "^0.164.0",
     "cypress": "^13.9.0",

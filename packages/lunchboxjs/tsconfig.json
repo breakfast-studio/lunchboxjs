@@ -20,9 +20,13 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": [
+      "cypress"
+    ]
   },
   "include": [
-    "src"
+    "src",
+    "**/*.ts"
   ],
 }
