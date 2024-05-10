@@ -2,7 +2,7 @@ import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
 import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
 import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
-import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
+import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
 import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
@@ -72,6 +72,7 @@ export class ThreeLunchbox extends LitElement {
 
     // Prep mouse info
     this.three.renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
+    this.three.renderer.domElement.addEventListener('mousemove', this.onPointerMove.bind(this));
     this.three.renderer.domElement.addEventListener('click', this.onClick.bind(this));
     // this.renderer.domElement.addEventListener('touchstart', this.onClick.bind(this));
 
@@ -147,12 +148,16 @@ export class ThreeLunchbox extends LitElement {
 
   // Pointer movement
   // ==================
-  onPointerMove(evt: PointerEvent) {
+  onPointerMove(evt: PointerEvent | MouseEvent) {
     const matches = this.runRaycast.bind(this)(evt);
-
     matches.forEach(match => {
-      match.element?.dispatchEvent(new PointerEvent('pointermove'));
-      match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));
+      if (evt.type === 'pointermove') {
+        match.element?.dispatchEvent(new PointerEvent('pointermove'));
+        match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));
+      } else if (evt.type === 'mousemove') {
+        match.element?.dispatchEvent(new MouseEvent('mousemove'));
+        match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_MOUSE_MOVE_EVENT_NAME, { detail: match }));
+      }
     });
   }
 

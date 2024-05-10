@@ -17,7 +17,10 @@
 
 <body>
     <three-lunchbox>
-        <three-mesh position-z="-5" onclick="console.log('clicked')" raycast data-name="base">
+        <three-mesh position-z="-5" onclick="console.log('clicked')" onpointermove="console.log('pointer moved')"
+            onmousemove="console.log('mouse moved')" onpointerenter="console.log('pointer enter')"
+            onmouseenter="console.log('mouse enter')" onpointerleave="console.log('pointer leave')"
+            onmouseleave="console.log('mouse leave')" raycast data-name="base">
             <icosahedron-geometry args="[1, 2]"></icosahedron-geometry>
             <mesh-normal-material></mesh-normal-material>
     </three-lunchbox>
