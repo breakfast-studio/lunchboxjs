@@ -13,7 +13,7 @@
   },
   "version": "2.0.0-alpha.0",
   "type": "module",
-  "types": "./dist/lunchboxjs.d.ts",
+  "types": "./types.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && npm run dts",

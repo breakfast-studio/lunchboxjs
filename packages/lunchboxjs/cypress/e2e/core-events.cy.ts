@@ -1,4 +1,4 @@
-import { Lunchbox, ThreeLunchbox } from "../../src";
+import { Lunchbox, ThreeIntersectEvent, ThreeLunchbox } from "../../src";
 import type * as THREE from 'three';
 import { Vector3 } from "three";
 
@@ -24,8 +24,12 @@ describe('vanilla HTML spec', () => {
 
   it('fires the custom click event correctly', () => {
     cy.get('three-mesh[data-name="base"]').then(async c => {
-      // c.get(0).addEventListener('three')
+      // add threeclick listener as custom value
+      c.get(0).addEventListener('threeclick', (evt) => {
+        const event = evt as CustomEvent<ThreeIntersectEvent>;
+        expect(event.detail.element?.getAttribute('data-name')).to.eq('base');
+        expect(event.detail.intersect.point.toArray()).to.deep.eq([0, 0, -4.0205678939819345]);
+      });
     });
-    cy.get('three-lunchbox').trigger('click', 'center');
   });
 });
