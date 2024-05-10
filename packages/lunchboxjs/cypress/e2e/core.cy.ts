@@ -15,6 +15,7 @@ describe('vanilla HTML spec', () => {
       // ensure box position is correct
       const [box] = lb.three.scene.children;
       expect(box.type).to.eq('Mesh');
+      expect(box).to.not.haveOwnProperty('data');
 
       // ensure geometry is correct
       const mesh = box as THREE.Mesh;

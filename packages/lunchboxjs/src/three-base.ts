@@ -5,9 +5,10 @@ import { IsClass, THREE_UUID_ATTRIBUTE_NAME, isClass } from "./utils";
 import { setThreeProperty } from "./setThreeProperty";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
-const BUILT_IN_ATTRIBUTES = [
+export const IGNORED_ATTRIBUTES = [
     RAYCASTABLE_ATTRIBUTE_NAME,
     'args',
+    'data',
 ];
 
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
@@ -99,8 +100,11 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 }
             });
 
+            // nested properties
+            const split = targetCase.split('-');
+
             // ignore Lunchbox-specific attributes
-            if (BUILT_IN_ATTRIBUTES.includes(targetCase)) {
+            if (IGNORED_ATTRIBUTES.includes(targetCase) || IGNORED_ATTRIBUTES.includes(split[0])) {
                 return;
             }
 
@@ -114,8 +118,6 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 // noop, since allowed values can fail JSON parsing
             }
 
-            // nested properties
-            const split = targetCase.split('-');
 
             // current value
             if (this.instance) {

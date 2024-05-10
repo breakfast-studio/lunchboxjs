@@ -1,0 +1,31 @@
+import { Lunchbox, ThreeLunchbox } from "../../src";
+import type * as THREE from 'three';
+import { Vector3 } from "three";
+
+describe('vanilla HTML spec', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:5173/cypress/pages/core-events.html', {
+      onBeforeLoad(win) {
+        cy.stub(win.console, 'log').as('consoleLog');
+      }
+    });
+  });
+
+
+  it('fires the native click event correctly', () => {
+    // miss the target
+    cy.get('three-lunchbox').trigger('click', 'topLeft');
+    cy.get('@consoleLog').should('not.be.called');
+
+    // click the target
+    cy.get('three-lunchbox').trigger('click', 'center');
+    cy.get('@consoleLog').should('be.calledWith', 'clicked');
+  });
+
+  it('fires the custom click event correctly', () => {
+    cy.get('three-mesh[data-name="base"]').then(async c => {
+      // c.get(0).addEventListener('three')
+    });
+    cy.get('three-lunchbox').trigger('click', 'center');
+  });
+});
