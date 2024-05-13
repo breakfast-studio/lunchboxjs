@@ -46,11 +46,7 @@ export const initLunchbox = ({
 
     // define components
     [...prependList, ...autoComponents].forEach(className => {
-        // convert name to kebab-case; prepend `three-` if needed; `-g-l-` becomes `-gl-`
-        let kebabCase = className.split(/\.?(?=[A-Z])/).join('-').toLowerCase().replace(/-g-l-/, '-gl-');
-        if (!kebabCase.includes('-')) {
-            kebabCase = `three-${kebabCase}`;
-        }
+        const kebabCase = convertThreeClassToWebComponent(className);
 
         const result = buildClass(className as keyof typeof THREE);
         if (result) {
@@ -92,3 +88,16 @@ export type ThreeIntersectEvent = {
     intersect: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>;
     element: Element | null;
 }
+
+// Components
+export { autoComponents };
+const convertThreeClassToWebComponent = (className: string) => {
+    // convert name to kebab-case; prepend `three-` if needed; `-g-l-` becomes `-gl-`
+    let kebabCase = className.split(/\.?(?=[A-Z])/).join('-').toLowerCase().replace(/-g-l-/, '-gl-');
+    if (!kebabCase.includes('-')) {
+        kebabCase = `three-${kebabCase}`;
+    }
+    return kebabCase;
+};
+/** The kebab-cased name of the ThreeJS web components automatically registered in Lunchbox. */
+export const webComponentNames = autoComponents.map(convertThreeClassToWebComponent);
