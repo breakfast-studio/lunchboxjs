@@ -1,11 +1,13 @@
+⚠️ **Under active development!** ⚠️
+
 Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components).
 
 ```html
 <three-lunchbox>
-    <three-mesh position-z="-5">
-        <torus-knot-geometry />
-        <mesh-normal-material />
-    </three-mesh>
+  <three-mesh position-z="-5">
+    <torus-knot-geometry />
+    <mesh-normal-material />
+  </three-mesh>
 </three-lunchbox>
 ```
 
