@@ -52,7 +52,7 @@ export class ThreeLunchbox extends LitElement {
             } else if (this.three.camera.type.toLowerCase() === 'orthographiccamera') {
               const heightInTermsOfWidth = contentRect.height / contentRect.width;
               // TODO: more flexible size?
-              const SIZE = 4;
+              const SIZE = 10;
               (this.three.camera as THREE.OrthographicCamera).top = heightInTermsOfWidth * SIZE;
               (this.three.camera as THREE.OrthographicCamera).bottom = -heightInTermsOfWidth * SIZE;
               (this.three.camera as THREE.OrthographicCamera).right = SIZE;
