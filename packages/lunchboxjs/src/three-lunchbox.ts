@@ -7,6 +7,8 @@ import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
 
+const ORTHOGRAPHIC_CAMERA_ATTR_NAME = 'orthographic';
+
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
   // Utils
@@ -18,7 +20,7 @@ export class ThreeLunchbox extends LitElement {
   // TODO: Fully customizable scene, camera, renderer
   three = {
     scene: new THREE.Scene(),
-    camera: new THREE.PerspectiveCamera(75),
+    camera: null as null | THREE.Camera,
     renderer: new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
@@ -37,24 +39,30 @@ export class ThreeLunchbox extends LitElement {
   constructor() {
     super();
 
-    // Camera, scene, renderer information
-    (['scene', 'camera', 'renderer'] as const).forEach(key => {
-      const options = parse(this.getAttribute(key) ?? '{}');
-      // properties
-      Object.entries(options).forEach(([k, v]) => {
-        // set property
-        setThreeProperty(this.three[key], k.split('-'), v);
-      });
-    });
-
-    // Resize observer
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(({ target, contentRect }) => {
         if (target === this as unknown as Element) {
           this.three.renderer.setSize(contentRect.width, contentRect.height);
-          this.three.camera.aspect = contentRect.width / contentRect.height;
-          this.three.camera.updateProjectionMatrix();
-          this.renderThree();
+          if (this.three.camera) {
+            const aspect = contentRect.width / contentRect.height;
+            if (this.three.camera.type.toLowerCase() === 'perspectivecamera') {
+              // perspective camera
+              (this.three.camera as THREE.PerspectiveCamera).aspect = aspect;
+              (this.three.camera as THREE.PerspectiveCamera).updateProjectionMatrix();
+            } else if (this.three.camera.type.toLowerCase() === 'orthographiccamera') {
+              const heightInTermsOfWidth = contentRect.height / contentRect.width;
+              // TODO: more flexible size?
+              const SIZE = 10;
+              (this.three.camera as THREE.OrthographicCamera).top = heightInTermsOfWidth * SIZE;
+              (this.three.camera as THREE.OrthographicCamera).bottom = -heightInTermsOfWidth * SIZE;
+              (this.three.camera as THREE.OrthographicCamera).right = SIZE;
+              (this.three.camera as THREE.OrthographicCamera).left = -SIZE;
+              (this.three.camera as THREE.OrthographicCamera).updateProjectionMatrix();
+            }
+
+            // Render on resize to avoid flicker
+            this.renderThree();
+          }
         }
       });
     });
@@ -63,6 +71,26 @@ export class ThreeLunchbox extends LitElement {
   /** To run on start. */
   connectedCallback(): void {
     super.connectedCallback();
+    if (this.getAttribute(ORTHOGRAPHIC_CAMERA_ATTR_NAME) !== null) {
+      this.three.camera = new THREE.OrthographicCamera();
+    } else {
+      this.three.camera = new THREE.PerspectiveCamera(75);
+    }
+
+    // Camera, scene, renderer information
+    (['scene', 'camera', 'renderer'] as const).forEach(key => {
+      const options = parse(this.getAttribute(key) ?? '{}');
+      // properties
+      Object.entries(options).forEach(([k, v]) => {
+        if (this.three[key]) {
+          console.log('set', key, v);
+          // set property
+          setThreeProperty(this.three[key]!, k.split('-'), v);
+        }
+      });
+    });
+
+    // Resize observer
     this.resizeObserver.observe(this as unknown as Element);
 
     // Background color
@@ -127,7 +155,7 @@ export class ThreeLunchbox extends LitElement {
     clientX: number,
     clientY: number,
   }) {
-    if (!this.raycastPool.length) return [];
+    if (!this.raycastPool.length || !this.three.camera) return [];
 
     const ndc = this.scratchV2.clone().set(
       (evt.clientX / this.three.renderer.domElement.width) * 2 - 1,
@@ -209,6 +237,7 @@ export class ThreeLunchbox extends LitElement {
 
   /** Render the 3D scene */
   renderThree() {
+    if (!this.three.camera) return;
     this.three.renderer.render(this.three.scene, this.three.camera);
   }
 

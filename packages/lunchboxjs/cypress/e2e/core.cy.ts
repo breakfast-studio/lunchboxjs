@@ -11,7 +11,7 @@ describe('vanilla HTML spec', () => {
     cy.get('three-lunchbox').then(c => {
       const lb = c[0] as unknown as ThreeLunchbox;
       // ensure scene has correct number of children
-      expect(lb.three.scene.children).to.have.length(1);
+      expect(lb.three.scene.children).to.have.length(2);
       // ensure box position is correct
       const [box] = lb.three.scene.children;
       expect(box.type).to.eq('Mesh');
@@ -38,7 +38,7 @@ describe('vanilla HTML spec', () => {
     // has a chance to respond to the attribute update.
 
     cy.get('three-mesh').then(async c => {
-      expect(c.length).to.eq(1);
+      expect(c.length).to.eq(2);
       const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
       // update mesh property
       mesh.setAttribute('position-x', '1');
@@ -48,7 +48,7 @@ describe('vanilla HTML spec', () => {
       expect(mesh.instance.position.x).to.eq(1);
     });
     cy.get('mesh-basic-material').then(async c => {
-      expect(c.length).to.eq(1);
+      expect(c.length).to.eq(2);
       const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
       // update material property
       mat.setAttribute('color', 'red');
@@ -82,7 +82,7 @@ describe('vanilla HTML spec', () => {
   it('handles adding and removing nested children correctly', () => {
     // add a child
     cy.get('three-mesh').then(async c => {
-      expect(c.length).to.eq(1);
+      expect(c.length).to.eq(2);
       const html = `<three-mesh data-name="child">
         <icosahedron-geometry></icosahedron-geometry>
         <mesh-basic-material color="black"></mesh-basic-material> 
@@ -120,6 +120,22 @@ describe('vanilla HTML spec', () => {
       expect(child.instance.position.toArray()).to.deep.eq([-1, 0, 0]);
       const worldArray = child.instance.getWorldPosition(new Vector3()).toArray();
       expect(worldArray).to.deep.eq([0, 0, -5]);
+    });
+  });
+
+  it('handles scalar, array, and object attributes correctly', () => {
+    // scalar scale value, array position value, adjust scale to array
+    cy.get('three-mesh[data-name="scaled"]').then(async (c) => {
+      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      expect(c.length).to.eq(1);
+      expect(child.instance.position.toArray()).to.deep.eq([-2, 0, -5]);
+      expect(child.instance.scale.toArray()).to.deep.eq([2, 2, 2]);
+      child.setAttribute('scale', '[1, 3, 4]');
+    });
+    cy.get('three-mesh[data-name="scaled"]').then(async (c) => {
+      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      expect(c.length).to.eq(1);
+      expect(child.instance.scale.toArray()).to.deep.eq([1, 3, 4]);
     });
   });
 });
