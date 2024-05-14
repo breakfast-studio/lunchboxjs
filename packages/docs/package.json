@@ -1,27 +1,18 @@
 {
-    "name": "docs",
-    "version": "1.0.0",
-    "scripts": {
-        "dev": "vitepress dev",
-        "build": "vitepress build",
-        "serve": "vitepress serve"
-    },
-    "engines": {
-        "node": ">=16.0.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/breakfast-studio/lunchboxjs.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/breakfast-studio/lunchboxjs/issues"
-    },
-    "homepage": "https://github.com/breakfast-studio/lunchboxjs#readme",
-    "description": "",
-    "dependencies": {
-        "vitepress": "0.20.1"
-    }
+  "name": "docs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "vitepress": "^1.1.4"
+  }
 }

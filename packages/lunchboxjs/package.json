@@ -1,83 +1,38 @@
 {
   "name": "lunchboxjs",
-  "version": "0.2.1020",
-  "scripts": {
-    "dev": "vite -c utils/vite.config.ts",
-    "build": "vue-tsc --noEmit && vite build -c utils/vite.config.ts",
-    "build:tsc": "tsc --project ./utils/tsconfig.lib.json",
-    "build:rollup": "rollup -c ./utils/lib-rollup.js",
-    "build:dts": "node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.es.d.ts && node utils/cp utils/lib-dts.d.ts dist/lunchboxjs.umd.d.ts",
-    "build:lib": "node utils/rm js && npm run build:tsc && npm run build:rollup && npm run build:dts",
-    "prepare": "npm run build:lib",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs",
-    "demo:create": "node utils/createExample"
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/lunchboxjs.umd.cjs",
+  "module": "./dist/lunchboxjs.js",
+  "exports": {
+    ".": {
+      "import": "./dist/lunchboxjs.js",
+      "require": "./dist/lunchboxjs.umd.cjs"
+    }
   },
-  "engines": {
-    "node": ">=16.0.0"
+  "version": "2.0.0-alpha.0",
+  "type": "module",
+  "types": "./types.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && npm run dts",
+    "dts": "echo \"export * from '../src/';\" > ./dist/lunchboxjs.d.ts",
+    "preview": "vite preview",
+    "cy:open": "cypress open",
+    "test": "cypress run"
   },
   "dependencies": {
-    "uuid": "8.3.2",
-    "vue": "^3.2.16"
+    "json5": "^2.2.3",
+    "lit": "^3.1.2",
+    "three": "^0.164.1"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "7.18.10",
-    "@rollup/plugin-babel": "5.3.1",
-    "@rollup/plugin-node-resolve": "13.0.5",
-    "@rollup/plugin-typescript": "8.3.0",
-    "@types/node": "18.6.3",
-    "@types/three": "0.141.0",
-    "@types/uuid": "8.3.1",
-    "@vitejs/plugin-vue": "3.0.1",
-    "@vitejs/plugin-vue-jsx": "2.0.0",
-    "@vue/babel-plugin-jsx": "1.1.1",
-    "@vue/reactivity": "3.2.41",
-    "chroma-js": "2.1.2",
-    "kolorist": "1.5.1",
-    "lodash": "4.17.21",
-    "lunchboxjs-plugins": "workspace:*",
-    "nice-color-palettes": "3.0.0",
-    "prompt": "1.3.0",
-    "prompts": "2.4.2",
-    "rollup": "3.2.5",
-    "rollup-plugin-delete": "2.0.0",
-    "rollup-plugin-jsx": "1.0.3",
-    "rollup-plugin-terser": "7.0.2",
-    "three": "0.141.0",
-    "typescript": "^4.4.3",
-    "vite": "3.0.4",
-    "vite-plugin-glsl": "0.0.5",
-    "vue-jsx-factory": "0.3.0",
-    "vue-tsc": "^0.3.0"
-  },
-  "peerDependencies": {
-    "three": "*"
-  },
-  "files": [
-    "dist",
-    "extras",
-    "package.json",
-    "README.md",
-    "src",
-    "types.d.ts"
-  ],
-  "main": "./dist/lunchboxjs.js",
-  "module": "./dist/lunchboxjs.module.js",
-  "types": "dist/lunchboxjs.es.d.ts",
-  "directories": {
-    "doc": "docs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/breakfast-studio/lunchboxjs.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/breakfast-studio/lunchboxjs/issues"
-  },
-  "homepage": "https://github.com/breakfast-studio/lunchboxjs#readme",
-  "description": ""
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.12.7",
+    "@types/three": "^0.164.0",
+    "cypress": "^13.9.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
 }

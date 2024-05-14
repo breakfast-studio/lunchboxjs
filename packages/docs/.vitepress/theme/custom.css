@@ -1,0 +1,7 @@
+three-lunchbox {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--vp-code-block-bg);
+}

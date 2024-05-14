@@ -4,18 +4,20 @@
   "description": "monorepo for lunchboxjs",
   "main": "index.js",
   "devDependencies": {
+    "@eslint/js": "^9.2.0",
     "concurrently": "7.5.0",
-    "watch": "1.0.2"
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0",
+    "watch": "^0.13.0"
   },
   "scripts": {
-    "dev:lunchboxjs": "concurrently \"pnpm run watch:lunchboxjs-plugins\" \"pnpm --filter lunchboxjs run dev\"",
-    "watch:lunchboxjs": "watch \"pnpm run build\" packages/lunchboxjs/src --ignoreDirectoryPattern=/dist/",
-    "dev:lunchboxjs-plugins": "concurrently \"pnpm run watch:lunchboxjs\" \"pnpm --filter lunchboxjs-plugins run dev\"",
-    "watch:lunchboxjs-plugins": "watch \"pnpm --filter lunchboxjs-plugins build\" packages/plugins/src --ignoreDirectoryPattern=/dist/",
-    "dev": "pnpm run dev:lunchboxjs",
-    "build": "pnpm --filter lunchboxjs run build:lib",
-    "docs:dev": "pnpm --filter docs run dev",
-    "docs:build": "pnpm --filter docs run build"
+    "dev": "npm -w lunchboxjs run dev",
+    "build": "npm -w lunchboxjs run build",
+    "lint": "eslint .",
+    "docs:dev": "npm -w docs run docs:dev",
+    "cy:open": "npm -w lunchboxjs run cy:open",
+    "test": "npm -w lunchboxjs run test"
   },
   "repository": {
     "type": "git",

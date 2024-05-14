@@ -1,16 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lunchbox</title>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite + Lit + TS</title>
+  <script type="module" src="/demo.ts"></script>
+  <style>
+    three-lunchbox {
+      position: fixed;
+      inset: 0;
+    }
+  </style>
 </head>
 
 <body>
-    <div id="app"></div>
-    <script type="module" src="./demo/home/main.ts"></script>
+  <!-- Vanilla HTML -->
+  <three-lunchbox camera="{ position: [1, -1, 5] }" background="black">
+    <!-- box -->
+    <three-mesh data-id="test" position-x="-0.5" position-y="0.5">
+      <box-geometry args="[2, 2, 2]"></box-geometry>
+      <mesh-basic-material wireframe color="teal"></mesh-basic-material>
+
+      <!-- icosahedron -->
+      <three-mesh>
+        <icosahedron-geometry args="[1, 2]"></icosahedron-geometry>
+        <mesh-basic-material wireframe></mesh-basic-material>
+      </three-mesh>
+    </three-mesh>
+
+    <!-- ground plane -->
+    <three-mesh rotation-x="-1.57" position-y="-10" scale="200" raycast data-name="ground">
+      <plane-geometry args="[1, 1, 20, 20]"></plane-geometry>
+      <mesh-basic-material wireframe></mesh-basic-material>
+    </three-mesh>
+  </three-lunchbox>
 </body>
 
 </html>
