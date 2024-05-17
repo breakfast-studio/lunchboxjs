@@ -14,6 +14,14 @@ describe('vanilla HTML spec', () => {
       expect(lb.three.scene.children).to.have.length(1);
       expect(lb.three.camera?.type).to.eq('OrthographicCamera');
       expect(lb.three.camera?.position.toArray()).to.deep.eq([0.25, 0.5, 0]);
+
+      lb.three.camera?.position.set(1, 1, 1);
+      lb.three.camera?.lookAt(0, 0, 0);
+      expect(lb.three.camera?.position.toArray()).to.deep.eq([1, 1, 1]);
+
+      expect(lb.three.camera?.quaternion.toArray()).to.deep.eq(
+        [-0.27984814233312133, 0.3647051996310009, 0.11591689595929514, 0.8804762392171493]
+      );
     });
   });
 });
