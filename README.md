@@ -28,3 +28,7 @@ _Under development_
 `npm run test` to run headless tests, `npm run cy:open` to open Cypress test suites.
 
 `npm run docs:dev` to run docs locally.
+
+## Publishing
+
+`npm run test` to make sure all tests pass, then `npm run publish`.
