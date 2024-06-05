@@ -24,3 +24,7 @@ _Under development_
 ## Local Dev
 
 `npm install`, then `npm run dev` to run dev server. From there, edit source code in the LunchboxJS package's `/src/...` and examples in `/index.html/...` to build and test features.
+
+`npm run test` to run headless tests, `npm run cy:open` to open Cypress test suites.
+
+`npm run docs:dev` to run docs locally.
