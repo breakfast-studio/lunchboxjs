@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "Lunchbox"
+  name: "Lunchbox 2"
   text: "ThreeJS Web Components"
-  tagline: react-three-fiber anywhere
+  tagline: Write once, use in any (or no) framework
   actions:
     - theme: brand
       text: Get started
@@ -16,7 +16,7 @@ hero:
 
 features:
   - title: ThreeJS in native web components
-    details: Write once, use in any (or no) framework.
+    details: react-three-fiber anywhere
   # - title: Feature B
   #   details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
   # - title: Feature C

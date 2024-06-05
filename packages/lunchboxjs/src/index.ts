@@ -41,12 +41,19 @@ interface LunchboxOptions {
 export const initLunchbox = ({
     prependList = [],
 }: LunchboxOptions = {}) => {
-    // define wrapper
-    customElements.define('three-lunchbox', ThreeLunchbox);
+    if (!customElements.get('three-lunchbox')) {
+        // define wrapper
+        customElements.define('three-lunchbox', ThreeLunchbox);
+    }
 
     // define components
     [...prependList, ...autoComponents].forEach(className => {
         const kebabCase = convertThreeClassToWebComponent(className);
+
+        // ignore if already defined
+        if (customElements.get(kebabCase)) {
+            return;
+        }
 
         const result = buildClass(className as keyof typeof THREE);
         if (result) {
@@ -73,6 +80,11 @@ export const initLunchbox = ({
  * ```
  */
 export const extend = (name: string, classDefinition: IsClass) => {
+    if (customElements.get(name)) {
+        console.log(`${name} already registered as a custom element. Try a different name if registering is still required.`);
+        return;
+    }
+
     const result = buildClass(classDefinition);
     if (result) {
         customElements.define(name, result);

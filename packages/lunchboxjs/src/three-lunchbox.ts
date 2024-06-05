@@ -31,6 +31,9 @@ export class ThreeLunchbox extends LitElement {
   background: THREE.ColorRepresentation | null = null;
 
   @property()
+  dpr: number = 2;
+
+  @property()
   sizePolicy: 'container' | 'full' = 'full';
 
   /** ResizeObserver to handle container sizing */
@@ -42,7 +45,7 @@ export class ThreeLunchbox extends LitElement {
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(({ target, contentRect }) => {
         if (target === this as unknown as Element) {
-          this.three.renderer.setSize(contentRect.width, contentRect.height);
+          this.three.renderer.setSize(contentRect.width * this.dpr, contentRect.height * this.dpr);
           if (this.three.camera) {
             const aspect = contentRect.width / contentRect.height;
             if (this.three.camera.type.toLowerCase() === 'perspectivecamera') {
@@ -71,6 +74,9 @@ export class ThreeLunchbox extends LitElement {
   /** To run on start. */
   connectedCallback(): void {
     super.connectedCallback();
+    if (this.getAttribute('dpr') === null) {
+      this.dpr = window.devicePixelRatio;
+    }
     if (this.getAttribute(ORTHOGRAPHIC_CAMERA_ATTR_NAME) !== null) {
       this.three.camera = new THREE.OrthographicCamera();
     } else {
@@ -83,7 +89,6 @@ export class ThreeLunchbox extends LitElement {
       // properties
       Object.entries(options).forEach(([k, v]) => {
         if (this.three[key]) {
-          console.log('set', key, v);
           // set property
           setThreeProperty(this.three[key]!, k.split('-'), v);
         }
@@ -158,8 +163,8 @@ export class ThreeLunchbox extends LitElement {
     if (!this.raycastPool.length || !this.three.camera) return [];
 
     const ndc = this.scratchV2.clone().set(
-      (evt.clientX / this.three.renderer.domElement.width) * 2 - 1,
-      -(evt.clientY / this.three.renderer.domElement.height) * 2 + 1
+      (evt.clientX / (this.three.renderer.domElement.width / this.dpr)) * 2 - 1,
+      -(evt.clientY / (this.three.renderer.domElement.height / this.dpr)) * 2 + 1
     );
 
     this.raycaster.setFromCamera(ndc, this.three.camera);
@@ -224,6 +229,8 @@ export class ThreeLunchbox extends LitElement {
     canvas {
       width: 100%;
       height: 100%;
+      max-width: 100%;
+      max-height: 100%;
     }
   `;
 
