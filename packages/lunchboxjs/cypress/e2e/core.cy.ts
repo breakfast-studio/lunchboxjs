@@ -1,6 +1,7 @@
 import { Lunchbox, ThreeLunchbox } from "../../src";
 import type * as THREE from 'three';
 import { Vector3 } from "three";
+import { initLunchbox } from '../../src';
 
 describe('vanilla HTML spec', () => {
   beforeEach(() => {
@@ -137,5 +138,9 @@ describe('vanilla HTML spec', () => {
       expect(c.length).to.eq(1);
       expect(child.instance.scale.toArray()).to.deep.eq([1, 3, 4]);
     });
+  });
+
+  it('handles attempted re-registering correctly', () => {
+    cy.wrap(initLunchbox).should('not.throw');
   });
 });
