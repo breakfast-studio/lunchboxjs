@@ -17,7 +17,8 @@
     "lint": "eslint .",
     "docs:dev": "npm -w docs run docs:dev",
     "cy:open": "npm -w lunchboxjs run cy:open",
-    "test": "npm -w lunchboxjs run test"
+    "test": "npm -w lunchboxjs run test",
+    "publish": "npm run build && npm -w lunchboxjs publish"
   },
   "repository": {
     "type": "git",
