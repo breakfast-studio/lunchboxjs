@@ -5,8 +5,8 @@ Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web comp
 ```html
 <three-lunchbox>
   <three-mesh position-z="-5">
-    <torus-knot-geometry />
-    <mesh-normal-material />
+    <torus-knot-geometry></torus-knot-geometry>
+    <mesh-normal-material></mesh-normal-material>
   </three-mesh>
 </three-lunchbox>
 ```
@@ -19,7 +19,7 @@ Lunchbox started as a Vue + ThreeJS custom renderer, but from version 2 on will 
 
 ## Full Docs
 
-_Under development_
+docs.lunchboxjs.com _(under development)_
 
 ## Local Dev
 
