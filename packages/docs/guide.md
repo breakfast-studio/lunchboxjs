@@ -9,8 +9,8 @@ Write this:
 ```html
 <three-lunchbox>
     <three-mesh position-z="-5">
-        <torus-knot-geometry />
-        <mesh-normal-material />
+        <torus-knot-geometry></torus-knot-geometry>
+        <mesh-normal-material></mesh-normal-material>
     </three-mesh>
 </three-lunchbox>
 ```
@@ -19,7 +19,7 @@ And get this:
 
 <three-lunchbox>
     <three-mesh position-z="-5">
-        <torus-knot-geometry />
-        <mesh-normal-material />
+        <torus-knot-geometry></torus-knot-geometry>
+        <mesh-normal-material></mesh-normal-material>
     </three-mesh>
 </three-lunchbox>
