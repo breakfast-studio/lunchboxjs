@@ -80,6 +80,11 @@ export const initLunchbox = ({
  * ```
  */
 export const extend = (name: string, classDefinition: IsClass) => {
+    if (customElements.get(name)) {
+        console.log(`${name} already registered as a custom element. Try a different name if registering is still required.`);
+        return;
+    }
+
     const result = buildClass(classDefinition);
     if (result) {
         customElements.define(name, result);
