@@ -60,8 +60,9 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Instance bookkeeping
             // ==================
-            if (this.instance instanceof THREE.Object3D) {
-                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, this.instance.uuid);
+            const instanceAsObject3d = this.instance as unknown as THREE.Object3D;
+            if (instanceAsObject3d.uuid) {
+                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, instanceAsObject3d.uuid);
             }
 
             // Do some attaching based on common use cases
@@ -70,7 +71,6 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             if (parent.instance) {
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
                 const thisAsMaterial = this.instance as unknown as THREE.Material;
-                const thisAsObject3d = this.instance as unknown as THREE.Object3D;
                 const parentAsMesh = parent.instance as unknown as THREE.Mesh;
                 const parentAsAddTarget = parent.instance as unknown as { add?: (item: THREE.Object3D) => void };
 
@@ -81,9 +81,13 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 else if (thisAsMaterial.type.toLowerCase().includes('material') && parentAsMesh.material) {
                     parentAsMesh.material = thisAsMaterial;
                 }
-                else if (this.instance instanceof THREE.Object3D && parentAsAddTarget.add) {
+                else if (parentAsAddTarget.add) {
                     // If parent is an add target, add to parent
-                    parentAsAddTarget.add(thisAsObject3d);
+                    try {
+                        parentAsAddTarget.add(instanceAsObject3d);
+                    } catch (_) {
+                        throw new Error(`Error adding ${this.tagName} to ${parentAsAddTarget}`);
+                    }
                 }
             }
         }
