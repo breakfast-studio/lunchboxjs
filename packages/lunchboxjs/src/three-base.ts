@@ -3,6 +3,7 @@ import { property } from "lit/decorators.js";
 import * as THREE from 'three';
 import { IsClass, THREE_UUID_ATTRIBUTE_NAME, isClass } from "./utils";
 import { setThreeProperty } from "./setThreeProperty";
+import { parseAttributeValue } from "./parseAttributeValue";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 export const IGNORED_ATTRIBUTES = [
@@ -48,7 +49,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Instance creation
             // ==================
-            this.instance = new (threeClass as U)(...this.args) as unknown as U;
+            this.instance = new (threeClass as U)(...this.args.map(arg => parseAttributeValue(arg, this))) as unknown as U;
             // Populate initial attributes
             this.getAttributeNames().forEach(attName => {
                 const attr = this.attributes.getNamedItem(attName);
@@ -115,7 +116,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             // handle non-events
             // ==================
             // TODO: parse objects as non-JSON (`{&quot;test&quot;: 1}` is annoying to write)
-            let parsedValue = value;
+            let parsedValue = parseAttributeValue(value, this);
             try {
                 parsedValue = JSON.parse(value === '' ? 'true' : value);
             } catch (_err) {

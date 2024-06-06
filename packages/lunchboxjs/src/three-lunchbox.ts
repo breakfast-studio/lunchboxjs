@@ -6,6 +6,7 @@ import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_PO
 import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
+import { parseAttributeValue } from './parseAttributeValue';
 
 const ORTHOGRAPHIC_CAMERA_ATTR_NAME = 'orthographic';
 
@@ -90,7 +91,7 @@ export class ThreeLunchbox extends LitElement {
       Object.entries(options).forEach(([k, v]) => {
         if (this.three[key]) {
           // set property
-          setThreeProperty(this.three[key]!, k.split('-'), v);
+          setThreeProperty(this.three[key]!, k.split('-'), parseAttributeValue(v, this));
         }
       });
     });
