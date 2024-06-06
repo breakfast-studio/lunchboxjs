@@ -132,14 +132,11 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         disconnectedCallback(): void {
             super.disconnectedCallback();
 
-            if (this.instance instanceof THREE.BufferGeometry
-                || this.instance instanceof THREE.Material
-                || this.instance instanceof THREE.Texture) {
-                this.instance.dispose();
-            }
-            if (this.instance instanceof THREE.Object3D) {
-                this.instance.removeFromParent();
-            }
+            const instanceAsDisposable = this.instance as unknown as { dispose?: () => void };
+            const instanceAsRemovableFromParent = this.instance as unknown as { removeFromParent?: () => void };
+
+            instanceAsDisposable.dispose?.();
+            instanceAsRemovableFromParent.removeFromParent?.();
         }
 
         /** Render */
