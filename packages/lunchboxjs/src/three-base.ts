@@ -66,6 +66,13 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, instanceAsObject3d.uuid);
             }
 
+            // Fire instancecreated event
+            this.dispatchEvent(new CustomEvent('instancecreated', {
+                detail: {
+                    instance: this.instance,
+                },
+            }));
+
             // Do some attaching based on common use cases
             // ==================
             const parent = this.parentElement as ThreeBase;

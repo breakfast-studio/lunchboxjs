@@ -102,6 +102,9 @@ export type ThreeIntersectEvent = {
     intersect: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>;
     element: Element | null;
 }
+export interface InstanceEvent<T = unknown> {
+    instance: T;
+}
 
 // Components
 export { autoComponents };
