@@ -1,8 +1,6 @@
-import { Lunchbox, ThreeLunchbox, extend } from "../../src";
-import type * as THREE from 'three';
+import { extend } from "../../src";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { IsClass } from "../../src/utils";
-// import { Vector3 } from "three";
 
 describe('vanilla HTML spec', () => {
   beforeEach(() => {
