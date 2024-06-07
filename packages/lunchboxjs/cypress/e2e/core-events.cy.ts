@@ -1,4 +1,5 @@
-import { ThreeIntersectEvent } from "../../src";
+import { ThreeIntersectEvent, ThreeLunchbox } from "../../src";
+import * as THREE from 'three';
 
 describe('vanilla HTML spec', () => {
   beforeEach(() => {
@@ -53,6 +54,22 @@ describe('vanilla HTML spec', () => {
     // move over the target
     cy.get('three-lunchbox').trigger('mousemove', 'center');
     cy.get('@consoleLog').should('be.calledWith', 'mouse moved');
+  });
+
+  it('fires the custom instancecreated event correctly', () => {
+    let lb: ThreeLunchbox;
+
+    cy.get('three-lunchbox').then(lunchbox => {
+      lb = lunchbox.get(0) as unknown as ThreeLunchbox;
+    });
+    cy.window().then(win => {
+      const el = win.document.createElement('three-mesh');
+      el.addEventListener('instancecreated', evt => {
+        win.console.log((evt.detail.instance as THREE.Mesh).type);
+      });
+      lb.appendChild(el as unknown as Node);
+    });
+    cy.get('@consoleLog').should('be.calledWith', 'Mesh');
   });
 
   // it('fires the native pointer/mouse enter and leave events correctly', () => {
