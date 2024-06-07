@@ -123,4 +123,4 @@ You can use the most common Three.js classes in Lunchbox right away, such as:
 -   Materials (standard, basic, points, shader, etc)
 -   Lights (spotlights, point lights, directional, etc)
 
-To add any features not in that list, see the instructions under [Extend](/components/extend).
+To add any features not in that list, see the instructions under [Extend](/components/component-guide#extend).
