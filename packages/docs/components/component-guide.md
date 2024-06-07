@@ -25,4 +25,26 @@ Available attributes are:
 
 ## Auto-registered components
 
+All ThreeJS classes listed [here](https://github.com/breakfast-studio/lunchboxjs/blob/main/packages/lunchboxjs/src/auto-components.ts) can be used out of the box with Lunchbox 2. Elements must be separated by a dash if the class name is two or more words:
+
+```html
+<!-- right -->
+<box-geometry></box-geometry>
+
+<!-- wrong -->
+<boxGeometry></boxGeometry>
+```
+
+If the class name is one word, prepend `three-` to the element name:
+
+```html
+<!-- right -->
+<three-mesh></three-mesh>
+
+<!-- wrong -->
+<mesh></mesh>
+```
+
 ## Custom components via `extend`
+
+TODO
