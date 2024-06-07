@@ -34,7 +34,7 @@ describe('Vue spec', () => {
     it('updates position X on ref update', () => {
         cy.get('input[data-name="position-x"]').type('2');
         cy.get('three-mesh[data-name="base"]').then(m => {
-            const instance = (m.get(0) as Lunchbox<THREE.Mesh>).instance;
+            const instance = (m.get(0) as unknown as Lunchbox<THREE.Mesh>).instance;
             expect(instance.position.toArray()).to.deep.eq([2, 0, -5]);
         });
     });

@@ -40,42 +40,42 @@ describe('vanilla HTML spec', () => {
 
     cy.get('three-mesh').then(async c => {
       expect(c.length).to.eq(2);
-      const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
+      const mesh = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       // update mesh property
       mesh.setAttribute('position-x', '1');
     });
     cy.get('three-mesh').then(async c => {
-      const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
+      const mesh = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       expect(mesh.instance.position.x).to.eq(1);
     });
     cy.get('mesh-basic-material').then(async c => {
       expect(c.length).to.eq(2);
-      const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
+      const mat = c.get(0) as unknown as Lunchbox<THREE.MeshBasicMaterial>;
       // update material property
       mat.setAttribute('color', 'red');
     });
     cy.get('mesh-basic-material').then(async c => {
-      const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
+      const mat = c.get(0) as unknown as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([1, 0, 0]);
       // update material color to hex
       mat.setAttribute('color', '0x0000ff');
 
     });
     cy.get('mesh-basic-material').then(async c => {
-      const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
+      const mat = c.get(0) as unknown as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([0, 0, 1]);
       // update material color to hash hex
       mat.setAttribute('color', '#00ff00');
 
     });
     cy.get('mesh-basic-material').then(async c => {
-      const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
+      const mat = c.get(0) as unknown as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([0, 1, 0]);
       // update material color to shortened hash hex
       mat.setAttribute('color', '#f0f');
     });
     cy.get('mesh-basic-material').then(async c => {
-      const mat = c.get(0) as Lunchbox<THREE.MeshBasicMaterial>;
+      const mat = c.get(0) as unknown as Lunchbox<THREE.MeshBasicMaterial>;
       expect(mat.instance.color.toArray()).to.deep.eq([1, 0, 1]);
     });
   });
@@ -88,24 +88,24 @@ describe('vanilla HTML spec', () => {
         <icosahedron-geometry></icosahedron-geometry>
         <mesh-basic-material color="black"></mesh-basic-material> 
       </three-mesh>`;
-      (c.get(0) as Lunchbox<THREE.Mesh>).innerHTML = html;
+      (c.get(0) as unknown as Lunchbox<THREE.Mesh>).innerHTML = html;
     });
     // get basic child position
     cy.get('three-mesh[data-name="child"]').then(async (c) => {
-      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      const child = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       expect(child.instance.position.toArray()).to.deep.eq([0, 0, 0]);
     });
     // move parent
     cy.get('three-mesh[data-name="base"').then(async c => {
       expect(c.length).to.eq(1);
-      const mesh = c.get(0) as Lunchbox<THREE.Mesh>;
+      const mesh = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       // update mesh property
       mesh.setAttribute('position-x', '1');
     });
     // ensure child local/world positions are correct, update local position
     cy.get('three-mesh[data-name="child"]').then(async (c) => {
-      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      const child = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       // local position should be origin
       expect(child.instance.position.toArray()).to.deep.eq([0, 0, 0]);
@@ -116,7 +116,7 @@ describe('vanilla HTML spec', () => {
     });
     // ensure child local/world positions are correct after update
     cy.get('three-mesh[data-name="child"]').then(async (c) => {
-      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      const child = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       expect(child.instance.position.toArray()).to.deep.eq([-1, 0, 0]);
       const worldArray = child.instance.getWorldPosition(new Vector3()).toArray();
@@ -127,14 +127,14 @@ describe('vanilla HTML spec', () => {
   it('handles scalar, array, and object attributes correctly', () => {
     // scalar scale value, array position value, adjust scale to array
     cy.get('three-mesh[data-name="scaled"]').then(async (c) => {
-      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      const child = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       expect(child.instance.position.toArray()).to.deep.eq([-2, 0, -5]);
       expect(child.instance.scale.toArray()).to.deep.eq([2, 2, 2]);
       child.setAttribute('scale', '[1, 3, 4]');
     });
     cy.get('three-mesh[data-name="scaled"]').then(async (c) => {
-      const child = c.get(0) as Lunchbox<THREE.Mesh>;
+      const child = c.get(0) as unknown as Lunchbox<THREE.Mesh>;
       expect(c.length).to.eq(1);
       expect(child.instance.scale.toArray()).to.deep.eq([1, 3, 4]);
     });

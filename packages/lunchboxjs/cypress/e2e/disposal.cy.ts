@@ -18,11 +18,11 @@ describe('vanilla HTML spec', () => {
       expect(lb.three.renderer.info.render.calls).to.eq(2);
       // set child to invisible - note no change to child/geo counts
       cy.get('three-mesh').then(async mesh => {
-        const el = mesh.get(0) as Lunchbox<THREE.Mesh>;
+        const el = mesh.get(0) as unknown as Lunchbox<THREE.Mesh>;
         el.setAttribute('visible', 'false');
       });
       cy.get('three-mesh').then(async mesh => {
-        const el = mesh.get(0) as Lunchbox<THREE.Mesh>;
+        const el = mesh.get(0) as unknown as Lunchbox<THREE.Mesh>;
         expect(el.instance.visible).to.be.false;
         expect(lb.three.scene.children).to.have.length(2);
         expect(lb.three.renderer.info.memory.geometries).to.eq(2);

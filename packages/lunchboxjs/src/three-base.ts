@@ -13,9 +13,7 @@ export const IGNORED_ATTRIBUTES = [
 ];
 
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
-
     const threeClass = typeof targetClass === 'string' ? THREE[targetClass as keyof typeof THREE] : targetClass;
-
     if (!isClass(threeClass)) {
         return null;
     }
