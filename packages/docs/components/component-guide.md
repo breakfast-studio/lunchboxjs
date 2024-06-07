@@ -45,6 +45,8 @@ If the class name is one word, prepend `three-` to the element name:
 <mesh></mesh>
 ```
 
+See [core concepts](/concepts#three-js-and-lunchbox) for attribute notes.
+
 ## Custom components via `extend`
 
 TODO
