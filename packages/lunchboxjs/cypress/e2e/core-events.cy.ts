@@ -10,17 +10,6 @@ describe('vanilla HTML spec', () => {
     });
   });
 
-
-  it('fires the native click event correctly', () => {
-    // miss the target
-    cy.get('three-lunchbox').trigger('click', 'topLeft');
-    cy.get('@consoleLog').should('not.be.called');
-
-    // click the target
-    cy.get('three-lunchbox').trigger('click', 'center');
-    cy.get('@consoleLog').should('be.calledWith', 'clicked');
-  });
-
   it('fires the custom click event correctly', () => {
     cy.window().then(win => {
       cy.get('three-mesh[data-name="base"]').then(async c => {
@@ -34,6 +23,16 @@ describe('vanilla HTML spec', () => {
     });
     cy.get('three-lunchbox').trigger('click', 'center');
     cy.get('@consoleLog').should('be.calledWith', 'base');
+  });
+
+  it('fires the native click event correctly', () => {
+    // miss the target
+    cy.get('three-lunchbox').trigger('click', 'topLeft');
+    cy.get('@consoleLog').should('not.be.called');
+
+    // click the target
+    cy.get('three-lunchbox').trigger('click', 'center');
+    cy.get('@consoleLog').should('be.calledWith', 'clicked');
   });
 
   it('fires the native pointer/mouse move events correctly', () => {
