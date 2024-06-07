@@ -23,14 +23,14 @@ export default defineConfig({
       {
         text: 'Components',
         items: [
-          { text: 'Wrapper', link: '/components/wrapper' },
-          { text: 'Extend', link: '/components/extend' },
+          { text: 'Component Guide', link: '/components/component-guide' },
+          // { text: 'Extend', link: '/components/extend' },
         ],
       },
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' },
+      { icon: 'github', link: 'https://github.com/breakfast-studio/lunchboxjs' },
     ],
   },
 });

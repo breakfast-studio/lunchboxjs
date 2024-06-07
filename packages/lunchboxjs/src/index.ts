@@ -79,15 +79,17 @@ export const initLunchbox = ({
  * </three-lunchbox>
  * ```
  */
-export const extend = (name: string, classDefinition: IsClass) => {
-    if (customElements.get(name)) {
+export const extend = (name: string, classDefinition: IsClass, targetWindow = window) => {
+    if (targetWindow.customElements.get(name)) {
         console.log(`${name} already registered as a custom element. Try a different name if registering is still required.`);
         return;
     }
 
     const result = buildClass(classDefinition);
     if (result) {
-        customElements.define(name, result);
+        targetWindow.customElements.define(name, result);
+    } else {
+        throw new Error(`Could not extend ${name}. The second paramater must be a class.`);
     }
 };
 
@@ -99,6 +101,9 @@ export const THREE_CLICK_EVENT_NAME = 'threeclick';
 export type ThreeIntersectEvent = {
     intersect: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>;
     element: Element | null;
+}
+export interface InstanceEvent<T = unknown> {
+    instance: T;
 }
 
 // Components

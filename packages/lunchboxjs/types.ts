@@ -1,6 +1,7 @@
-import { ThreeIntersectEvent } from './src/index';
+import { InstanceEvent, ThreeIntersectEvent } from './src/index';
 
 interface ElementEventMap {
+    'instancecreated': CustomEvent<InstanceEvent>;
     'threepointermove': CustomEvent<ThreeIntersectEvent>;
     'threeclick': CustomEvent<ThreeIntersectEvent>;
 }

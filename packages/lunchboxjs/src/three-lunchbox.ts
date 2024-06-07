@@ -6,8 +6,10 @@ import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_PO
 import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
+import { parseAttributeValue } from './parseAttributeValue';
 
 const ORTHOGRAPHIC_CAMERA_ATTR_NAME = 'orthographic';
+const DEFAULT_DPR = Infinity;
 
 /** Wrapper element for ThreeLunchbox. */
 export class ThreeLunchbox extends LitElement {
@@ -31,10 +33,7 @@ export class ThreeLunchbox extends LitElement {
   background: THREE.ColorRepresentation | null = null;
 
   @property()
-  dpr: number = 2;
-
-  @property()
-  sizePolicy: 'container' | 'full' = 'full';
+  dpr: number = DEFAULT_DPR;
 
   /** ResizeObserver to handle container sizing */
   resizeObserver: ResizeObserver;
@@ -74,7 +73,7 @@ export class ThreeLunchbox extends LitElement {
   /** To run on start. */
   connectedCallback(): void {
     super.connectedCallback();
-    if (this.getAttribute('dpr') === null) {
+    if (this.dpr === DEFAULT_DPR) {
       this.dpr = window.devicePixelRatio;
     }
     if (this.getAttribute(ORTHOGRAPHIC_CAMERA_ATTR_NAME) !== null) {
@@ -90,7 +89,7 @@ export class ThreeLunchbox extends LitElement {
       Object.entries(options).forEach(([k, v]) => {
         if (this.three[key]) {
           // set property
-          setThreeProperty(this.three[key]!, k.split('-'), v);
+          setThreeProperty(this.three[key]!, k.split('-'), parseAttributeValue(v, this));
         }
       });
     });

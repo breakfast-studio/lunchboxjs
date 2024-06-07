@@ -19,7 +19,7 @@ Lunchbox started as a Vue + ThreeJS custom renderer, but from version 2 on will 
 
 ## Full Docs
 
-docs.lunchboxjs.com _(under development)_
+[docs.lunchboxjs.com](https://docs.lunchboxjs.com/) _(under development)_
 
 ## Local Dev
 

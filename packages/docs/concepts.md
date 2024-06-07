@@ -10,7 +10,7 @@ A Lunchbox app needs to be wrapped in a `three-lunchbox` wrapper:
 </three-lunchbox>
 ```
 
-See the [Wrapper](/components/wrapper) page for more information and available props.
+See the [Wrapper](/components/component-guide#three-lunchbox-wrapper) page for more information and available props.
 
 ## Three.js and Lunchbox
 

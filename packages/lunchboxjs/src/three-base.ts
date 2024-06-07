@@ -3,6 +3,7 @@ import { property } from "lit/decorators.js";
 import * as THREE from 'three';
 import { IsClass, THREE_UUID_ATTRIBUTE_NAME, isClass } from "./utils";
 import { setThreeProperty } from "./setThreeProperty";
+import { parseAttributeValue } from "./parseAttributeValue";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 export const IGNORED_ATTRIBUTES = [
@@ -48,7 +49,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Instance creation
             // ==================
-            this.instance = new (threeClass as U)(...this.args) as unknown as U;
+            this.instance = new (threeClass as U)(...this.args.map(arg => parseAttributeValue(arg, this))) as unknown as U;
             // Populate initial attributes
             this.getAttributeNames().forEach(attName => {
                 const attr = this.attributes.getNamedItem(attName);
@@ -60,9 +61,17 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Instance bookkeeping
             // ==================
-            if (this.instance instanceof THREE.Object3D) {
-                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, this.instance.uuid);
+            const instanceAsObject3d = this.instance as unknown as THREE.Object3D;
+            if (instanceAsObject3d.uuid) {
+                this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, instanceAsObject3d.uuid);
             }
+
+            // Fire instancecreated event
+            this.dispatchEvent(new CustomEvent('instancecreated', {
+                detail: {
+                    instance: this.instance,
+                },
+            }));
 
             // Do some attaching based on common use cases
             // ==================
@@ -70,7 +79,6 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             if (parent.instance) {
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
                 const thisAsMaterial = this.instance as unknown as THREE.Material;
-                const thisAsObject3d = this.instance as unknown as THREE.Object3D;
                 const parentAsMesh = parent.instance as unknown as THREE.Mesh;
                 const parentAsAddTarget = parent.instance as unknown as { add?: (item: THREE.Object3D) => void };
 
@@ -81,9 +89,13 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 else if (thisAsMaterial.type.toLowerCase().includes('material') && parentAsMesh.material) {
                     parentAsMesh.material = thisAsMaterial;
                 }
-                else if (this.instance instanceof THREE.Object3D && parentAsAddTarget.add) {
+                else if (parentAsAddTarget.add) {
                     // If parent is an add target, add to parent
-                    parentAsAddTarget.add(thisAsObject3d);
+                    try {
+                        parentAsAddTarget.add(instanceAsObject3d);
+                    } catch (_) {
+                        throw new Error(`Error adding ${this.tagName} to ${parentAsAddTarget}`);
+                    }
                 }
             }
         }
@@ -111,7 +123,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             // handle non-events
             // ==================
             // TODO: parse objects as non-JSON (`{&quot;test&quot;: 1}` is annoying to write)
-            let parsedValue = value;
+            let parsedValue = parseAttributeValue(value, this);
             try {
                 parsedValue = JSON.parse(value === '' ? 'true' : value);
             } catch (_err) {
@@ -128,14 +140,11 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         disconnectedCallback(): void {
             super.disconnectedCallback();
 
-            if (this.instance instanceof THREE.BufferGeometry
-                || this.instance instanceof THREE.Material
-                || this.instance instanceof THREE.Texture) {
-                this.instance.dispose();
-            }
-            if (this.instance instanceof THREE.Object3D) {
-                this.instance.removeFromParent();
-            }
+            const instanceAsDisposable = this.instance as unknown as { dispose?: () => void };
+            const instanceAsRemovableFromParent = this.instance as unknown as { removeFromParent?: () => void };
+
+            instanceAsDisposable.dispose?.();
+            instanceAsRemovableFromParent.removeFromParent?.();
         }
 
         /** Render */
