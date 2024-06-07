@@ -23,8 +23,8 @@ export default defineConfig({
       {
         text: 'Components',
         items: [
-          { text: 'Wrapper', link: '/components/wrapper' },
-          { text: 'Extend', link: '/components/extend' },
+          { text: 'Component Guide', link: '/components/component-guide' },
+          // { text: 'Extend', link: '/components/extend' },
         ],
       },
     ],

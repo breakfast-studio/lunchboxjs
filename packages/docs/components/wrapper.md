@@ -1,3 +1,0 @@
-# `three-lunchbox` wrapper
-
-TODO
