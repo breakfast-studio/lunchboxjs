@@ -1,7 +1,7 @@
 name: End-to-end tests
 on: 
   - push
-  - pull-request
+  - pull_request
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
