@@ -12,6 +12,3 @@ declare global {
         dispatchEvent<K extends keyof ElementEventMap>(ev: ElementEventMap[K]): void;
     }
 }
-
-
-export * from './src/index';

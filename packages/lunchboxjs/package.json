@@ -8,31 +8,32 @@
   "exports": {
     ".": {
       "import": "./dist/lunchboxjs.js",
-      "require": "./dist/lunchboxjs.umd.cjs"
+      "require": "./dist/lunchboxjs.umd.cjs",
+      "types": "./dist/src/index.d.ts"
     }
   },
   "version": "2.0.0-beta.2",
   "type": "module",
-  "types": "./types.ts",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && npm run dts",
-    "dts": "echo \"export * from '../src/';\" > ./dist/lunchboxjs.d.ts",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "cy:open": "cypress open",
     "test": "cypress run"
   },
   "dependencies": {
     "json5": "^2.2.3",
-    "lit": "^3.1.2",
-    "three": "^0.164.1"
+    "lit": "^3.1.2"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.12.7",
     "@types/three": "^0.164.0",
     "cypress": "^13.9.0",
+    "three": "^0.164.1",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vite-plugin-dts": "^3.9.1"
   }
 }
