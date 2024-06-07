@@ -11,7 +11,7 @@
       "require": "./dist/lunchboxjs.umd.cjs"
     }
   },
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "type": "module",
   "types": "./types.ts",
   "scripts": {
