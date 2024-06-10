@@ -25,6 +25,7 @@ export default defineConfig({
         items: [
           { text: 'Component Guide', link: '/components/component-guide' },
           { text: 'Events', link: '/components/events' },
+          { text: 'Advanced components', link: '/components/advanced' },
         ],
       },
     ],
