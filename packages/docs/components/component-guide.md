@@ -132,3 +132,5 @@ Now you can add an `<orbit-controls>` component:
     <orbit-controls args="[&quot;$camera$quot;, $quot;$domElement$quot;]"></orbit-controls>
 </three-lunchbox>
 ```
+
+TODO: `$camera`, `$domElement` docs

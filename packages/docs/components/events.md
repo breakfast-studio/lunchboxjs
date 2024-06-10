@@ -12,24 +12,27 @@ All [auto-registered](/component-guide.html#auto-registered-components) and [`ex
 
 Note that a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) passes data via its `detail` property; this is the unique data of each event, and so is the payload in the `detail` column below.
 
-| Name              | `detail`                                 | Notes      |
-| ----------------- | ---------------------------------------- | ---------- |
-| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when |
+| Name              | `detail`                                 | Notes                                                                                        |
+| ----------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when the underling [instance](/component-guide.html#the-instance-property) is created. |
 
 ### Examples
 
-```html
-<three-lunchbox>
-  <three-mesh position-z="-5" oninstancecreated="console.log(event.detail)">
-    <torus-knot-geometry></torus-knot-geometry>
-    <mesh-normal-material></mesh-normal-material>
-  </three-mesh>
-</three-lunchbox>
+```js
+const mesh = document.querySelector('three-mesh');
+mesh.addEventListener('instancecreated', event => {
+    console.log(event.detail.instance);
+});
 ```
 
-<three-lunchbox>
-  <three-mesh position-z="-5" oninstancecreated="console.log('zzz')">
-    <torus-knot-geometry></torus-knot-geometry>
-    <mesh-normal-material></mesh-normal-material>
-  </three-mesh>
-</three-lunchbox>
+In TypeScript, this you can get type completion with the `InstanceEvent` generic type:
+
+```ts
+import { type Lunchbox, type InstanceEvent } from 'lunchboxjs';
+import * as THREE from 'three';
+
+const mesh = document.querySelector<Lunchbox<THREE.Mesh>>('three-mesh');
+mesh.addEventListener('instancecreated', (event: CustomEvent<InstanceEvent<THREE.Mesh>>) => {
+    console.log(event.detail.instance);
+});
+```
