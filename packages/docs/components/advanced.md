@@ -40,6 +40,7 @@ Any component ending with `-loader` (`<texture-loader>`, for example) will do th
 
 1. Execute its `load` method, passing its `src` attribute as the URL
 2. Save the result of its `load` method to its `loaded` property
+3. (Optional, if `attach` attribute provided) Attach the loaded result to the parent
 
 For example, this is how to load a texture in Lunchbox:
 
@@ -47,7 +48,11 @@ For example, this is how to load a texture in Lunchbox:
 <three-mesh>
     <box-geometry></box-geometry>
     <mesh-basic-material>
-        <texture-loader src="/three-favicon.png" attach="map"></texture-loader>
+        <!-- Load the ThreeJS favicon and attach as a map -->
+        <texture-loader 
+            src="/three-favicon.png" 
+            attach="map">
+        </texture-loader>
     </mesh-basic-material>
 </three-mesh>
 ```
@@ -56,7 +61,34 @@ For example, this is how to load a texture in Lunchbox:
     <three-mesh>
         <box-geometry></box-geometry>
         <mesh-basic-material transparent>
-            <texture-loader src="/three-favicon.png" attach="map"></texture-loader>
+            <texture-loader src="/three-favicon.png" attach="map" ></texture-loader>
         </mesh-basic-material>
     </three-mesh>
 </three-lunchbox>
+
+## Special arguments
+
+Sometimes, you need to access the scene, camera, etc in `args`. For example, after [extend](component-guide.html#custom-components-via-extend)ing OrbitControls:
+
+```html
+<!-- We need the camera and DOM element as args here -->
+<orbit-controls args="[]"></orbit-controls>
+```
+
+Lunchbox has a few shortcuts built into `args` - you can pass any of the following strings:
+
+| String        | Usage                                                      |
+| ------------- | ---------------------------------------------------------- |
+| `$camera`     | The `<three-lunchbox>` container's camera.                 |
+| `$scene`      | The `<three-lunchbox>` container's scene.                  |
+| `$renderer`   | The `<three-lunchbox>` container's renderer.               |
+| `$domElement` | The `<three-lunchbox>` container's renderer's DOM element. |
+
+For example, this will start OrbitControls correctly:
+
+```html
+<!-- We need the camera and DOM element as args here -->
+<orbit-controls args="[&quot;$camera&quot;, &quot;$domElement&quot;]"></orbit-controls>
+```
+
+**Note the `&quot;` characters** - this is a temporary workaround while more robust parsing is being worked on.
