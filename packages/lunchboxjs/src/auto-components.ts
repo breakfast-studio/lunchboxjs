@@ -88,4 +88,7 @@ export const autoComponents: Partial<keyof typeof THREE>[] = [
     'Raycaster',
     'CameraHelper',
     'Color',
+
+    // Loaders
+    'TextureLoader',
 ];

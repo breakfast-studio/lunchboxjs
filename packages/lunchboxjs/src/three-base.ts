@@ -12,6 +12,8 @@ export const IGNORED_ATTRIBUTES = [
     'data',
 ];
 
+const buildNestedPropertyArray = (input: string) => input.split('-');
+
 export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | IsClass) => {
     const threeClass = typeof targetClass === 'string' ? THREE[targetClass as keyof typeof THREE] : targetClass;
     if (!isClass(threeClass)) {
@@ -22,6 +24,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         @property({ type: Array })
         args: ConstructorParameters<U> = [] as unknown as ConstructorParameters<U>;
         instance: U | null = null;
+        loaded: unknown | null = null;
 
         dispose: (() => void)[] = [];
 
@@ -71,6 +74,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 },
             }));
 
+
             // Do some attaching based on common use cases
             // ==================
             const parent = this.parentElement as ThreeBase;
@@ -78,15 +82,39 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
                 const thisAsMaterial = this.instance as unknown as THREE.Material;
                 const parentAsMesh = parent.instance as unknown as THREE.Mesh;
+                const thisAsLoader = this.instance as unknown as THREE.Loader;
                 const parentAsAddTarget = parent.instance as unknown as { add?: (item: THREE.Object3D) => void };
+                const thisIsALoader = this.tagName.toString().toLowerCase().endsWith('-loader');
 
                 // if we're a geometry or material, attach to parent
-                if (thisAsGeometry.type.toLowerCase().includes('geometry') && parentAsMesh.geometry) {
+                if (thisAsGeometry.type?.toLowerCase().includes('geometry') && parentAsMesh.geometry) {
                     parentAsMesh.geometry = thisAsGeometry;
                 }
-                else if (thisAsMaterial.type.toLowerCase().includes('material') && parentAsMesh.material) {
+                else if (thisAsMaterial.type?.toLowerCase().includes('material') && parentAsMesh.material) {
                     parentAsMesh.material = thisAsMaterial;
                 }
+                // if we're a loader, start loading
+                else if (thisIsALoader) {
+                    const src = this.getAttribute('src');
+                    if (!src) throw new Error('Loader requires a source.');
+
+                    // load and try attaching
+                    thisAsLoader.load(src, loaded => {
+                        this.loaded = loaded;
+                        const attachAttribute = this.getAttribute('attach');
+                        if (attachAttribute) {
+                            this.executeAttach(attachAttribute, loaded);
+                        }
+                        this.dispatchEvent(new CustomEvent('loaded', {
+                            detail: {
+                                loaded,
+                            },
+                        }));
+                    }, undefined, error => {
+                        throw new Error(`error loading: ${src}` + error);
+                    });
+                }
+                // otherwise, try to add as a child of the parent
                 else if (parentAsAddTarget.add) {
                     // If parent is an add target, add to parent
                     try {
@@ -94,6 +122,13 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                     } catch (_) {
                         throw new Error(`Error adding ${this.tagName} to ${parentAsAddTarget}`);
                     }
+                }
+
+                // try executing attachment if we can
+                // (skip if this is a loader to avoid race condition)
+                const attachAttribute = this.getAttribute('attach');
+                if (!thisIsALoader && attachAttribute) {
+                    this.executeAttach(attachAttribute, this.instance);
                 }
             }
         }
@@ -111,7 +146,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             });
 
             // nested properties
-            const split = targetCase.split('-');
+            const split = buildNestedPropertyArray(targetCase);
 
             // ignore Lunchbox-specific attributes
             if (IGNORED_ATTRIBUTES.includes(targetCase) || IGNORED_ATTRIBUTES.includes(split[0])) {
@@ -135,14 +170,27 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             }
         }
 
+        executeAttach(targetProperty: string, toAttach: unknown): void {
+            const parent = this.parentElement as ThreeBase;
+            if (parent.instance) {
+                setThreeProperty(parent.instance, buildNestedPropertyArray(targetProperty), toAttach);
+            }
+        }
+
         disconnectedCallback(): void {
             super.disconnectedCallback();
 
-            const instanceAsDisposable = this.instance as unknown as { dispose?: () => void };
-            const instanceAsRemovableFromParent = this.instance as unknown as { removeFromParent?: () => void };
+            const toDispose = [this.instance, this.loaded];
+            toDispose.forEach(target => {
+                if (!target) return;
 
-            instanceAsDisposable.dispose?.();
-            instanceAsRemovableFromParent.removeFromParent?.();
+                const instanceAsDisposable = target as { dispose?: () => void };
+                const instanceAsRemovableFromParent = target as { removeFromParent?: () => void };
+
+                instanceAsDisposable.dispose?.();
+                instanceAsRemovableFromParent.removeFromParent?.();
+            });
+
         }
 
         /** Render */

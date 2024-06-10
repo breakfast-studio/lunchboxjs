@@ -1,4 +1,5 @@
 import { get, isNumber, set } from "./utils";
+import * as THREE from 'three';
 
 export const setThreeProperty = <T extends object>(target: T, split: string[], parsedValue: unknown) => {
     const property: {
@@ -39,5 +40,11 @@ export const setThreeProperty = <T extends object>(target: T, split: string[], p
     } else {
         // Manually set
         set(target, split, parsedValue);
+    }
+
+    // handle common update functions
+    const targetAsMaterial = target as THREE.Material;
+    if (targetAsMaterial.type?.toLowerCase().endsWith('material')) {
+        targetAsMaterial.needsUpdate = true;
     }
 };
