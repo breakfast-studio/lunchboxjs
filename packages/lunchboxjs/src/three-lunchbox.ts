@@ -115,6 +115,7 @@ export class ThreeLunchbox extends LitElement {
 
   disconnectedCallback(): void {
     this.three.renderer.domElement.removeEventListener('pointermove', this.onPointerMove.bind(this));
+    this.three.renderer.domElement.removeEventListener('mousemove', this.onPointerMove.bind(this));
     this.three.renderer.domElement.removeEventListener('click', this.onClick.bind(this));
     // this.renderer.domElement.removeEventListener('touchstart', this.onClick.bind(this));
     this.three.renderer.dispose();

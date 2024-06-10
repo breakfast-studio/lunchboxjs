@@ -22,6 +22,30 @@ Available attributes are:
 | `renderer`   | `null`        | Options to pass to the default renderer. Accepts an object that is parsed and whose values are sent to the renderer. See `camera` below for formatting.                                                                                                                                                                                                                               |
 | `camera`     | `null`        | Options to pass to the default camera. Accepts an object that is parsed and whose values are sent to the camera.<br/><br/>Nested values can be set by replacing dot notation with a dash.<br/><br/>Set `camera.position.z` to 5:<br/>`<three-renderer camera="{'position-z': 5}">`<br/><br/>Set `camera.position` to 1, 2, 3:<br/>`<three-renderer camera="{'position': [1, 2, 3]}">` |
 
+#### The `three` property of `<three-lunchbox>`
+
+A `three-lunchbox` component contains a property called `three` with ThreeJS details. For example:
+
+```js
+const lunchbox = document.querySelector('three-lunchbox');
+console.log(lunchbox.three);
+```
+
+Current properties of `three` are:
+
+| Property   | Notes                     |
+| ---------- | ------------------------- |
+| `scene`    | The component's scene.    |
+| `camera`   | The component's camera.   |
+| `renderer` | The component's renderer. |
+
+In TypeScript, you can get type completion by querying the `ThreeLunchbox` type:
+
+```ts
+import { type ThreeLunchbox } from 'lunchboxjs';
+const lunchbox = document.querySelector<ThreeLunchbox>('three-lunchbox');
+console.log(lunchbox?.three);
+```
 
 ## Auto-registered components
 
@@ -47,6 +71,66 @@ If the class name is one word, prepend `three-` to the element name:
 
 See [core concepts](/concepts#three-js-and-lunchbox) for attribute notes.
 
+### The `instance` property
+
+All auto-registered components and components created by `extend` (see [below](#custom-components-via-extend)) contain an `instance` property that holds the underlying ThreeJS object. For example:
+
+```html
+<box-geometry></box-geometry>
+
+<script>
+const boxGeometry = document.querySelector('box-geometry');
+console.log(boxGeometry.instance); // logs the BoxGeometry held by the component
+</script>
+```
+
+In TypeScript, this you can get type completion with the `Lunchbox` generic type:
+
+```ts
+import { type Lunchbox } from 'lunchboxjs';
+import * as THREE from 'three';
+
+const boxGeometry = document.querySelector<Lunchbox<THREE.BoxGeometry>>('box-geometry');
+console.log(boxGeometry?.instance); // logs the BoxGeometry held by the component
+```
+
+You can do anything with an `instance` that you would do with a standard ThreeJS object - for example:
+
+```js
+const mesh = document.querySelector('three-mesh');
+// add a child to the selected mesh
+mesh.instance.add(new THREE.Mesh(
+    new THREE.BoxGeometry(),
+    new THREE.MeshBasicMaterial(),
+));
+```
+
+This is a contrived example, since it would usually be easier to add a child via another `<three-mesh>` element; doing so also handles disposal automatically when removing the element from the DOM, while in the example above you would need to handle disposal manually. 
+
+Accessing `instance` is most useful when handling animations or large quantities of components/updates that would otherwise be expensive to add in the DOM.
+
 ## Custom components via `extend`
 
-TODO
+You can add your own components via the `extend` command. For example, a common use case is to add [OrbitControls](https://threejs.org/docs/#examples/en/controls/OrbitControls):
+
+```js
+import { extend } from 'lunchboxjs';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+extend('orbit-controls', OrbitControls);
+```
+
+Now you can add an `<orbit-controls>` component:
+
+```html
+<three-lunchbox camera="{ 'position-z': 5 }">
+    <three-mesh>
+        <torus-knot-geometry></torus-knot-geometry>
+        <mesh-normal-material></mesh-normal-material>
+    </three-mesh>
+
+    <orbit-controls args="[&quot;$camera$quot;, $quot;$domElement$quot;]"></orbit-controls>
+</three-lunchbox>
+```
+
+TODO: `$camera`, `$domElement` docs

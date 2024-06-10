@@ -105,6 +105,9 @@ export type ThreeIntersectEvent = {
 export interface InstanceEvent<T = unknown> {
     instance: T;
 }
+export interface LoadedEvent<T = unknown> {
+    loaded: T;
+}
 
 // Components
 export { autoComponents };
