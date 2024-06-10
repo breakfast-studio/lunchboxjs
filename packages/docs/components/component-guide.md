@@ -111,4 +111,24 @@ Accessing `instance` is most useful when handling animations or large quantities
 
 ## Custom components via `extend`
 
-TODO
+You can add your own components via the `extend` command. For example, a common use case is to add [OrbitControls](https://threejs.org/docs/#examples/en/controls/OrbitControls):
+
+```js
+import { extend } from 'lunchboxjs';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+extend('orbit-controls', OrbitControls);
+```
+
+Now you can add an `<orbit-controls>` component:
+
+```html
+<three-lunchbox camera="{ 'position-z': 5 }">
+    <three-mesh>
+        <torus-knot-geometry></torus-knot-geometry>
+        <mesh-normal-material></mesh-normal-material>
+    </three-mesh>
+
+    <orbit-controls args="[&quot;$camera$quot;, $quot;$domElement$quot;]"></orbit-controls>
+</three-lunchbox>
+```
