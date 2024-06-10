@@ -4,17 +4,17 @@ Lunchbox 2 components can trigger [`CustomEvent`](https://developer.mozilla.org/
 
 ## Built-in events
 
-Currently, [built-in components](/component-guide.html#built-in-components) do not trigger any special events.
+Currently, [built-in components](/components/component-guide.html#built-in-components) do not trigger any special events.
 
 ## Common events
 
-All [auto-registered](/component-guide.html#auto-registered-components) and [`extend`ed components](/component-guide.html#custom-components-via-extend) trigger the following events. 
+All [auto-registered](/components/component-guide.html#auto-registered-components) and [`extend`ed components](/components/component-guide.html#custom-components-via-extend) trigger the following events. 
 
 Note that a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) passes data via its `detail` property; this is the unique data of each event, and so is the payload in the `detail` column below.
 
-| Name              | `detail`                                 | Notes                                                                                        |
-| ----------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when the underling [instance](/component-guide.html#the-instance-property) is created. |
+| Name              | `detail`                                 | Notes                                                                                                   |
+| ----------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when the underling [instance](/components/component-guide.html#the-instance-property) is created. |
 
 ### Examples
 
