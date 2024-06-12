@@ -148,7 +148,7 @@ describe('vanilla HTML spec', () => {
     cy.wrap(initLunchbox).should('not.throw');
   });
 
-  it.only('registers before and after update events correctly', () => {
+  it('registers before and after update events correctly', () => {
     cy.window().then(win => {
       cy.get('three-lunchbox').then(lb => {
         const lunchbox = lb.get(0) as unknown as ThreeLunchbox;
