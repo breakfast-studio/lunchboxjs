@@ -5,7 +5,11 @@ import { initLunchbox } from '../../src';
 
 describe('vanilla HTML spec', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:5173/cypress/pages/core.html');
+    cy.visit('http://localhost:5173/cypress/pages/core.html', {
+      onBeforeLoad(win) {
+        cy.stub(win.console, 'log').as('consoleLog');
+      }
+    });
   });
 
   it('loads and sets up a basic scene', () => {
@@ -142,5 +146,46 @@ describe('vanilla HTML spec', () => {
 
   it('handles attempted re-registering correctly', () => {
     cy.wrap(initLunchbox).should('not.throw');
+  });
+
+  it('registers before and after update events correctly', () => {
+    cy.window().then(win => {
+      cy.get('three-lunchbox').then(lb => {
+        const lunchbox = lb.get(0) as unknown as ThreeLunchbox;
+        lunchbox.addEventListener('beforerender', () => {
+          win.console.log('before');
+        }, { once: true });
+        lunchbox.addEventListener('afterrender', () => {
+          win.console.log('after');
+        }, { once: true });
+      });
+      cy.get('@consoleLog').should('be.calledWith', 'before');
+      cy.get('@consoleLog').should('be.calledWith', 'after');
+    });
+  });
+
+  it('respects setting and updating manual-render="true"', () => {
+    cy.visit('http://localhost:5173/cypress/pages/core-no-update.html', {
+      onBeforeLoad(win) {
+        cy.stub(win.console, 'log').as('consoleLogNoUpdate');
+      }
+    });
+
+    cy.window().then(win => {
+      cy.get('three-lunchbox').then(async lb => {
+        const lunchbox = lb.get(0) as unknown as ThreeLunchbox;
+        lunchbox.setAttribute('manual-render', '');
+        lunchbox.addEventListener('beforerender', () => {
+          win.console.log('before');
+        }, { once: true });
+        lunchbox.addEventListener('afterrender', () => {
+          win.console.log('after');
+        }, { once: true });
+
+      });
+      cy.get('@consoleLogNoUpdate').should('not.be.called');
+      cy.get('@consoleLogNoUpdate').should('not.be.called');
+
+    });
   });
 });

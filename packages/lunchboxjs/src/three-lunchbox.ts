@@ -2,7 +2,7 @@ import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
 import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
 import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
-import { Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
+import { AFTER_RENDER_EVENT_NAME, BEFORE_RENDER_EVENT_NAME, Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
 import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
@@ -35,6 +35,24 @@ export class ThreeLunchbox extends LitElement {
   @property()
   dpr: number = DEFAULT_DPR;
 
+  @property({
+    attribute: 'manual-render',
+    type: Boolean,
+  })
+  manualRender = false;
+
+  @property({
+    attribute: 'dispatch-before-render',
+    type: Boolean,
+  })
+  dispatchBeforeRender = false;
+
+  @property({
+    attribute: 'dispatch-after-render',
+    type: Boolean,
+  })
+  dispatchAfterRender = false;
+
   /** ResizeObserver to handle container sizing */
   resizeObserver: ResizeObserver;
 
@@ -63,7 +81,9 @@ export class ThreeLunchbox extends LitElement {
             }
 
             // Render on resize to avoid flicker
-            this.renderThree();
+            if (!this.manualRender) {
+              this.renderThree();
+            }
           }
         }
       });
@@ -110,7 +130,9 @@ export class ThreeLunchbox extends LitElement {
 
 
     // Kick update loop
-    this.updateLoop();
+    if (!this.manualRender) {
+      this.updateLoop();
+    }
   }
 
   disconnectedCallback(): void {
@@ -236,16 +258,26 @@ export class ThreeLunchbox extends LitElement {
 
   /** Render loop */
   frame: number = Infinity;
-  // TODO: Only kick if required
   updateLoop() {
     this.renderThree();
-    this.frame = requestAnimationFrame(this.updateLoop.bind(this));
+    if (!this.manualRender) {
+      this.frame = requestAnimationFrame(this.updateLoop.bind(this));
+    }
   }
 
-  /** Render the 3D scene */
-  renderThree() {
+  /** Render the 3D scene. Optional scene/camera overrides; defaults to the internal scene and camera. */
+  public renderThree(overrideScene?: THREE.Scene, overrideCamera?: THREE.Camera,) {
+    if (this.dispatchBeforeRender) {
+      this.dispatchEvent(new CustomEvent<object>(BEFORE_RENDER_EVENT_NAME, {}));
+    }
     if (!this.three.camera) return;
-    this.three.renderer.render(this.three.scene, this.three.camera);
+    this.three.renderer.render(
+      overrideScene ?? this.three.scene,
+      overrideCamera ?? this.three.camera
+    );
+    if (this.dispatchAfterRender) {
+      this.dispatchEvent(new CustomEvent<object>(AFTER_RENDER_EVENT_NAME, {}));
+    }
   }
 
   render() {

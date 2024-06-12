@@ -4,7 +4,34 @@ Lunchbox 2 components can trigger [`CustomEvent`](https://developer.mozilla.org/
 
 ## Built-in events
 
-Currently, [built-in components](/components/component-guide.html#built-in-components) do not trigger any special events.
+### `<three-lunchbox>` events
+
+If `dispatch-after-render` and/or `dispatch-before-render` attributes are set to `true` on the `<three-lunchbox>` wrapper, `afterrender` and `beforerender` events, respectively, will be dispatched. These events do not have any data in the `details` parameter. 
+
+For example, in TypeScript:
+
+```html
+<!-- remember that a blank value equals `true` for HTML attributes -->
+<three-lunchbox 
+    dispatch-after-render 
+    dispatch-before-render
+>
+</three-lunchbox>
+```
+
+```ts
+import { type ThreeLunchbox } from 'lunchboxjs';
+
+const lunchbox = document.querySelector('three-lunchbox');
+lunchbox?.addEventListener<CustomEvent<object>>(
+    'beforerender', 
+    evt => console.log('before', evt)
+);
+lunchbox?.addEventListener<CustomEvent<object>>(
+    'afterrender', 
+    evt => console.log('after', evt)
+);
+```
 
 ## Common events
 

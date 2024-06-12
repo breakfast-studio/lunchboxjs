@@ -5,6 +5,8 @@ interface ElementEventMap {
     'loaded': CustomEvent<LoadedEvent>;
     'threepointermove': CustomEvent<ThreeIntersectEvent>;
     'threeclick': CustomEvent<ThreeIntersectEvent>;
+    'beforerender': CustomEvent<object>;
+    'afterrender': CustomEvent<object>;
 }
 declare global {
     interface HTMLElement {
