@@ -98,6 +98,8 @@ export const extend = (name: string, classDefinition: IsClass, targetWindow = wi
 export const THREE_POINTER_MOVE_EVENT_NAME = 'threepointermove';
 export const THREE_MOUSE_MOVE_EVENT_NAME = 'threemousemove';
 export const THREE_CLICK_EVENT_NAME = 'threeclick';
+export const BEFORE_RENDER_EVENT_NAME = 'beforerender';
+export const AFTER_RENDER_EVENT_NAME = 'afterrender';
 export type ThreeIntersectEvent = {
     intersect: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>;
     element: Element | null;
