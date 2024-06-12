@@ -257,20 +257,25 @@ export class ThreeLunchbox extends LitElement {
   /** Render loop */
   frame: number = Infinity;
   updateLoop() {
-    if (this.dispatchBeforeRender) {
-      this.dispatchEvent(new CustomEvent<object>(BEFORE_RENDER_EVENT_NAME, {}));
-    }
     this.renderThree();
-    this.frame = requestAnimationFrame(this.updateLoop.bind(this));
-    if (this.dispatchAfterRender) {
-      this.dispatchEvent(new CustomEvent<object>(AFTER_RENDER_EVENT_NAME, {}));
+    if (this.autoUpdate) {
+      this.frame = requestAnimationFrame(this.updateLoop.bind(this));
     }
   }
 
-  /** Render the 3D scene */
-  renderThree() {
+  /** Render the 3D scene. Optional scene/camera overrides; defaults to the internal scene and camera. */
+  public renderThree(overrideScene?: THREE.Scene, overrideCamera?: THREE.Camera,) {
+    if (this.dispatchBeforeRender) {
+      this.dispatchEvent(new CustomEvent<object>(BEFORE_RENDER_EVENT_NAME, {}));
+    }
     if (!this.three.camera) return;
-    this.three.renderer.render(this.three.scene, this.three.camera);
+    this.three.renderer.render(
+      overrideScene ?? this.three.scene,
+      overrideCamera ?? this.three.camera
+    );
+    if (this.dispatchAfterRender) {
+      this.dispatchEvent(new CustomEvent<object>(AFTER_RENDER_EVENT_NAME, {}));
+    }
   }
 
   render() {

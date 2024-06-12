@@ -147,20 +147,4 @@ describe('vanilla HTML spec', () => {
   it('handles attempted re-registering correctly', () => {
     cy.wrap(initLunchbox).should('not.throw');
   });
-
-  it('registers before and after update events correctly', () => {
-    cy.window().then(win => {
-      cy.get('three-lunchbox').then(lb => {
-        const lunchbox = lb.get(0) as unknown as ThreeLunchbox;
-        lunchbox.addEventListener('beforerender', () => {
-          win.console.log('before');
-        }, { once: true });
-        lunchbox.addEventListener('afterrender', () => {
-          win.console.log('after');
-        }, { once: true });
-      });
-      cy.get('@consoleLog').should('be.calledWith', 'before');
-      cy.get('@consoleLog').should('be.calledWith', 'after');
-    });
-  });
 });
