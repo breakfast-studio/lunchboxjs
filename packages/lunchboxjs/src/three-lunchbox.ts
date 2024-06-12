@@ -36,10 +36,10 @@ export class ThreeLunchbox extends LitElement {
   dpr: number = DEFAULT_DPR;
 
   @property({
-    attribute: 'auto-update',
+    attribute: 'manual-render',
     type: Boolean,
   })
-  autoUpdate = true;
+  manualRender = false;
 
   @property({
     attribute: 'dispatch-before-render',
@@ -81,7 +81,9 @@ export class ThreeLunchbox extends LitElement {
             }
 
             // Render on resize to avoid flicker
-            this.renderThree();
+            if (!this.manualRender) {
+              this.renderThree();
+            }
           }
         }
       });
@@ -128,7 +130,7 @@ export class ThreeLunchbox extends LitElement {
 
 
     // Kick update loop
-    if (this.autoUpdate) {
+    if (!this.manualRender) {
       this.updateLoop();
     }
   }
@@ -258,7 +260,7 @@ export class ThreeLunchbox extends LitElement {
   frame: number = Infinity;
   updateLoop() {
     this.renderThree();
-    if (this.autoUpdate) {
+    if (!this.manualRender) {
       this.frame = requestAnimationFrame(this.updateLoop.bind(this));
     }
   }
