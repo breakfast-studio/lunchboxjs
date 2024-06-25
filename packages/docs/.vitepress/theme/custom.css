@@ -14,3 +14,11 @@ three-lunchbox {
     overflow: hidden;
     background: var(--vp-code-block-bg);
 }
+
+.VPNavBarAppearance {
+    display: none !important;
+}
+.VPSocialLinks::before {
+    /* display: none !important; */
+    transform: translateX(-7px);
+}
