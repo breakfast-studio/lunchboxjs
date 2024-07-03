@@ -39,8 +39,9 @@ mesh.material = material; // <-- this is the `attach="material"` on the mesh-bas
 Any component ending with `-loader` (`<texture-loader>`, for example) will do the following in Lunchbox:
 
 1. Execute its `load` method, passing its `src` attribute as the URL
-2. Save the result of its `load` method to its `loaded` property
-3. (Optional, if `attach` attribute provided) Attach the loaded result to the parent
+2. Save the result of its `load` method to its `instance` property
+3. Save the loader itself to the `loader` property
+4. (Optional, if `attach` attribute provided) Attach the loaded result to the parent
 
 For example, this is how to load a texture in Lunchbox:
 
@@ -65,6 +66,24 @@ For example, this is how to load a texture in Lunchbox:
         </mesh-basic-material>
     </three-mesh>
 </three-lunchbox>
+
+Since the loaded content itself is in the `instance` property, you can set its properties on the loader component directly:
+
+For example, this is how to load a texture in Lunchbox:
+
+```html
+<three-mesh>
+    <box-geometry></box-geometry>
+    <mesh-basic-material>
+        <!-- Load the ThreeJS favicon, attach as a map, and set its anisotropy to 32 -->
+        <texture-loader 
+            src="/three-favicon.png" 
+            attach="map"
+            anisotropy="32">
+        </texture-loader>
+    </mesh-basic-material>
+</three-mesh>
+```
 
 ## Special arguments
 

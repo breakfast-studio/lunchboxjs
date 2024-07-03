@@ -39,9 +39,9 @@ All [auto-registered](/components/component-guide.html#auto-registered-component
 
 Note that a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) passes data via its `detail` property; this is the unique data of each event, and so is the payload in the `detail` column below.
 
-| Name              | `detail`                                 | Notes                                                                                                   |
-| ----------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when the underling [instance](/components/component-guide.html#the-instance-property) is created. |
+| Name              | `detail`                                 | Notes                                                                                                    |
+| ----------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when the underlying [instance](/components/component-guide.html#the-instance-property) is created. |
 
 ### Examples
 
@@ -63,3 +63,12 @@ mesh.addEventListener('instancecreated', (event: CustomEvent<InstanceEvent<THREE
     console.log(event.detail.instance);
 });
 ```
+
+
+## Special events
+
+Some components and component types trigger their own special events:
+
+| Component                        | Event name | `detail`                                | Notes                                                                 |
+| -------------------------------- | ---------- | --------------------------------------- | --------------------------------------------------------------------- |
+| Any component ending in `loader` | `loaded`   | `{ instance: /* the loaded object */ }` | Fired when a loader's `load` method has finished loading its resource |
