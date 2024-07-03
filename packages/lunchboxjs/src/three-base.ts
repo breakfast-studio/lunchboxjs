@@ -222,7 +222,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 this.refreshAttributes.call(this);
                 this.dispatchEvent(new CustomEvent('loaded', {
                     detail: {
-                        loaded,
+                        instance: loaded,
                     },
                 }));
             }, undefined, error => {
