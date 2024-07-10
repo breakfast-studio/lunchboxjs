@@ -9,13 +9,13 @@ Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web comp
 </three-lunchbox>
 ```
 
-## About
-
-Lunchbox started as a Vue + ThreeJS custom renderer, but from version 2 on will be focused on web components built into browsers.
-
 ## Full Docs
 
 [docs.lunchboxjs.com](https://docs.lunchboxjs.com/)
+
+## About
+
+Lunchbox started as a Vue + ThreeJS custom renderer, but from version 2 on will be focused on web components built into browsers.
 
 ## Local Dev
 
