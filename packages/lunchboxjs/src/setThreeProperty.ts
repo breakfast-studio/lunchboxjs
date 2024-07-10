@@ -44,7 +44,7 @@ export const setThreeProperty = <T extends object>(target: T, split: string[], p
 
     // handle common update functions
     const targetAsMaterial = target as THREE.Material;
-    if (targetAsMaterial.type?.toLowerCase().endsWith('material')) {
+    if (typeof targetAsMaterial.type === 'string' && targetAsMaterial.type?.toLowerCase().endsWith('material')) {
         targetAsMaterial.needsUpdate = true;
     }
 };
