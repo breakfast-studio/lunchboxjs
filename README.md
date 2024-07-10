@@ -1,6 +1,4 @@
-⚠️ **Under active development!** ⚠️
-
-Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components).
+Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components). You can use it in any (or no) framework.
 
 ```html
 <three-lunchbox>
@@ -13,13 +11,11 @@ Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web comp
 
 ## About
 
-Lunchbox 2 is still in active development. Expect breaking changes until the full `2.0.0` version is released.
-
 Lunchbox started as a Vue + ThreeJS custom renderer, but from version 2 on will be focused on web components built into browsers.
 
 ## Full Docs
 
-[docs.lunchboxjs.com](https://docs.lunchboxjs.com/) _(under development)_
+[docs.lunchboxjs.com](https://docs.lunchboxjs.com/)
 
 ## Local Dev
 
