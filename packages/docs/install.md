@@ -6,7 +6,7 @@ Lunchbox 2 is available in a few different formats:
 
 ### With npm
 
-1. Run `npm install three lunchboxjs@beta`. This will install ThreeJS and Lunchbox 2.
+1. Run `npm install three lunchboxjs`. This will install ThreeJS and Lunchbox 2.
 2. In your code, import and run `initLunchbox`:
 
 ```ts
@@ -24,7 +24,7 @@ initLunchbox();
 <script type="importmap">
   {
     "imports": {
-      "lunchboxjs": "https://cdn.jsdelivr.net/npm/lunchboxjs@beta/dist/lunchboxjs.js",
+      "lunchboxjs": "https://cdn.jsdelivr.net/npm/lunchboxjs/dist/lunchboxjs.js",
     }
   }
 </script>
