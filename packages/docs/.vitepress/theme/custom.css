@@ -22,3 +22,14 @@ three-lunchbox {
     /* display: none !important; */
     transform: translateX(-7px);
 }
+.VPHero .main > * {
+    max-width: initial !important;
+    text-align: center;
+}
+.VPHero .main .actions {
+    justify-content: center;
+}
+.VPNavScreenAppearance,
+.VPMenu .appearance {
+    display: none !important;
+}
