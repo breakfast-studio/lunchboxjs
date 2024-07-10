@@ -9,9 +9,11 @@ Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web comp
 </three-lunchbox>
 ```
 
-## Full Docs
+## Docs
 
-[docs.lunchboxjs.com](https://docs.lunchboxjs.com/)
+[Install](https://docs.lunchboxjs.com/install.html)
+
+[Full docs](https://docs.lunchboxjs.com/)
 
 ## About
 
