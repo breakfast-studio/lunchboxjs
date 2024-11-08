@@ -104,7 +104,7 @@ export class ThreeLunchbox extends LitElement {
 
     // Camera, scene, renderer information
     (['scene', 'camera', 'renderer'] as const).forEach(key => {
-      const options = (this as any)[key] ?? this.getAttribute(key) ?? {};
+      const options = (this as { scene?: object | string, camera?: object | string, renderer?: object | string })[key] ?? this.getAttribute(key) ?? {};
       const parsedOptions = typeof options === 'string' ? JSON.parse(options) : options;
       // properties
       Object.entries(parsedOptions).forEach(([k, v]) => {

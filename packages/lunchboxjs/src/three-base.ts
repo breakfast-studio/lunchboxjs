@@ -1,5 +1,4 @@
 import { LitElement, html } from "lit";
-import { property } from "lit/decorators.js";
 import * as THREE from 'three';
 import { IsClass, THREE_UUID_ATTRIBUTE_NAME, isClass } from "./utils";
 import { setThreeProperty } from "./setThreeProperty";
@@ -24,8 +23,6 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
     /** Standard ThreeJS class */
     class ThreeBase<U extends IsClass = T> extends LitElement {
-        @property({ type: Array })
-        args: ConstructorParameters<U> = [] as unknown as ConstructorParameters<U>;
         instance: U | null = null;
 
         dispose: (() => void)[] = [];
@@ -49,10 +46,16 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             });
         }
 
+        parsedArgs() {
+            const args = (this as { args?: Array<unknown> }).args ?? this.getAttribute('args') ?? [];
+            const parsedArgs: Array<unknown> = typeof args === 'string' ? JSON.parse(args) : args;
+            return parsedArgs;
+        }
+
         createUnderlyingThreeObject() {
             // Instance creation
             // ==================
-            this.instance = new (threeClass as U)(...this.args.map(arg => parseAttributeValue(arg, this))) as unknown as U;
+            this.instance = new (threeClass as U)(...this.parsedArgs().map(arg => parseAttributeValue(arg, this))) as unknown as U;
         }
 
         refreshAttributes() {
@@ -203,7 +206,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
         createUnderlyingThreeObject(): void {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            this.loader = new (threeClass as any)(...this.args.map(arg => parseAttributeValue(arg, this)));
+            this.loader = new (threeClass as any)(...this.parsedArgs().map(arg => parseAttributeValue(arg, this)));
         }
 
         onUnderlyingThreeObjectReady(): void {
