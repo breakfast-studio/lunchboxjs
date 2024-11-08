@@ -1,4 +1,5 @@
 import { ThreeLunchbox } from "./three-lunchbox";
+import * as THREE from 'three';
 
 const valueShortcuts = {
     '$scene': (element: HTMLElement) => {
@@ -33,6 +34,9 @@ export const parseAttributeValue = (targetValue: unknown, element: HTMLElement) 
     // look for Lunchbox-specific shortcuts
     // TODO: allow extending these
     const result = valueShortcuts[targetValue as keyof typeof valueShortcuts]?.(element);
+
+    // Color support
+    if (CSS.supports('color', targetValue)) return new THREE.Color(targetValue);
 
     // default - return target value
     return result ?? targetValue;
