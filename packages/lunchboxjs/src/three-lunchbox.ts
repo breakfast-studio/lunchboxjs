@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
 import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
 import { AFTER_RENDER_EVENT_NAME, BEFORE_RENDER_EVENT_NAME, Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
-// import parse from 'json5/lib/parse';
+import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
 import { parseAttributeValue } from './parseAttributeValue';
@@ -105,7 +105,7 @@ export class ThreeLunchbox extends LitElement {
     // Camera, scene, renderer information
     (['scene', 'camera', 'renderer'] as const).forEach(key => {
       const options = (this as { scene?: object | string, camera?: object | string, renderer?: object | string })[key] ?? this.getAttribute(key) ?? {};
-      const parsedOptions = typeof options === 'string' ? JSON.parse(options) : options;
+      const parsedOptions = typeof options === 'string' ? parse(options) : options;
       // properties
       Object.entries(parsedOptions).forEach(([k, v]) => {
         if (this.three[key]) {
