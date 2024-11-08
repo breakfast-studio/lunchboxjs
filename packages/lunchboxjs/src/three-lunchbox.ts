@@ -6,7 +6,7 @@ import { AFTER_RENDER_EVENT_NAME, BEFORE_RENDER_EVENT_NAME, Lunchbox, THREE_CLIC
 import parse from 'json5/lib/parse';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
-import { parseAttributeValue } from './parseAttributeValue';
+import { parseAttributeOrPropertyValue } from './parseAttributeValue';
 
 const ORTHOGRAPHIC_CAMERA_ATTR_NAME = 'orthographic';
 const DEFAULT_DPR = Infinity;
@@ -110,7 +110,7 @@ export class ThreeLunchbox extends LitElement {
       Object.entries(parsedOptions).forEach(([k, v]) => {
         if (this.three[key]) {
           // set property
-          setThreeProperty(this.three[key]!, k.split('-'), parseAttributeValue(v, this));
+          setThreeProperty(this.three[key]!, k.split('-'), parseAttributeOrPropertyValue(v, this));
         }
       });
     });

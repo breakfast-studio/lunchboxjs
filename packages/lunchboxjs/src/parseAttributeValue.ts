@@ -24,7 +24,7 @@ const valueShortcuts = {
     },
 };
 
-export const parseAttributeValue = (targetValue: unknown, element: HTMLElement) => {
+export const parseAttributeOrPropertyValue = (targetValue: unknown, element: HTMLElement) => {
     // leave as-is if this isn't a string
     if (typeof targetValue !== 'string') return targetValue;
 
