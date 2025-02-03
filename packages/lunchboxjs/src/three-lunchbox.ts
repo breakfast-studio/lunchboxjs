@@ -32,6 +32,9 @@ export class ThreeLunchbox extends LitElement {
   @property()
   dpr: number = DEFAULT_DPR;
 
+  @property()
+  headless: boolean = false;
+
   @property({
     attribute: 'manual-render',
     type: Boolean,
@@ -121,12 +124,14 @@ export class ThreeLunchbox extends LitElement {
     }
 
     // Prep mouse info
-    const renderer = new THREE.WebGLRenderer();
-    renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
-    renderer.domElement.addEventListener('mousemove', this.onPointerMove.bind(this));
-    renderer.domElement.addEventListener('click', this.onClick.bind(this));
-    // this.renderer.domElement.addEventListener('touchstart', this.onClick.bind(this));
-    this.three.renderer = renderer;
+    if (!this.headless) {
+      const renderer = new THREE.WebGLRenderer();
+      renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
+      renderer.domElement.addEventListener('mousemove', this.onPointerMove.bind(this));
+      renderer.domElement.addEventListener('click', this.onClick.bind(this));
+      // this.renderer.domElement.addEventListener('touchstart', this.onClick.bind(this));
+      this.three.renderer = renderer;  
+    }
 
 
     // Kick update loop
@@ -149,21 +154,7 @@ export class ThreeLunchbox extends LitElement {
   handleDefaultSlotChange(evt: { target: HTMLSlotElement }) {
     evt.target.assignedElements().forEach(el => {
       const elAsThree = el as unknown as Lunchbox<unknown>;
-      if (elAsThree.instance instanceof THREE.Object3D) {
-        // TODO: optimize so we're not searching through whole scene graph
-        let alreadyExists = false;
-        this.three.scene.traverse(child => {
-          if (alreadyExists) return;
-
-          if (child.uuid === (elAsThree.instance as THREE.Object3D).uuid) {
-            alreadyExists = true;
-          }
-        });
-        if (alreadyExists) return;
-
-        // add to scene
-        this.three.scene.add(elAsThree.instance);
-
+      if (elAsThree.instance instanceof THREE.Object3D && el.getAttributeNames().includes(RAYCASTABLE_ATTRIBUTE_NAME)) {
         // Add to raycast pool
         if (el.getAttributeNames().includes(RAYCASTABLE_ATTRIBUTE_NAME)) {
           this.raycastPool.push(elAsThree.instance);
