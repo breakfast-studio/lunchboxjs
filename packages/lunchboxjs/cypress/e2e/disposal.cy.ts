@@ -13,9 +13,9 @@ describe('vanilla HTML spec', () => {
       // ensure scene has correct number of children...
       expect(lb.three.scene.children).to.have.length(2);
       // ...geometries in memory...
-      expect(lb.three.renderer.info.memory.geometries).to.eq(2);
+      expect(lb.three.renderer?.info.memory.geometries).to.eq(2);
       // ...and draw calls
-      expect(lb.three.renderer.info.render.calls).to.eq(2);
+      expect(lb.three.renderer?.info.render.calls).to.eq(2);
       // set child to invisible - note no change to child/geo counts
       cy.get('three-mesh').then(async mesh => {
         const el = mesh.get(0) as unknown as Lunchbox<THREE.Mesh>;
@@ -25,15 +25,15 @@ describe('vanilla HTML spec', () => {
         const el = mesh.get(0) as unknown as Lunchbox<THREE.Mesh>;
         expect(el.instance.visible).to.be.false;
         expect(lb.three.scene.children).to.have.length(2);
-        expect(lb.three.renderer.info.memory.geometries).to.eq(2);
+        expect(lb.three.renderer?.info.memory.geometries).to.eq(2);
 
         // remove child - should see child, geo, and draw call count changes after this
         el.remove();
         expect(lb.three.scene.children).to.have.length(1);
-        expect(lb.three.renderer.info.memory.geometries).to.eq(1);
+        expect(lb.three.renderer?.info.memory.geometries).to.eq(1);
         // (note we're waiting a frame so the draw calls count has the opportunity to update)
         await new Promise(requestAnimationFrame);
-        expect(lb.three.renderer.info.render.calls).to.eq(1);
+        expect(lb.three.renderer?.info.render.calls).to.eq(1);
       });
     });
   });

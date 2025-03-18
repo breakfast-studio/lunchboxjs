@@ -78,13 +78,13 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Do some attaching based on common use cases
             // ==================
-            const parent = this.parentElement as ThreeBase;
-            if (parent.instance) {
+            const parent = this.parentNode as unknown as ThreeBase & { three?: { scene?: THREE.Scene } };
+            if (parent.instance || parent.three?.scene) {
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
                 const thisAsMaterial = this.instance as unknown as THREE.Material;
                 const parentAsMesh = parent.instance as unknown as THREE.Mesh;
                 // const thisAsLoader = this.instance as unknown as THREE.Loader<U>;
-                const parentAsAddTarget = parent.instance as unknown as { add?: (item: THREE.Object3D) => void };
+                const parentAsAddTarget = (parent.instance ?? parent.three?.scene) as unknown as { add?: (item: THREE.Object3D) => void };
                 // const thisIsALoader = this.tagName.toString().toLowerCase().endsWith('-loader');
                 const instanceAsObject3d = this.instance as unknown as THREE.Object3D;
 
