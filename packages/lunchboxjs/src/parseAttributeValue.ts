@@ -20,7 +20,7 @@ const valueShortcuts = {
     '$domElement': (element: HTMLElement) => {
         // TODO: allow non-wrapper dom element
         const el = element.closest('three-lunchbox') as unknown as ThreeLunchbox | null;
-        return el?.three.renderer.domElement;
+        return el?.three.renderer?.domElement;
     },
 };
 
