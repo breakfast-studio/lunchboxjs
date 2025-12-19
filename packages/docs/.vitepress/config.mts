@@ -8,6 +8,9 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [{ text: "Guide", link: "/guide" }],
+    outline: {
+	level: "deep",
+    },
 
     sidebar: [
       {
