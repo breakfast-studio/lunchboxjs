@@ -18,12 +18,14 @@ Available attributes are:
 | ------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `background`             | `null`        | Background color of the scene. Any [ThreeJS color representation](https://threejs.org/docs/#api/en/math/Color) will work. <br/><br/>`<three-lunchbox background="blue">`<br/>`<three-lunchbox background="#0f0">`<br/>(etc)                                                                                                                                                           |
 | `camera`                 | `null`        | Options to pass to the default camera. Accepts an object that is parsed and whose values are sent to the camera.<br/><br/>Nested values can be set by replacing dot notation with a dash.<br/><br/>Set `camera.position.z` to 5:<br/>`<three-renderer camera="{'position-z': 5}">`<br/><br/>Set `camera.position` to 1, 2, 3:<br/>`<three-renderer camera="{'position': [1, 2, 3]}">` |
+| `camera-args`                 | `[]`        | Array of args to pass to the camera when it is instantiated. |
 | `dpr`                    | `Infinity`    | [Device pixel ratio](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio). Will automatically adjust to the screen's DPR if set to `Infinity`.                                                                                                                                                                                                                   |
 | `dispatch-after-render`  | `false`       | Set to `true` to dispatch an `afterrender` `CustomEvent` after every render. See [`<three-lunchbox>` events](/components/events#three-lunchbox-events).                                                                                                                                                                                                                               |
 | `dispatch-before-render` | `false`       | Set to `true` to dispatch a `beforerender` `CustomEvent` before every render. See [`<three-lunchbox>` events](/components/events#three-lunchbox-events).                                                                                                                                                                                                                              |
 | `headless` | `false` | Set to `true` to prevent automatic WebGLRenderer initialization. Useful in unit tests, for example. |
 | `manual-render`          | `false`       | Set to `true` to prevent automatic rendering. Note you'll need to call `renderThree()` yourself if this is the case.                                                                                                                                                                                                                                                                  |
 | `renderer`               | `null`        | Options to pass to the default renderer. Accepts an object that is parsed and whose values are sent to the renderer. See `camera` for formatting.                                                                                                                                                                                                                                     |
+| `renderer-args`               | `[]`        | Array of args to pass to the renderer when it is instantiated.                                                                                                                                                                                                                                     |
 | `scene`                  | `null`        | Options to pass to the default scene. Accepts an object that is parsed and whose values are sent to the scene. See `camera` for formatting.                                                                                                                                                                                                                                           |
 
 #### The `three` property of `<three-lunchbox>`
@@ -150,8 +152,8 @@ Now you can add an `<orbit-controls>` component:
         <mesh-normal-material></mesh-normal-material>
     </three-mesh>
 
-    <orbit-controls args="[&quot;$camera$quot;, $quot;$domElement$quot;]"></orbit-controls>
+    <orbit-controls args='["$camera", "$domElement"]'></orbit-controls>
 </three-lunchbox>
 ```
 
-TODO: `$camera`, `$domElement` docs
+See [here](/components/advanced.html#special-arguments) for notes on `$camera` and `$renderer`.

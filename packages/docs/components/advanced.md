@@ -107,7 +107,7 @@ For example, this will start OrbitControls correctly:
 
 ```html
 <!-- We need the camera and DOM element as args here -->
-<orbit-controls args="[&quot;$camera&quot;, &quot;$domElement&quot;]"></orbit-controls>
+<orbit-controls args='["$camera", "$domElement"]'></orbit-controls>
 ```
 
-**Note the `&quot;` characters** - this is a temporary workaround while more robust parsing is being worked on.
+See [here](/concepts.html#object-array-values) for notes on passing arrays as values.
