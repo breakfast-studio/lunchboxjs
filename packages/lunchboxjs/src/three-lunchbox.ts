@@ -18,7 +18,6 @@ export class ThreeLunchbox extends LitElement {
   private scratchV2 = new THREE.Vector2();
   // private scratchV3 = new THREE.Vector3();
 
-  // TODO: Customizable scene, camera, renderer args
   // TODO: Fully customizable scene, camera, renderer
   three = {
     scene: new THREE.Scene(),
@@ -53,6 +52,18 @@ export class ThreeLunchbox extends LitElement {
   })
   dispatchAfterRender = false;
 
+  @property({
+	attribute: 'renderer-args',
+	type: Object,	
+  })
+  rendererArgs: ConstructorParameters<typeof THREE.WebGLRenderer> = [];
+
+  @property({
+	attribute: 'camera-args',
+	type: Object,	
+  })
+  cameraArgs: ConstructorParameters<typeof THREE.PerspectiveCamera | typeof THREE.OrthographicCamera> = [];
+  
   /** ResizeObserver to handle container sizing */
   resizeObserver: ResizeObserver;
 
@@ -97,9 +108,9 @@ export class ThreeLunchbox extends LitElement {
       this.dpr = window.devicePixelRatio;
     }
     if (this.getAttribute(ORTHOGRAPHIC_CAMERA_ATTR_NAME) !== null) {
-      this.three.camera = new THREE.OrthographicCamera();
+      this.three.camera = new THREE.OrthographicCamera(...this.cameraArgs);
     } else {
-      this.three.camera = new THREE.PerspectiveCamera(75);
+      this.three.camera = new THREE.PerspectiveCamera(...(this.cameraArgs.length ? this.cameraArgs : [75]));
     }
 
     // Camera, scene, renderer information
@@ -125,7 +136,7 @@ export class ThreeLunchbox extends LitElement {
 
     // Prep mouse info
     if (!this.headless) {
-      const renderer = new THREE.WebGLRenderer();
+      const renderer = new THREE.WebGLRenderer(...this.rendererArgs);
       renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
       renderer.domElement.addEventListener('mousemove', this.onPointerMove.bind(this));
       renderer.domElement.addEventListener('click', this.onClick.bind(this));

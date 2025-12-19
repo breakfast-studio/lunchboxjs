@@ -17,7 +17,7 @@
 
 <body>
   <!-- Vanilla HTML -->
-  <three-lunchbox camera="{ position: [1, -1, 5] }" background="black">
+  <three-lunchbox renderer-args='[{ "antialias": true }]'  camera="{ position: [1, -1, 5] }" background="black">
     <!-- box -->
     <three-mesh data-id="test" position-x="-0.5" position-y="0.5">
       <box-geometry args="[2, 2, 2]"></box-geometry>
