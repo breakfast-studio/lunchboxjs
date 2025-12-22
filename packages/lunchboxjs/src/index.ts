@@ -3,8 +3,10 @@ import { buildClass } from './three-base';
 import { ThreeLunchbox } from './three-lunchbox';
 import { IsClass } from './utils';
 import * as THREE from '../node_modules/@types/three';
+import { HtmlAnchor } from './html-anchor';
 
 export * from './three-lunchbox';
+export * from './html-anchor';
 
 /** Every component in a Lunchbox scene is of the Lunchbox type - it contains its ThreeJS instance
  * as a property called `instance`. 
@@ -41,10 +43,16 @@ interface LunchboxOptions {
 export const initLunchbox = ({
     prependList = [],
 }: LunchboxOptions = {}) => {
-    if (!customElements.get('three-lunchbox')) {
-        // define wrapper
-        customElements.define('three-lunchbox', ThreeLunchbox);
+    const toDefine = {
+        'three-lunchbox': ThreeLunchbox,
+        'html-anchor': HtmlAnchor,
     }
+
+    Object.entries(toDefine).forEach(([k, v]) => {
+        if (!customElements.get(k)){
+            customElements.define(k, v);
+        }
+    });
 
     // define components
     [...prependList, ...autoComponents].forEach(className => {

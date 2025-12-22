@@ -17,13 +17,13 @@ Lunchbox 2 lets you write [ThreeJS](https://threejs.org/) scenes using [web comp
 
 ## About
 
-Lunchbox started as a Vue + ThreeJS custom renderer, but from version 2 on will be focused on web components built into browsers.
+Lunchbox started as a Vue + ThreeJS custom renderer, but from version 2 on is focused on web components built into browsers.
 
 ## Local Dev
 
 `npm install`, then `npm run dev` to run dev server. From there, edit source code in the LunchboxJS package's `/src/...` and examples in `/index.html/...` to build and test features.
 
-`npm run test` to run headless tests, `npm run cy:open` to open Cypress test suites.
+With the dev server still running and accessible via `localhost:5173`, run `npm run test` to run headless tests, `npm run cy:open` to open Cypress test suites.
 
 `npm run docs:dev` to run docs locally.
 
