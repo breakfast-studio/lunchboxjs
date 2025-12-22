@@ -70,6 +70,43 @@ const lunchbox = document.querySelector<ThreeLunchbox>('three-lunchbox');
 lunchbox?.renderThree();
 ```
 
+### `<html-anchor>`
+
+`<html-anchor>` makes the `.position` of its parent available as CSS vars (`--left` and `--top`, from the top left of the canvas) to its children. 
+
+For example, you can create this:
+
+<three-lunchbox style="position: relative;">
+  <three-mesh position-z="-5">
+    <html-anchor>
+        <div style="position: absolute; left: var(--left); top: var(--top); background: white; color: black; padding: 5px; border-radius: 10px;">
+            HTML Label
+        </div>
+    </html-anchor>
+    <torus-knot-geometry></torus-knot-geometry>
+    <mesh-normal-material></mesh-normal-material>
+  </three-mesh>
+</three-lunchbox>
+
+with this:
+
+
+```html
+<three-lunchbox style="position: relative;">
+  <three-mesh position-z="-5">
+    <html-anchor>
+        <!-- `--left` and `--top` are set automatically by <html-anchor> -->
+        <div style="position: absolute; left: var(--left); top: var(--top);">
+            HTML Label
+        </div>
+    </html-anchor>
+    <torus-knot-geometry></torus-knot-geometry>
+    <mesh-normal-material></mesh-normal-material>
+  </three-mesh>
+</three-lunchbox>
+```
+
+
 ## Auto-registered components
 
 All ThreeJS classes listed [here](https://github.com/breakfast-studio/lunchboxjs/blob/main/packages/lunchboxjs/src/auto-components.ts) can be used out of the box with Lunchbox 2. Elements must be separated by a dash if the class name is two or more words:
