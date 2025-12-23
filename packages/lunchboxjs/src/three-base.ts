@@ -5,6 +5,7 @@ import { setThreeProperty } from "./setThreeProperty";
 import { parseAttributeOrPropertyValue } from "./parseAttributeValue";
 import parse from 'json5/lib/parse';
 import { ThreeLunchbox } from "./three-lunchbox";
+import { property, state } from "lit/decorators.js";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 export const IGNORED_ATTRIBUTES = [
@@ -30,6 +31,12 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         dispose: (() => void)[] = [];
 
         mutationObserver: MutationObserver | null = null;
+
+        @property({ type: Boolean, attribute: 'try-add-once' })
+        tryAddOnce = false;
+
+        @state()
+        connected = false;
 
         observeAttributes() {
             // Attribute mutation observation
@@ -71,7 +78,15 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             Array.from(this.attributes).forEach(this.updateProperty.bind(this));
         }
 
-        onUnderlyingThreeObjectReady() {
+        getCandidateParent(){
+            let parent = (this.parentNode) as unknown as ThreeBase | ThreeLunchbox | Node | null | undefined;
+            while (parent && !(parent as ThreeBase)?.instance && !(parent as ThreeLunchbox)?.three?.scene){
+                parent = parent?.parentNode || (parent as ShadowRoot)?.host || ((parent.getRootNode?.() as ShadowRoot)?.host);
+            }
+            return parent;
+        }
+
+        async onUnderlyingThreeObjectReady() {
             const instanceAsObject3d = this.instance as unknown as THREE.Object3D;
             if (instanceAsObject3d.uuid) {
                 this.setAttribute(THREE_UUID_ATTRIBUTE_NAME, instanceAsObject3d.uuid);
@@ -79,9 +94,10 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Do some attaching based on common use cases
             // ==================
-            let parent = (this.parentNode) as unknown as ThreeBase | ThreeLunchbox | Node | null | undefined;
-            while (parent && !(parent as ThreeBase)?.instance && !(parent as ThreeLunchbox)?.three?.scene){
-                parent = parent?.parentNode || (parent as ShadowRoot)?.host || ((parent.getRootNode?.() as ShadowRoot)?.host);
+            let parent = this.getCandidateParent();
+            while (this?.connected && !this.tryAddOnce && !parent){
+                await new Promise(requestAnimationFrame);
+                parent = this.getCandidateParent();
             }
             if (parent && (parent as ThreeBase).instance || (parent as ThreeLunchbox)?.three?.scene) {
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
@@ -133,6 +149,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                 },
             }));
 
+            this.connected = true;
             this.onUnderlyingThreeObjectReady.call(this);
         }
 
@@ -185,6 +202,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             const toDispose = [this.instance];
             this.disposeThreeObjects.call(this, toDispose);
+            this.connected = false;
         }
 
         disposeThreeObjects(toDispose: unknown[]): void {
@@ -214,7 +232,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             this.loader = new (threeClass as any)(...this.parsedArgs().map(arg => parseAttributeOrPropertyValue(arg, this)));
         }
 
-        onUnderlyingThreeObjectReady(): void {
+        async onUnderlyingThreeObjectReady() {
             const src = this.getAttribute('src');
             if (!src) throw new Error('Loader requires a source.');
 

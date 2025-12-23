@@ -131,6 +131,14 @@ If the class name is one word, prepend `three-` to the element name:
 
 See [core concepts](/concepts#three-js-and-lunchbox) for attribute notes.
 
+### Universal component attributes
+
+All components registered or `extend`ed through Lunchbox 2 have the following attributes:
+
+| Name | Default value | Notes |
+| --- | --- | --- |
+| `try-add-once` | | By default, components poll for a suitable parent element (ie, one with an `instance` or `three.scene` property) every frame until they find a parent. Set this attribute to `true` to only try adding once on insertion into the DOM. |
+
 ### The `instance` property
 
 All auto-registered components and components created by `extend` (see [below](#custom-components-via-extend)) contain an `instance` property that holds the underlying ThreeJS object. For example:
