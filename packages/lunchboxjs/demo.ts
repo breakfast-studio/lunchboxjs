@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { customElement } from 'lit/decorators.js';
 import { initLunchbox } from './src/index.ts';
 import { html, LitElement } from 'lit';
