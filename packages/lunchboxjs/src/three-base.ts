@@ -81,7 +81,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             // ==================
             let parent = (this.parentNode) as unknown as ThreeBase | ThreeLunchbox | Node | null | undefined;
             while (parent && !(parent as ThreeBase)?.instance && !(parent as ThreeLunchbox)?.three?.scene){
-                parent = parent?.parentNode || (parent as ShadowRoot)?.host;
+                parent = parent?.parentNode || (parent as ShadowRoot)?.host || ((parent.getRootNode?.() as ShadowRoot)?.host);
             }
             if (parent && (parent as ThreeBase).instance || (parent as ThreeLunchbox)?.three?.scene) {
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;

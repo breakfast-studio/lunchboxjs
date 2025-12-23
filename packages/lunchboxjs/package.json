@@ -12,7 +12,7 @@
       "types": "./dist/src/index.d.ts"
     }
   },
-  "version": "2.1.5",
+  "version": "2.1.6",
   "type": "module",
   "types": "./dist/src/index.d.ts",
   "scripts": {
