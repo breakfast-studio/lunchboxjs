@@ -4,6 +4,7 @@ import { IsClass, THREE_UUID_ATTRIBUTE_NAME, isClass } from "./utils";
 import { setThreeProperty } from "./setThreeProperty";
 import { parseAttributeOrPropertyValue } from "./parseAttributeValue";
 import parse from 'json5/lib/parse';
+import { ThreeLunchbox } from "./three-lunchbox";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 export const IGNORED_ATTRIBUTES = [
@@ -78,13 +79,16 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Do some attaching based on common use cases
             // ==================
-            const parent = this.parentNode as unknown as ThreeBase & { three?: { scene?: THREE.Scene } };
-            if (parent.instance || parent.three?.scene) {
+            let parent = (this.parentNode) as unknown as ThreeBase | ThreeLunchbox | Node | null | undefined;
+            while (parent && !(parent as ThreeBase)?.instance && !(parent as ThreeLunchbox)?.three?.scene){
+                parent = parent?.parentNode || (parent as ShadowRoot)?.host;
+            }
+            if (parent && (parent as ThreeBase).instance || (parent as ThreeLunchbox)?.three?.scene) {
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
                 const thisAsMaterial = this.instance as unknown as THREE.Material;
-                const parentAsMesh = parent.instance as unknown as THREE.Mesh;
+                const parentAsMesh = (parent as ThreeBase).instance as unknown as THREE.Mesh;
                 // const thisAsLoader = this.instance as unknown as THREE.Loader<U>;
-                const parentAsAddTarget = (parent.instance ?? parent.three?.scene) as unknown as { add?: (item: THREE.Object3D) => void };
+                const parentAsAddTarget = ((parent as ThreeBase).instance ?? (parent as ThreeLunchbox).three?.scene) as unknown as { add?: (item: THREE.Object3D) => void };
                 // const thisIsALoader = this.tagName.toString().toLowerCase().endsWith('-loader');
                 const instanceAsObject3d = this.instance as unknown as THREE.Object3D;
 
