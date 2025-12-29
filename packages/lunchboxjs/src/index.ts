@@ -28,10 +28,11 @@ export * from './html-anchor';
  * mesh?.instance.position.set(0, 1, 0); // - or anything else you can do with a mesh
  * ```
  */
-export type Lunchbox<T> = Element & {
-    instance: T
-};
+export type Lunchbox<T = THREE.Object3D> = Element & LunchboxProperties<T>
 
+export type LunchboxProperties<T = THREE.Object3D> = {
+    instance: T;
+}
 
 /** Options for initializing Lunchbox. */
 interface LunchboxOptions {

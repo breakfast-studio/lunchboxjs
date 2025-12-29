@@ -1,11 +1,12 @@
 import { LitElement, html } from "lit";
 import * as THREE from 'three';
-import { IsClass, THREE_UUID_ATTRIBUTE_NAME, isClass } from "./utils";
+import { IsClass, THREE_UUID_ATTRIBUTE_NAME, getCandidateParent, isClass } from "./utils";
 import { setThreeProperty } from "./setThreeProperty";
 import { parseAttributeOrPropertyValue } from "./parseAttributeValue";
 import parse from 'json5/lib/parse';
 import { ThreeLunchbox } from "./three-lunchbox";
 import { property, state } from "lit/decorators.js";
+import { Lunchbox } from ".";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 export const IGNORED_ATTRIBUTES = [
@@ -78,14 +79,6 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             Array.from(this.attributes).forEach(this.updateProperty.bind(this));
         }
 
-        getCandidateParent(){
-            let parent = (this.parentNode) as unknown as ThreeBase | ThreeLunchbox | Node | null | undefined;
-            while (parent && !(parent as ThreeBase)?.instance && !(parent as ThreeLunchbox)?.three?.scene){
-                parent = parent?.parentNode || (parent as ShadowRoot)?.host || ((parent.getRootNode?.() as ShadowRoot)?.host);
-            }
-            return parent;
-        }
-
         async onUnderlyingThreeObjectReady() {
             const instanceAsObject3d = this.instance as unknown as THREE.Object3D;
             if (instanceAsObject3d.uuid) {
@@ -94,17 +87,17 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
 
             // Do some attaching based on common use cases
             // ==================
-            let parent = this.getCandidateParent();
+            let parent = getCandidateParent(this);
             while (this?.connected && !this.tryAddOnce && !parent){
                 await new Promise(requestAnimationFrame);
-                parent = this.getCandidateParent();
+                parent = getCandidateParent(this);
             }
-            if (parent && (parent as ThreeBase).instance || (parent as ThreeLunchbox)?.three?.scene) {
+            if (parent && (parent as Lunchbox).instance || (parent as ThreeLunchbox)?.three?.scene) {
                 const thisAsGeometry = this.instance as unknown as THREE.BufferGeometry;
                 const thisAsMaterial = this.instance as unknown as THREE.Material;
-                const parentAsMesh = (parent as ThreeBase).instance as unknown as THREE.Mesh;
+                const parentAsMesh = (parent as Lunchbox).instance as unknown as THREE.Mesh;
                 // const thisAsLoader = this.instance as unknown as THREE.Loader<U>;
-                const parentAsAddTarget = ((parent as ThreeBase).instance ?? (parent as ThreeLunchbox).three?.scene) as unknown as { add?: (item: THREE.Object3D) => void };
+                const parentAsAddTarget = ((parent as Lunchbox).instance ?? (parent as ThreeLunchbox).three?.scene) as unknown as { add?: (item: THREE.Object3D) => void };
                 // const thisIsALoader = this.tagName.toString().toLowerCase().endsWith('-loader');
                 const instanceAsObject3d = this.instance as unknown as THREE.Object3D;
 

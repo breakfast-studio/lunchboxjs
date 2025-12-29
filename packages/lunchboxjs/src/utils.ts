@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { Lunchbox } from ".";
+import { ThreeLunchbox } from "./three-lunchbox";
+
 /** Get potentially nested property in object */
 export const get = <T = unknown>(
     obj: any,
@@ -153,3 +157,12 @@ export const set = (
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export const THREE_UUID_ATTRIBUTE_NAME = 'data-three-uuid';
+
+/** Get the parent of the given `el` that can has an instance or scene available. */
+export const getCandidateParent = (el: HTMLElement) => {
+    let parent = (el.parentNode) as unknown as Lunchbox | ThreeLunchbox | Node | null | undefined;
+    while (parent && !(parent as Lunchbox)?.instance && !(parent as ThreeLunchbox)?.three?.scene){
+        parent = parent?.parentNode || (parent as ShadowRoot)?.host || ((parent.getRootNode?.() as ShadowRoot)?.host);
+    }
+    return parent;
+}
