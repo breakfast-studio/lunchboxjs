@@ -114,6 +114,12 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
                     // If parent is an add target, add to parent
                     try {
                         parentAsAddTarget.add(instanceAsObject3d);
+                        this.dispatchEvent(new CustomEvent('instanceadded', {
+                            detail: {
+                                instance: this.instance,
+                                parent: parentAsAddTarget,
+                            },
+                        }));
                     } catch (_) {
                         throw new Error(`Error adding ${this.tagName} to ${parentAsAddTarget}`);
                     }

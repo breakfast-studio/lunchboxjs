@@ -116,6 +116,9 @@ export type ThreeIntersectEvent = {
 export interface InstanceEvent<T = unknown> {
     instance: T;
 }
+export type InstanceAddedEvent<T = unknown> = InstanceEvent<T> & {
+    parent: THREE.Scene | THREE.Object3D
+}
 export interface LoadedEvent<T = unknown> {
     loaded: T;
 }

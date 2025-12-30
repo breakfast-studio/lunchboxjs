@@ -41,7 +41,8 @@ Note that a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/Cus
 
 | Name              | `detail`                                 | Notes                                                                                                    |
 | ----------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when the underlying [instance](/components/component-guide.html#the-instance-property) is created. |
+| `instanceadded` | `{ instance: /* the ThreeJS object */, parent: /* the ThreeJS parent */ }` | Fired when the underlying [instance](/components/component-guide.html#the-instance-property) is added to a scene or Object3D parent. This happens after `instancecreated`. |
+| `instancecreated` | `{ instance: /* the ThreeJS object */ }` | Fired when the underlying [instance](/components/component-guide.html#the-instance-property) is created. This happens before `instanceadded`. |
 
 ### Examples
 

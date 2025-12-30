@@ -170,7 +170,7 @@ export const getCandidateParent = (el: HTMLElement) => {
 // Source - https://stackoverflow.com/a/67676665
 // Posted by Mendy
 // Retrieved 2025-12-30, License - CC BY-SA 4.0
-export function closestPassShadow(node: HTMLElement | ParentNode | null, selector: string) {
+export function closestPassShadow(node: HTMLElement | ParentNode | null, selector: string | ((el: HTMLElement | ParentNode | null) => boolean)) {
 
     if (!node) {
         return null;
@@ -181,7 +181,9 @@ export function closestPassShadow(node: HTMLElement | ParentNode | null, selecto
     }
 
     if (node instanceof HTMLElement) {
-        if (node.matches(selector)) {
+        if (typeof selector === 'string' && node.matches(selector)) {
+            return node;
+        } else if (typeof selector === 'function' && selector(node)){
             return node;
         } else {
             return closestPassShadow(node.parentNode, selector);

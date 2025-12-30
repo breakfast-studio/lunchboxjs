@@ -12,7 +12,7 @@
       "types": "./dist/src/index.d.ts"
     }
   },
-  "version": "2.1.8",
+  "version": "2.1.9",
   "type": "module",
   "types": "./dist/src/index.d.ts",
   "scripts": {
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "json5": "^2.2.3",
-    "lit": "^3.1.2"
+    "lit": "^3.3.2"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",

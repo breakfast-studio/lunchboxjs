@@ -14,12 +14,25 @@ export class HtmlAnchor extends LitElement {
     if (!instance) return false;
     if (!instance.isObject3D) throw new Error('html-anchor must be the child of an Object3D');
 
-    const lunchboxParent = closestPassShadow(this, 'three-lunchbox') as ThreeLunchbox | null;
-    if (!lunchboxParent) throw new Error('three-lunchbox parent required for html-anchor')
+    // const lunchboxParent = closestPassShadow(this, 'three-lunchbox') as ThreeLunchbox | null;
+    const lunchboxParent = closestPassShadow(this, (el) => {
+      return !!(el as ThreeLunchbox)?.three?.renderer;
+    }) as Pick<ThreeLunchbox, 'three'> | null;
+
+    if (!lunchboxParent) {
+      console.error('three-lunchbox parent required for html-anchor');
+      return false;
+    }
     const camera = lunchboxParent.three.camera;
-    if (!camera) throw new Error('camera required for html-anchor');
+    if (!camera) {
+      console.error('camera required for html-anchor');
+      return false;
+    }
     const renderer = lunchboxParent.three.renderer;
-    if (!renderer?.domElement) throw new Error('renderer and DOM element required for html-anchor')
+    if (!renderer?.domElement) {
+      console.error('renderer and DOM element required for html-anchor');
+      return false;
+    }
 
     const update = () => {
       this.frame = requestAnimationFrame(update);
@@ -51,7 +64,7 @@ export class HtmlAnchor extends LitElement {
     this.parentLunchbox = parent;
     const attached = this.tryAttachUpdate();
     if (!attached) {
-      this.parentLunchbox.addEventListener('instancecreated', () => {
+      this.parentLunchbox.addEventListener('instanceadded', () => {
         const attachedAfterInstanceCreated = this.tryAttachUpdate();
         if (!attachedAfterInstanceCreated) throw new Error('error attaching html-anchor to Object3D')
       }, { once: true });

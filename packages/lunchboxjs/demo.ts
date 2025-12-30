@@ -38,7 +38,7 @@ class WrappedLunchbox extends LitElement {
   }
 
   protected render() {
-    return html`<three-lunchbox ${ref(el => this.lunchbox = el)}>
+    return html`<three-lunchbox ${ref(el => this.lunchbox = el)} style="position: absolute; inset: 0;">
       ${this.ready ? html`<slot></slot>` : nothing}
       <three-mesh position="[2, 0, -5]" data-name="scaled" scale="2">
         <box-geometry></box-geometry>
