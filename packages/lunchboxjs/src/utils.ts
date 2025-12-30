@@ -166,3 +166,28 @@ export const getCandidateParent = (el: HTMLElement) => {
     }
     return parent;
 }
+
+// Source - https://stackoverflow.com/a/67676665
+// Posted by Mendy
+// Retrieved 2025-12-30, License - CC BY-SA 4.0
+export function closestPassShadow(node: HTMLElement | ParentNode | null, selector: string) {
+
+    if (!node) {
+        return null;
+    }
+
+    if (node instanceof ShadowRoot) {
+        return closestPassShadow(node.host, selector);
+    }
+
+    if (node instanceof HTMLElement) {
+        if (node.matches(selector)) {
+            return node;
+        } else {
+            return closestPassShadow(node.parentNode, selector);
+        }
+    }
+
+    return closestPassShadow(node.parentNode, selector);
+
+}

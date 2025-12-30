@@ -1,6 +1,7 @@
 import { html, LitElement } from "lit";
 import { Lunchbox, ThreeLunchbox } from ".";
 import * as THREE from "three";
+import { closestPassShadow } from "./utils";
 
 export class HtmlAnchor extends LitElement {
   private parentLunchbox: Lunchbox<THREE.Object3D> | null = null;
@@ -13,7 +14,7 @@ export class HtmlAnchor extends LitElement {
     if (!instance) return false;
     if (!instance.isObject3D) throw new Error('html-anchor must be the child of an Object3D');
 
-    const lunchboxParent = this.closest('three-lunchbox') as ThreeLunchbox | null;
+    const lunchboxParent = closestPassShadow(this, 'three-lunchbox') as ThreeLunchbox | null;
     if (!lunchboxParent) throw new Error('three-lunchbox parent required for html-anchor')
     const camera = lunchboxParent.three.camera;
     if (!camera) throw new Error('camera required for html-anchor');
@@ -66,5 +67,9 @@ export class HtmlAnchor extends LitElement {
 
   protected render(): unknown {
     return html`<slot></slot>`
+  }
+
+  protected createRenderRoot() {
+    return this;
   }
 }

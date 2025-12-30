@@ -214,6 +214,10 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
         render() {
             return html`<slot></slot>`;
         }
+
+        protected createRenderRoot() {
+            return this;
+        }
     }
 
     /** Loader class */
