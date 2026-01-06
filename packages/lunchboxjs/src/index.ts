@@ -7,6 +7,7 @@ import { HtmlAnchor } from './html-anchor';
 
 export * from './three-lunchbox';
 export * from './html-anchor';
+export { ThreeBase } from './three-base';
 
 /** Every component in a Lunchbox scene is of the Lunchbox type - it contains its ThreeJS instance
  * as a property called `instance`. 
