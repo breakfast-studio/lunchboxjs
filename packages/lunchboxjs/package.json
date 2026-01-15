@@ -1,7 +1,8 @@
 {
   "name": "lunchboxjs",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "main": "./dist/lunchboxjs.umd.cjs",
   "module": "./dist/lunchboxjs.js",
@@ -9,12 +10,12 @@
     ".": {
       "import": "./dist/lunchboxjs.js",
       "require": "./dist/lunchboxjs.umd.cjs",
-      "types": "./dist/src/index.d.ts"
+      "types": "./src/types.d.ts"
     }
   },
-  "version": "2.1.10",
+  "version": "2.1.11",
   "type": "module",
-  "types": "./dist/src/index.d.ts",
+  "types": "./src/types.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -37,7 +38,6 @@
     "three": "^0.164.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
-    "vite-plugin-dts": "^3.9.1",
     "vitest": "^3.0.5"
   }
 }

@@ -19,7 +19,7 @@
     "docs:build": "npm -w docs run docs:build",
     "cy:open": "npm -w lunchboxjs run cy:open",
     "test": "npm -w lunchboxjs run test",
-    "publish": "npm run build && npm -w lunchboxjs publish"
+    "publish": "npm run build && npm -w lunchboxjs publish --dry-run"
   },
   "repository": {
     "type": "git",
