@@ -13,7 +13,7 @@
       "types": "./src/types.d.ts"
     }
   },
-  "version": "2.1.12",
+  "version": "2.1.13",
   "type": "module",
   "types": "./src/types.d.ts",
   "scripts": {

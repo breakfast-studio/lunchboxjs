@@ -129,7 +129,7 @@ export abstract class ThreeBase<U extends new (...args: any) => any> extends Lit
         }
     }
 
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
 
         this.observeAttributes.call(this);
@@ -191,7 +191,7 @@ export abstract class ThreeBase<U extends new (...args: any) => any> extends Lit
         }
     }
 
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
         super.disconnectedCallback();
 
         const toDispose = [this.instance];
@@ -212,11 +212,11 @@ export abstract class ThreeBase<U extends new (...args: any) => any> extends Lit
     }
 
     /** Render */
-    render() {
+    override render() {
         return html`<slot></slot>`;
     }
 
-    protected createRenderRoot() {
+    protected override createRenderRoot() {
         return this;
     }
 }
@@ -240,12 +240,12 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
     class ThreeLoader<L extends THREE.Loader<U>, U extends IsClass = T> extends ThreeBase<U> {
         loader: L | null = null;
 
-        createUnderlyingThreeObject(): void {
+        override createUnderlyingThreeObject(): void {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             this.loader = new (threeClass as any)(...this.parsedArgs().map(arg => parseAttributeOrPropertyValue(arg, this)));
         }
 
-        async onUnderlyingThreeObjectReady() {
+        override async onUnderlyingThreeObjectReady() {
             const src = this.getAttribute('src');
             if (!src) throw new Error('Loader requires a source.');
 
@@ -269,7 +269,7 @@ export const buildClass = <T extends IsClass>(targetClass: keyof typeof THREE | 
             });
         }
 
-        disconnectedCallback(): void {
+        override disconnectedCallback(): void {
             super.disconnectedCallback();
             this.disposeThreeObjects.call(this, [this.loader]);
         }
