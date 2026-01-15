@@ -40,7 +40,7 @@ describe('vanilla HTML spec', () => {
     it('ensures camera nested position works', () => {
         cy.window().then(win => {
             const wrapper = win.document.createElement('three-lunchbox');
-            wrapper.setAttribute('camera', '{\'position-z\': 5}');
+            wrapper.setAttribute('camera', '{"position-z": 5}');
             win.document.body.appendChild(wrapper as unknown as Node);
         });
         cy.get('three-lunchbox').then(lb => {
@@ -56,7 +56,7 @@ describe('vanilla HTML spec', () => {
     it('ensures camera explicit position works', () => {
         cy.window().then(win => {
             const wrapper = win.document.createElement('three-lunchbox');
-            wrapper.setAttribute('camera', '{\'position\': [1, 2, 3]}');
+            wrapper.setAttribute('camera', '{"position": [1, 2, 3]}');
             win.document.body.appendChild(wrapper as unknown as Node);
         });
         cy.get('three-lunchbox').then(lb => {

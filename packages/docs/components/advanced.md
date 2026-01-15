@@ -58,7 +58,7 @@ For example, this is how to load a texture in Lunchbox:
 </three-mesh>
 ```
 
-<three-lunchbox camera="{'position-z': 3}" background="#888">
+<three-lunchbox camera='{"position-z": 3}' background="#888">
     <three-mesh>
         <box-geometry></box-geometry>
         <mesh-basic-material transparent>

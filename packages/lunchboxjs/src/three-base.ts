@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { IsClass, THREE_UUID_ATTRIBUTE_NAME, getCandidateParent, isClass } from "./utils";
 import { setThreeProperty } from "./setThreeProperty";
 import { parseAttributeOrPropertyValue } from "./parseAttributeValue";
-import parse from 'json5/lib/parse';
 import { ThreeLunchbox } from "./three-lunchbox";
 import { property, state } from "lit/decorators.js";
 import { Lunchbox } from ".";
@@ -54,7 +53,7 @@ export abstract class ThreeBase<U extends new (...args: any) => any> extends Lit
 
     parsedArgs() {
         const args = (this as { args?: Array<unknown> }).args ?? this.getAttribute('args') ?? [];
-        const parsedArgs: Array<unknown> = typeof args === 'string' ? parse(args) : args;
+        const parsedArgs: Array<unknown> = typeof args === 'string' ? JSON.parse(args) : args;
         return parsedArgs;
     }
 
