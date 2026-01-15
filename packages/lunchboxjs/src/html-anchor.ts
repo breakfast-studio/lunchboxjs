@@ -54,7 +54,7 @@ export class HtmlAnchor extends LitElement {
   }
 
   // Setup - save local parent and try adding update
-  connectedCallback() {
+  override connectedCallback() {
     super.connectedCallback();
 
     const parent = this.parentNode as Lunchbox<THREE.Object3D>;
@@ -73,16 +73,16 @@ export class HtmlAnchor extends LitElement {
   }
 
   // Teardown
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     if (this.frame !== -1) cancelAnimationFrame(this.frame);
   }
 
 
-  protected render(): unknown {
+  override render(): unknown {
     return html`<slot></slot>`
   }
 
-  protected createRenderRoot() {
+  override createRenderRoot() {
     return this;
   }
 }

@@ -101,7 +101,7 @@ export class ThreeLunchbox extends LitElement {
   }
 
   /** To run on start. */
-  connectedCallback(): void {
+  override connectedCallback(): void {
     super.connectedCallback();
     if (this.dpr === DEFAULT_DPR) {
       this.dpr = window.devicePixelRatio;
@@ -150,7 +150,7 @@ export class ThreeLunchbox extends LitElement {
     }
   }
 
-  disconnectedCallback(): void {
+  override disconnectedCallback(): void {
     this.three.renderer?.domElement.removeEventListener('pointermove', this.onPointerMove.bind(this));
     this.three.renderer?.domElement.removeEventListener('mousemove', this.onPointerMove.bind(this));
     this.three.renderer?.domElement.removeEventListener('click', this.onClick.bind(this));
@@ -245,7 +245,7 @@ export class ThreeLunchbox extends LitElement {
 
   /** Container styles */
   // TODO: fill window, fit-to-container
-  static styles = css`
+  static override styles = css`
     :host {
       width: 100%;
       height: 100%;
@@ -284,7 +284,7 @@ export class ThreeLunchbox extends LitElement {
     }
   }
 
-  render() {
+  override render() {
     // TODO: more robust slot changes
     return html`
       <slot @slotchange=${this.handleDefaultSlotChange}></slot>

@@ -2,8 +2,8 @@ import { autoComponents } from './auto-components';
 import { buildClass } from './three-base';
 import { ThreeLunchbox } from './three-lunchbox';
 import { IsClass } from './utils';
-import * as THREE from '../node_modules/@types/three';
 import { HtmlAnchor } from './html-anchor';
+import type { Intersection, Object3DEventMap, Scene, Object3D } from 'three';
 
 export * from './three-lunchbox';
 export * from './html-anchor';
@@ -29,9 +29,9 @@ export { ThreeBase } from './three-base';
  * mesh?.instance.position.set(0, 1, 0); // - or anything else you can do with a mesh
  * ```
  */
-export type Lunchbox<T = THREE.Object3D> = Element & LunchboxProperties<T>
+export type Lunchbox<T = Object3D> = Element & LunchboxProperties<T>
 
-export type LunchboxProperties<T = THREE.Object3D> = {
+export type LunchboxProperties<T = Object3D> = {
     instance: T;
 }
 
@@ -65,7 +65,7 @@ export const initLunchbox = ({
             return;
         }
 
-        const result = buildClass(className as keyof typeof THREE);
+        const result = buildClass(className as any);
         if (result) {
             customElements.define(kebabCase, result);
         }
@@ -111,14 +111,14 @@ export const THREE_CLICK_EVENT_NAME = 'threeclick';
 export const BEFORE_RENDER_EVENT_NAME = 'beforerender';
 export const AFTER_RENDER_EVENT_NAME = 'afterrender';
 export type ThreeIntersectEvent = {
-    intersect: THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>;
+    intersect: Intersection<Object3D<Object3DEventMap>>;
     element: Element | null;
 }
 export interface InstanceEvent<T = unknown> {
     instance: T;
 }
 export type InstanceAddedEvent<T = unknown> = InstanceEvent<T> & {
-    parent: THREE.Scene | THREE.Object3D
+    parent: Scene | Object3D
 }
 export interface LoadedEvent<T = unknown> {
     loaded: T;
