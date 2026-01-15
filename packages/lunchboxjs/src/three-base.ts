@@ -39,7 +39,10 @@ export abstract class ThreeBase<U extends new (...args: any) => any> extends Lit
         // ==================
         this.mutationObserver = new MutationObserver(mutations => {
             mutations.forEach(mutation => {
+                // Ignore if no value
                 if (!mutation.attributeName) return;
+                // Ignore if this is one of the observed Lit attributes
+                if (Object.getPrototypeOf(this).constructor.observedAttributes?.includes(mutation.attributeName)) return;
                 const attr = this.attributes.getNamedItem(mutation.attributeName);
                 if (attr) {
                     this.updateProperty(attr);
