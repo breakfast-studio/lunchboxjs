@@ -209,7 +209,7 @@ export class ThreeLunchbox extends LitElement {
   // ==================
   onPointerMove(evt: PointerEvent | MouseEvent) {
     const matches = this.runRaycast.bind(this)(evt);
-    matches.forEach(match => {
+    matches.forEach((match: any) => {
       if (evt.type === 'pointermove') {
         match.element?.dispatchEvent(new PointerEvent('pointermove'));
         match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));

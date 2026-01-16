@@ -17,7 +17,7 @@ export class HtmlAnchor extends LitElement {
     // const lunchboxParent = closestPassShadow(this, 'three-lunchbox') as ThreeLunchbox | null;
     const lunchboxParent = closestPassShadow(this, (el) => {
       return !!(el as ThreeLunchbox)?.three?.renderer;
-    }) as Pick<ThreeLunchbox, 'three'> | null;
+    }) as unknown as Pick<ThreeLunchbox, 'three'> | null;
 
     if (!lunchboxParent) {
       console.error('three-lunchbox parent required for html-anchor');
