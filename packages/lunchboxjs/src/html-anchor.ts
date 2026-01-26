@@ -7,6 +7,8 @@ export class HtmlAnchor extends LitElement {
   private parentLunchbox: Lunchbox<THREE.Object3D> | null = null;
   private frame = -1;
   private scratchV3 = new THREE.Vector3();
+  private scratchFrustum = new THREE.Frustum();
+  private scratchMatrix4 = new THREE.Matrix4();
 
   /** Try attaching the update function to pass the parent's position to children. */
   tryAttachUpdate() {
@@ -36,16 +38,33 @@ export class HtmlAnchor extends LitElement {
 
     const update = () => {
       this.frame = requestAnimationFrame(update);
+
+      camera.updateMatrix();
+      camera.updateMatrixWorld();
+      
+      // get projected position
       instance.getWorldPosition(this.scratchV3);
+            const worldPosition = this.scratchV3.clone();
       this.scratchV3.project(camera);
       this.scratchV3.multiplyScalar(0.5).addScalar(0.5);
       this.scratchV3.y = 1 - this.scratchV3.y;
       const rendererSize = this.scratchV3.clone().set(renderer.domElement.width, renderer.domElement.height, 1);
       rendererSize.divideScalar(devicePixelRatio);
       this.scratchV3.multiply(rendererSize);
+      
+      // get distance from camera
+      const distance = instance.position.clone().distanceTo(camera.getWorldPosition(this.scratchV3.clone()));
+
+      // get presence in camera frustum
+      this.scratchFrustum.setFromProjectionMatrix(this.scratchMatrix4.clone().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+      const inFrustum = this.scratchFrustum.containsPoint(worldPosition);
+
+      // apply position data as CSS vars
       Array.from(this.children).forEach(child => {
         (child as unknown as HTMLElement).style.setProperty('--left', `${this.scratchV3.x}px`);
         (child as unknown as HTMLElement).style.setProperty('--top', `${this.scratchV3.y}px`);
+        (child as unknown as HTMLElement).style.setProperty('--distance-from-camera', `${distance}`);
+        (child as unknown as HTMLElement).style.setProperty('--in-frustum', `${inFrustum ? 1 : 0}`);
       })
     }
     update();

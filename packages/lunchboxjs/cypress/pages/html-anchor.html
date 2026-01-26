@@ -19,16 +19,20 @@
     <three-lunchbox dispatch-before-render dispatch-after-render>
         <three-mesh position-z="-5" data-name="base">
             <box-geometry args="[1, 2, 3]"></box-geometry>
-            <mesh-basic-material wireframe color="black"></mesh-basic-material>
+            <mesh-basic-material wireframe color="green"></mesh-basic-material>
 
             <html-anchor>
               <h2 data-test-id="label">label</h2>
             </html-anchor>
         </three-mesh>
 
-        <three-mesh position="[-2, 0, -5]" data-name="scaled" scale="2">
+        <three-mesh position-z="5" data-name="scaled" scale="2">
             <box-geometry></box-geometry>
             <mesh-basic-material wireframe color="blue"></mesh-basic-material>
+
+            <html-anchor>
+              <h2 data-test-id="label-behind">label2</h2>
+            </html-anchor>
         </three-mesh>
     </three-lunchbox>
 </body>

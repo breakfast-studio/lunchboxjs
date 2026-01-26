@@ -106,6 +106,15 @@ with this:
 </three-lunchbox>
 ```
 
+Full list of CSS vars provided to all children of `<html-anchor>`s:
+
+| CSS var name | Notes |
+| --- | --- |
+| `--distance-from-camera` | Distance from object to camera. Lower value = closer, which corresponds to a higher z-index in CSS.<br/><br/>When subtracted from a larger value and rounded, this can be used to correctly layer DOM elements based on their 3D parents.<br/><br/>Example using [CSS `round()`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/round):<br/><br/>`z-index: round(1000 - var(--distance-from-camera) * 100);` |
+| `--in-frustum` | Whether the 3D parent's position is present in the main camera's frustum. `0` if not present or `1` if present.<br/><br/>DOM elements will still appear onscreen if they're directly behind the camera, so you can use this var to determine if they should be visible and interactive or not. |
+| `--left` | Pixels from the left of the main canvas |
+| `--top` | Pixels from the top of the main canvas |
+
 
 ## Auto-registered components
 

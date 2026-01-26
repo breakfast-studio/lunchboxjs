@@ -167,7 +167,7 @@ export class ThreeLunchbox extends LitElement {
       if (elAsThree.instance instanceof THREE.Object3D && el.getAttributeNames().includes(RAYCASTABLE_ATTRIBUTE_NAME)) {
         // Add to raycast pool
         if (el.getAttributeNames().includes(RAYCASTABLE_ATTRIBUTE_NAME)) {
-          this.raycastPool.push(elAsThree.instance);
+          this.raycastPool.push(elAsThree.instance as any);
         }
       }
     });
