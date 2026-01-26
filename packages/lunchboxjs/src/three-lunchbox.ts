@@ -18,11 +18,20 @@ export class ThreeLunchbox extends LitElement {
   // private scratchV3 = new THREE.Vector3();
 
   // TODO: Fully customizable scene, camera, renderer
-  three = {
-    scene: new THREE.Scene(),
-    camera: null as null | THREE.Camera,
-    renderer: null as null | THREE.WebGLRenderer
-  };
+  three;
+
+  /** Function called at startup when creating Lunchbox's default scene. */
+  createDefaultScene(){
+    return new THREE.Scene();
+  }
+
+  createThree(){
+    return {
+      scene: this.createDefaultScene(),
+      camera: null as null | THREE.Camera,
+      renderer: null as null | THREE.WebGLRenderer,
+    };
+  }
 
   @property()
   background: THREE.ColorRepresentation | null = null;
@@ -68,6 +77,8 @@ export class ThreeLunchbox extends LitElement {
 
   constructor() {
     super();
+
+    this.three = this.createThree();
 
     this.resizeObserver = new ResizeObserver(entries => {
       entries.forEach(({ target, contentRect }) => {

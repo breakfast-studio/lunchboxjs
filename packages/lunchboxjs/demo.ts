@@ -4,6 +4,7 @@ import { customElement, state } from 'lit/decorators.js';
 import { initLunchbox, ThreeLunchbox } from './src/index.ts';
 import { html, LitElement, nothing } from 'lit';
 import { ref } from 'lit/directives/ref.js';
+import { Scene, Camera, WebGLRenderer, PerspectiveCamera } from 'three';
 initLunchbox();
 
 
@@ -64,5 +65,14 @@ class SlotTest extends LitElement {
 
   protected createRenderRoot() {
     return this;
+  }
+}
+
+@customElement('custom-scene')
+class CustomScene extends ThreeLunchbox {
+  createDefaultScene(): Scene {
+    return new class extends Scene {
+      isCustomScene = true;
+    }
   }
 }
