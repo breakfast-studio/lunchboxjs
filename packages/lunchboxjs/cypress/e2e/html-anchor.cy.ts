@@ -14,11 +14,13 @@ describe('html-anchor spec', () => {
       expect(style.getPropertyValue('--left')).to.eq('150px');
       expect(style.getPropertyValue('--in-frustum')).to.eq('1');
       expect(style.getPropertyValue('--distance-from-camera')).to.eq('5');
+      expect((c as unknown as HTMLElement).classList.contains('in-frustum')).to.eq(true);
     });
     cy.get('[data-test-id="label-behind"]').then(([c]) => {
       const style = (c as unknown as HTMLElement).style;
       expect(style.getPropertyValue('--in-frustum')).to.eq('0');
       expect(style.getPropertyValue('--distance-from-camera')).to.eq('5');
+      expect((c as unknown as HTMLElement).classList.contains('in-frustum')).to.eq(false);
     });
   });
 });

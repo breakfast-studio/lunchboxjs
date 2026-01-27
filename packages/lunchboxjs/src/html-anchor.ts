@@ -60,12 +60,15 @@ export class HtmlAnchor extends LitElement {
       const inFrustum = this.scratchFrustum.containsPoint(worldPosition);
 
       // apply position data as CSS vars
-      Array.from(this.children).forEach(child => {
-        (child as unknown as HTMLElement).style.setProperty('--left', `${this.scratchV3.x}px`);
-        (child as unknown as HTMLElement).style.setProperty('--top', `${this.scratchV3.y}px`);
-        (child as unknown as HTMLElement).style.setProperty('--distance-from-camera', `${distance}`);
-        (child as unknown as HTMLElement).style.setProperty('--in-frustum', `${inFrustum ? 1 : 0}`);
-      })
+      this.style.setProperty('--left', `${this.scratchV3.x}px`);
+      this.style.setProperty('--top', `${this.scratchV3.y}px`);
+      this.style.setProperty('--distance-from-camera', `${distance}`);
+      this.style.setProperty('--in-frustum', `${inFrustum ? 1 : 0}`);
+      if (inFrustum){
+        this.classList.add('in-frustum');
+      } else {
+        this.classList.remove('in-frustum');
+      }
     }
     update();
 

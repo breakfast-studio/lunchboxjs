@@ -54,8 +54,8 @@ class SlotTest extends LitElement {
   protected render() {
     return html`
       <three-group position="[1, 1, -5]">
-        <html-anchor>
-          <div data-test-id="label" style="position: absolute; top: var(--top); left: var(--left); background: white">
+        <html-anchor data-test-id="label">
+          <div style="position: absolute; top: var(--top); left: var(--left); background: white">
             test!
           </div>
         </html-anchor>

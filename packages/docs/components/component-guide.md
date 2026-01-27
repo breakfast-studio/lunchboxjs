@@ -72,7 +72,7 @@ lunchbox?.renderThree();
 
 ### `<html-anchor>`
 
-`<html-anchor>` makes the `.position` of its parent available as CSS vars (`--left` and `--top`, from the top left of the canvas) to its children. 
+`<html-anchor>` makes the `.position` of its parent available as CSS vars (`--left` and `--top`, from the top left of the canvas). 
 
 For example, you can create this:
 
@@ -106,12 +106,14 @@ with this:
 </three-lunchbox>
 ```
 
-Full list of CSS vars provided to all children of `<html-anchor>`s:
+`<html-anchor>` will also have a class called `in-frustum` present if its 3D parent point is in the frustum.
+
+Full list of CSS vars set on `<html-anchor>` (and therefore provided to children):
 
 | CSS var name | Notes |
 | --- | --- |
 | `--distance-from-camera` | Distance from object to camera. Lower value = closer, which corresponds to a higher z-index in CSS.<br/><br/>When subtracted from a larger value and rounded, this can be used to correctly layer DOM elements based on their 3D parents.<br/><br/>Example using [CSS `round()`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/round):<br/><br/>`z-index: round(1000 - var(--distance-from-camera) * 100);` |
-| `--in-frustum` | Whether the 3D parent's position is present in the main camera's frustum. `0` if not present or `1` if present.<br/><br/>DOM elements will still appear onscreen if they're directly behind the camera, so you can use this var to determine if they should be visible and interactive or not. |
+| `--in-frustum` | Whether the 3D parent's position is present in the main camera's frustum. `0` if not present or `1` if present.<br/><br/>DOM elements will still appear onscreen if they're directly behind the camera, so you can use this var to determine if they should be visible and interactive or not. (Note you can also use the presence or absence of the class `in-frustum` on the `<html-anchor>` element.) |
 | `--left` | Pixels from the left of the main canvas |
 | `--top` | Pixels from the top of the main canvas |
 
