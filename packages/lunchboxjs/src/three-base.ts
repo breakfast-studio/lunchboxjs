@@ -17,7 +17,7 @@ export const IGNORED_ATTRIBUTES = [
 const buildNestedPropertyArray = (input: string) => input.split('-');
 
 /** Standard ThreeJS class */
-export abstract class ThreeBase<U extends new (...args: any) => any> extends LitElement {
+export abstract class ThreeBase<U extends IsClass> extends LitElement {
     instance: U | null = null;
 
     dispose: (() => void)[] = [];
@@ -63,7 +63,7 @@ export abstract class ThreeBase<U extends new (...args: any) => any> extends Lit
     createUnderlyingThreeObject() {
         // Instance creation
         // ==================
-        this.instance = new (this.classSource)(...this.parsedArgs().map(arg => parseAttributeOrPropertyValue(arg, this)));
+        this.instance = new (this.classSource)(...this.parsedArgs().map(arg => parseAttributeOrPropertyValue(arg, this))) as U;
     }
 
     refreshAttributes() {
