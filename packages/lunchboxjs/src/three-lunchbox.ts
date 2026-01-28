@@ -2,7 +2,7 @@ import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
 import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
 import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
-import { AFTER_RENDER_EVENT_NAME, BEFORE_RENDER_EVENT_NAME, Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME, ThreeIntersectEvent } from '.';
+import { AFTER_RENDER_EVENT_NAME, BEFORE_RENDER_EVENT_NAME, Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME } from '.';
 import { setThreeProperty } from './setThreeProperty';
 import { property } from 'lit/decorators.js';
 import { parseAttributeOrPropertyValue } from './parseAttributeValue';
@@ -223,10 +223,10 @@ export class ThreeLunchbox extends LitElement {
     matches.forEach((match: any) => {
       if (evt.type === 'pointermove') {
         match.element?.dispatchEvent(new PointerEvent('pointermove'));
-        match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));
+        match.element?.dispatchEvent(new CustomEvent(THREE_POINTER_MOVE_EVENT_NAME, { detail: match }));
       } else if (evt.type === 'mousemove') {
         match.element?.dispatchEvent(new MouseEvent('mousemove'));
-        match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_MOUSE_MOVE_EVENT_NAME, { detail: match }));
+        match.element?.dispatchEvent(new CustomEvent(THREE_MOUSE_MOVE_EVENT_NAME, { detail: match }));
       }
     });
   }
@@ -250,7 +250,7 @@ export class ThreeLunchbox extends LitElement {
     }
 
     matches.forEach(match => {
-      match.element?.dispatchEvent(new CustomEvent<ThreeIntersectEvent>(THREE_CLICK_EVENT_NAME, { detail: match }));
+      match.element?.dispatchEvent(new CustomEvent(THREE_CLICK_EVENT_NAME, { detail: match }));
     });
   }
 
