@@ -8,6 +8,7 @@ import type { Intersection, Object3DEventMap, Scene, Object3D } from 'three';
 export * from './three-lunchbox';
 export * from './html-anchor';
 export { ThreeBase } from './three-base';
+export * from './utils';
 
 /** Every component in a Lunchbox scene is of the Lunchbox type - it contains its ThreeJS instance
  * as a property called `instance`. 
