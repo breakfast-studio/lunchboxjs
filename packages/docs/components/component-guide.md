@@ -28,6 +28,24 @@ Available attributes are:
 | `renderer-args`               | `[]`        | Array of args to pass to the renderer when it is instantiated.                                                                                                                                                                                                                                     |
 | `scene`                  | `null`        | Options to pass to the default scene. Accepts an object that is parsed and whose values are sent to the scene. See `camera` for formatting.                                                                                                                                                                                                                                           |
 
+#### `<three-lunchbox>` Events
+
+List of events:
+
+| Name | Properties | Notes |
+| --- | --- | --- |
+| `three-ready` | `{ lunchbox: /** The three-lunchbox element */ }` | Emitted when the scene, renderer, and camera are created |
+
+Note that the events emitted by `<three-lunchbox>` are [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent)s, so the properties listed below are contained in a `detail` property. For example:
+
+```ts
+const lunchbox = document.createElement('three-lunchbox') as ThreeLunchbox;
+lunchbox.addEventListener('three-ready', (evt: CustomEvent<{ lunchbox: ThreeLunchbox }>) => {
+    console.log('lunchbox:', evt.detail.lunchbox);
+});
+```
+
+
 #### The `three` property of `<three-lunchbox>`
 
 A `three-lunchbox` component contains a property called `three` with ThreeJS details. For example:
@@ -52,6 +70,10 @@ import { type ThreeLunchbox } from 'lunchboxjs';
 const lunchbox = document.querySelector<ThreeLunchbox>('three-lunchbox');
 console.log(lunchbox?.three);
 ```
+
+#### Customizing your lunchbox
+
+See [here](/components/advanced.html#extended-three-lunchbox) for instructions on customizing Lunchbox's scene, camera, or renderer.
 
 #### Other built-in `<three-lunchbox>` properties and methods
 
@@ -110,10 +132,11 @@ with this:
 
 Full list of CSS vars set on `<html-anchor>` (and therefore provided to children):
 
-| CSS var name | Notes |
+| CSS var name/class | Notes |
 | --- | --- |
 | `--distance-from-camera` | Distance from object to camera. Lower value = closer, which corresponds to a higher z-index in CSS.<br/><br/>When subtracted from a larger value and rounded, this can be used to correctly layer DOM elements based on their 3D parents.<br/><br/>Example using [CSS `round()`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/round):<br/><br/>`z-index: round(1000 - var(--distance-from-camera) * 100);` |
 | `--in-frustum` | Whether the 3D parent's position is present in the main camera's frustum. `0` if not present or `1` if present.<br/><br/>DOM elements will still appear onscreen if they're directly behind the camera, so you can use this var to determine if they should be visible and interactive or not. (Note you can also use the presence or absence of the class `in-frustum` on the `<html-anchor>` element.) |
+| `in-frustum` | Class name added to `<html-anchor>` when the target position is in the camera's frustum |
 | `--left` | Pixels from the left of the main canvas |
 | `--top` | Pixels from the top of the main canvas |
 

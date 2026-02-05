@@ -13,7 +13,7 @@
       "types": "./src/types.d.ts"
     }
   },
-  "version": "2.2.3",
+  "version": "2.3.0",
   "type": "module",
   "types": "./src/types.d.ts",
   "scripts": {
@@ -22,8 +22,8 @@
     "preview": "vite preview",
     "cy:open": "cypress open",
     "test:e2e": "cypress run",
-    "test:unit": "vitest",
-    "test": "npm run test:unit && npm run test:e2e"
+    "test:vitest": "vitest",
+    "test": "npm run test:vitest && npm run test:e2e"
   },
   "dependencies": {
     "lit": "^3.3.2"

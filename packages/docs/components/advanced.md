@@ -111,3 +111,30 @@ For example, this will start OrbitControls correctly:
 ```
 
 See [here](/concepts.html#object-array-values) for notes on passing arrays as values.
+
+## Extended `<three-lunchbox>`
+
+If you need special scene/camera/renderer creation, you can extend the `ThreeLunchbox` class and override `three` and `createThree`:
+
+```ts
+import { ThreeLunchbox } from 'lunchboxjs';
+
+// assuming you have CustomScene, CustomCamera, and CustomRenderer classes:
+class ExtendedLunchbox extends ThreeLunchbox {
+    override three!: {
+        scene: CustomScene,
+        camera: CustomCamera,
+        renderer: CustomRenderer,
+    }
+
+    override createThree(){
+        return {
+            scene: new CustomScene(),
+            camera: new CustomCamera(),
+            renderer: new CustomRenderer(),
+        }
+    }
+}
+```
+
+This is useful for (a) providing custom scene/camera/renderer classes besides the usual ThreeJS ones and/or (b) guaranteeing the `scene`, `camera`, and `renderer` properties are populated from initialization.

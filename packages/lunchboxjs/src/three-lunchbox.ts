@@ -117,10 +117,12 @@ export class ThreeLunchbox extends LitElement {
     if (this.dpr === DEFAULT_DPR) {
       this.dpr = window.devicePixelRatio;
     }
-    if (this.getAttribute(ORTHOGRAPHIC_CAMERA_ATTR_NAME) !== null) {
-      this.three.camera = new THREE.OrthographicCamera(...this.cameraArgs);
-    } else {
-      this.three.camera = new THREE.PerspectiveCamera(...(this.cameraArgs.length ? this.cameraArgs : [75]));
+    if (!this.three.camera){
+      if (this.getAttribute(ORTHOGRAPHIC_CAMERA_ATTR_NAME) !== null) {
+        this.three.camera = new THREE.OrthographicCamera(...this.cameraArgs);
+      } else {
+        this.three.camera = new THREE.PerspectiveCamera(...(this.cameraArgs.length ? this.cameraArgs : [75]));
+      }
     }
 
     // Camera, scene, renderer information
@@ -145,7 +147,7 @@ export class ThreeLunchbox extends LitElement {
     }
 
     // Prep mouse info
-    if (!this.headless) {
+    if (!this.three.renderer && !this.headless) {
       const renderer = new THREE.WebGLRenderer(...this.rendererArgs);
       renderer.domElement.addEventListener('pointermove', this.onPointerMove.bind(this));
       renderer.domElement.addEventListener('mousemove', this.onPointerMove.bind(this));
@@ -154,6 +156,7 @@ export class ThreeLunchbox extends LitElement {
       this.three.renderer = renderer;  
     }
 
+    this.dispatchEvent(new CustomEvent('three-ready', { bubbles: true, composed: true, detail: {lunchbox: this}}));
 
     // Kick update loop
     if (!this.manualRender) {
@@ -301,5 +304,14 @@ export class ThreeLunchbox extends LitElement {
       <slot @slotchange=${this.handleDefaultSlotChange}></slot>
       ${this.three.renderer?.domElement}
     `;
+  }
+}
+
+declare global {
+  interface GlobalEventHandlersEventMap {
+    'three-ready': CustomEvent<{lunchbox: ThreeLunchbox}>
+  }
+  interface HTMLElementTagNameMap {
+    'three-lunchbox': ThreeLunchbox
   }
 }
