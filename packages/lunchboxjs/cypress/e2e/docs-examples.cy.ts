@@ -16,7 +16,7 @@ describe('vanilla HTML spec', () => {
                 .should('have.a.property', 'three')
                 .should('have.a.property', 'scene')
                 .should('have.a.property', 'background')
-                .then(color => color.toArray())
+                .then(color => (color as any).toArray())
                 .should('deep.equal', [0, 0, 1]);
         });
     });
@@ -32,7 +32,7 @@ describe('vanilla HTML spec', () => {
                 .should('have.a.property', 'three')
                 .should('have.a.property', 'scene')
                 .should('have.a.property', 'background')
-                .then(color => color.toArray())
+                .then(color => (color as any).toArray())
                 .should('deep.equal', [0, 1, 0]);
         });
     });
@@ -64,7 +64,7 @@ describe('vanilla HTML spec', () => {
                 .should('have.a.property', 'three')
                 .should('have.a.property', 'camera')
                 .should('have.a.property', 'position')
-                .then(pos => pos.toArray())
+                .then(pos => (pos as any).toArray())
                 .should('deep.equal', [1, 2, 3]);
         });
     });
