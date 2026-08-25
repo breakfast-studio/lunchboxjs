@@ -1,7 +1,7 @@
 import { html, LitElement } from "lit";
-import { Lunchbox, ThreeLunchbox } from ".";
+import { Lunchbox, ThreeLunchbox } from "./index.js";
 import * as THREE from "three";
-import { closestPassShadow } from "./utils";
+import { closestPassShadow } from "./utils.js";
 
 export class HtmlAnchor extends LitElement {
   private parentLunchbox: Lunchbox<THREE.Object3D> | null = null;

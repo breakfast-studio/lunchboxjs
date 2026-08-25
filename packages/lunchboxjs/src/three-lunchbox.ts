@@ -1,11 +1,11 @@
 import { LitElement, css, html } from 'lit';
 import * as THREE from 'three';
-import { THREE_UUID_ATTRIBUTE_NAME } from './utils';
-import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base';
-import { AFTER_RENDER_EVENT_NAME, BEFORE_RENDER_EVENT_NAME, Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME } from '.';
-import { setThreeProperty } from './setThreeProperty';
+import { THREE_UUID_ATTRIBUTE_NAME } from './utils.js';
+import { RAYCASTABLE_ATTRIBUTE_NAME } from './three-base.js';
+import { AFTER_RENDER_EVENT_NAME, BEFORE_RENDER_EVENT_NAME, Lunchbox, THREE_CLICK_EVENT_NAME, THREE_MOUSE_MOVE_EVENT_NAME, THREE_POINTER_MOVE_EVENT_NAME } from './index.js';
+import { setThreeProperty } from './setThreeProperty.js';
 import { property } from 'lit/decorators.js';
-import { parseAttributeOrPropertyValue } from './parseAttributeValue';
+import { parseAttributeOrPropertyValue } from './parseAttributeValue.js';
 
 const ORTHOGRAPHIC_CAMERA_ATTR_NAME = 'orthographic';
 const DEFAULT_DPR = Infinity;

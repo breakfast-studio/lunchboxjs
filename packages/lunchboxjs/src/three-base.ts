@@ -1,11 +1,11 @@
 import { LitElement, html } from "lit";
 import * as THREE from 'three';
-import { IsClass, THREE_UUID_ATTRIBUTE_NAME, getCandidateParent, isClass } from "./utils";
-import { setThreeProperty } from "./setThreeProperty";
-import { parseAttributeOrPropertyValue } from "./parseAttributeValue";
-import { ThreeLunchbox } from "./three-lunchbox";
+import { IsClass, THREE_UUID_ATTRIBUTE_NAME, getCandidateParent, isClass } from "./utils.js";
+import { setThreeProperty } from "./setThreeProperty.js";
+import { parseAttributeOrPropertyValue } from "./parseAttributeValue.js";
+import { ThreeLunchbox } from "./three-lunchbox.js";
 import { property, state } from "lit/decorators.js";
-import { Lunchbox } from ".";
+import { Lunchbox } from "./index.js";
 
 export const RAYCASTABLE_ATTRIBUTE_NAME = 'raycast';
 export const IGNORED_ATTRIBUTES = [

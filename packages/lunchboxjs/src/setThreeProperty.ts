@@ -1,4 +1,4 @@
-import { get, isNumber, set } from "./utils";
+import { get, isNumber, set } from "./utils.js";
 import * as THREE from 'three';
 
 export const setThreeProperty = <T extends object>(target: T, split: string[], parsedValue: unknown) => {

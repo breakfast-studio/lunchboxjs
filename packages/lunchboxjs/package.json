@@ -5,20 +5,21 @@
     "src"
   ],
   "main": "./dist/lunchboxjs.umd.cjs",
-  "module": "./dist/lunchboxjs.js",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/lunchboxjs.js",
-      "require": "./dist/lunchboxjs.umd.cjs",
-      "types": "./src/types.d.ts"
+      "types": "./src/types.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/lunchboxjs.umd.cjs"
     }
   },
-  "version": "2.3.0",
+  "version": "2.4.0",
   "type": "module",
   "types": "./src/types.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc && tsc -p tsconfig.build.json && vite build",
     "preview": "vite preview",
     "cy:open": "cypress open",
     "test:e2e": "cypress run",
