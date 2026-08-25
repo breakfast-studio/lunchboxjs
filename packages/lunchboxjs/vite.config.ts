@@ -12,7 +12,8 @@ export default defineConfig({
         },
         rollupOptions: {
             external: [
-                'three'
+                'three',
+                'lit',
             ],
             output: {
                 globals: {

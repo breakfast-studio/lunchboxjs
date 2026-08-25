@@ -6,7 +6,7 @@ Lunchbox 2 is available in a few different formats:
 
 ### With npm
 
-1. Run `npm install three lunchboxjs`. This will install ThreeJS and Lunchbox 2.
+1. Run `npm install three lit lunchboxjs`. This will install ThreeJS, [Lit](https://lit.dev/), and Lunchbox 2.
 2. In your code, import and run `initLunchbox`:
 
 ```ts
@@ -17,8 +17,9 @@ initLunchbox();
 
 ### Vanilla 
 
-1. Follow the instructions to [install ThreeJS](https://threejs.org/docs/#manual/en/introduction/Installation).
-2. Add this code to your `<head>` tag (you can also add the `lunchboxjs` property to your importmap from step 1):
+1. Follow the instructions to [install ThreeJS](https://threejs.org/manual/#en/installation).
+2. Follow the instructions to [install Lit](https://lit.dev/docs/getting-started).
+3. Add this code to your `<head>` tag (you can also add the `lunchboxjs` property to your importmap from previous steps):
 
 ```html
 <script type="importmap">
@@ -30,7 +31,7 @@ initLunchbox();
 </script>
 ```
 
-3. Add this code to the body:
+4. Add this code to the body:
 
 ```html
 <script type="module">
