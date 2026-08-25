@@ -1,14 +1,14 @@
-import { autoComponents } from './auto-components';
-import { buildClass } from './three-base';
-import { ThreeLunchbox } from './three-lunchbox';
-import { IsClass } from './utils';
-import { HtmlAnchor } from './html-anchor';
+import { autoComponents } from './auto-components.js';
+import { buildClass } from './three-base.js';
+import { ThreeLunchbox } from './three-lunchbox.js';
+import { IsClass } from './utils.js';
+import { HtmlAnchor } from './html-anchor.js';
 import type { Intersection, Object3DEventMap, Scene, Object3D } from 'three';
 
-export * from './three-lunchbox';
-export * from './html-anchor';
-export { ThreeBase } from './three-base';
-export * from './utils';
+export * from './three-lunchbox.js';
+export * from './html-anchor.js';
+export { ThreeBase } from './three-base.js';
+export * from './utils.js';
 
 /** Every component in a Lunchbox scene is of the Lunchbox type - it contains its ThreeJS instance
  * as a property called `instance`. 

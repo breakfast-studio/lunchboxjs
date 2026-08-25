@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Lunchbox } from ".";
-import { ThreeLunchbox } from "./three-lunchbox";
+import { Lunchbox } from "./index.js";
+import { ThreeLunchbox } from "./three-lunchbox.js";
 
 /** Get potentially nested property in object */
 export const get = <T = unknown>(

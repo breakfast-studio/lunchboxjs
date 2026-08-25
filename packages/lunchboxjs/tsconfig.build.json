@@ -1,0 +1,23 @@
+{
+  // Emits the published package: unbundled ES modules, one output per source
+  // module, with `lit`/`three` left as bare specifiers for the consumer to
+  // resolve. Kept separate from tsconfig.json, which is a `noEmit` typecheck
+  // config covering tests, cypress, and the demo as well.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": "src",
+    // JS only. Types still ship from `src` (see package.json `types`), as they
+    // always have: `buildClass` returns locally-declared classes, so
+    // declaration emit fails with TS4094 until its public return type is
+    // widened to something nameable — an API change, not a build change.
+    "declaration": false,
+    "sourceMap": true,
+    // Emitting forbids this; source now writes explicit .js extensions instead.
+    "allowImportingTsExtensions": false,
+    "types": []
+  },
+  "include": ["src"],
+  "exclude": ["src/types.d.ts"]
+}

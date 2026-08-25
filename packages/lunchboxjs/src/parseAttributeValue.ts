@@ -1,4 +1,4 @@
-import { ThreeLunchbox } from "./three-lunchbox";
+import { ThreeLunchbox } from "./three-lunchbox.js";
 import * as THREE from 'three';
 
 const valueShortcuts = {
